@@ -1,0 +1,67 @@
+<!--this file will show parent-child relationship and creating new element in DOM-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating new element</title>
+</head>
+<body style="background-color: #212121; color: white;">
+    <div class="parent">
+        <div class="day">Monday</div>
+        <div class="day">Tuesday</div>
+        <div class="day">Wednesday</div>
+        <div class="day">Thursday</div>
+    </div>
+</body>
+<script>
+    const parent = document.querySelector(".parent")
+    console.log(parent);
+
+    //parent has children property
+    console.log(parent.children);  // it returns HTML collection that looks like array
+    console.log(parent.children[1])
+    //childNodes property
+    console.log(parent.childNodes);
+
+    //print the values of children
+    for(let i = 0; i < parent.children.length; i++){
+        console.log(parent.children[i].innerText);
+    }
+
+    //children also have parent property
+    const child = document.querySelector(".day")
+    console.log(child);
+    console.log(child.parentElement);
+    //nextElementSibling property
+    console.log(child.nextElementSibling);
+
+    //...........creating a new element.......................
+    const divBox = document.createElement('div')
+    divBox.setAttribute('id','footer')
+    divBox.setAttribute('class','footer-class')
+    divBox.style.backgroundColor = 'black'
+    divBox.style.padding = "20px"
+    divBox.style.borderRadius = "20px"
+    //creating and appending a text node
+    const textNode = document.createTextNode("Footer")
+    divBox.appendChild(textNode)
+    //upto above code we have created div and given the attributes,textNode and CSS properties
+    //to display we have to append it to the body element
+    document.body.appendChild(divBox)
+
+    //...........adding element as a sibling.............
+    const divBox2 = document.createElement('div')
+    divBox2.setAttribute('id','footer2')
+    divBox2.setAttribute('class','footer-class2')
+    divBox2.style.backgroundColor = 'black'
+    divBox2.style.padding = "20px"
+    divBox2.style.borderRadius = "20px"
+    divBox2.appendChild(document.createTextNode("Footer2"))
+    divBox2.style.marginTop = "10px"
+    //now select a element for which sibling is added
+    const sibling = document.querySelector("#footer");
+    console.log(sibling);
+    sibling.after(divBox2)
+</script>
+</html>

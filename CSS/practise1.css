@@ -1,0 +1,14 @@
+h2{
+    color:orange;
+}
+
+button{
+    background-color: blue;
+    color:white;
+}
+ 
+p{
+    background-color: black;  /* #000 or rgb(0,0,0)or black or #000000*/
+   /* color:rgb(255,255,255); /*whiteColor  rgb code*/
+   color:#ffffff;           /*whiteColor  hexcode*/
+} 

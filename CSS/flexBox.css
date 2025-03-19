@@ -1,0 +1,23 @@
+#container{
+    width: 80%;
+    height:500px;
+    background-color:wheat;
+    margin: 10px auto;
+    border: 2px solid black;
+    display:flex;
+    flex-direction: row; 
+    justify-content: space-between;          /* give spaces along main axis*/
+    flex-wrap: wrap;
+    align-items: baseline;                  /* align with respect to content of div*/
+    align-content: center;                  /* give spaces along cross axis*/
+}
+h1{
+    text-align: center;
+}
+#container div{
+    text-align: center;
+    height:100px;
+    width:600px;
+    font-size: 1.5em;
+    color:white;
+}

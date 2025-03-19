@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: #212121; color:white">
+    <ul class="language">
+        <li>JavaScript</li>
+    </ul>
+</body>
+<script>
+    //.........................to add elements..........................
+    function bruteAddLanguage(langName) {
+        const li = document.createElement("li")
+        //here innerHTML will traverse whole DOM tree
+        li.innerHTML = `${langName}`
+        document.querySelector(".language").appendChild(li)
+    }
+    bruteAddLanguage("Python")
+    bruteAddLanguage("Type Script")
+
+    //now we will try best way to append language
+    function optimalAddLanguage(langName) {
+        const li = document.createElement("li")
+        //here no traversing is done
+        li.appendChild(document.createTextNode(langName))
+        document.querySelector(".language").appendChild(li)
+    }
+    optimalAddLanguage("Ruby")
+    optimalAddLanguage("C#")
+
+    //................................to edit elements........................
+    //first select the element to replace
+    const secLang = document.querySelector("li:nth-child(2)")
+    //now create a new element and use replaceWith() function
+    const newLi = document.createElement("li")
+    newLi.appendChild(document.createTextNode("PHP")) 
+    secLang.replaceWith(newLi)
+
+    //2nd method to edit
+    const firstLang = document.querySelector("li:first-child")
+    firstLang.outerHTML = "<li>Java</li>"   //outer html require full HTML format
+
+    //..............................to remove element.........................
+    //select and use remove function
+    const lastLang = document.querySelector("li:last-child")
+    lastLang.remove()
+</script>
+</html>

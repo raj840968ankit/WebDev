@@ -1,0 +1,35 @@
+section{
+    margin-top: 100px;
+}
+div{
+    width:200px;
+    height: 50px;
+    background-color: hsla(108, 23%, 56%, 0.404);
+    text-align: center;
+    border:2px solid black;
+    margin:10px auto;
+    
+}
+div:nth-last-of-type(2n)
+{
+    background-color:#f7db6a9f ;
+}
+div:nth-last-of-type(3n)
+{
+    background-color: #ebb02d9f;
+}
+#item1{
+    transform: rotate(60deg);
+}
+#item2{
+    transform: scale(0.7);
+}
+#item3{
+    transform: translate(100px,15px);
+}
+#item4{
+    transform: skew(-30deg);
+}
+#item5{
+    transform: rotate(-45deg) translatex(100px) scale(0.8) skew(-20deg);
+}

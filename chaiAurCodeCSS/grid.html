@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding : 0;
+            box-sizing: border-box;
+        }
+        body {
+            height : 100vh;
+            width : 100vw;
+        }
+        .container{
+            height : 100%;
+            width: 100%;
+            background-color: rgb(66, 64, 64);
+            display:grid;
+            padding : 4rem;
+            row-gap: 0.5rem;
+            column-gap: 0.5rem;
+            grid-template-columns: repeat(1,1fr);
+            grid-template-rows: repeat(6,1fr);
+        }
+        .item{
+            background-color: rgb(244, 40, 9);
+            border: 5px solid black;
+            color : white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+        
+        @media (min-width : 768px){
+            .container{
+                grid-template-rows: 1fr repeat(2, 2fr) 1fr;
+                grid-template-columns: repeat(3, 1fr);
+            }
+            #header, .footer{
+                grid-column-start: 1;
+                grid-column-end: 4;
+            }
+            .sidebar{
+                grid-row-start: 2;
+                grid-row-end: 4;
+            }
+            .content1{
+                grid-column-start: 2;
+                grid-column-end: 4;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="item" id="header">Header</div>
+        <div class="item sidebar">sidebar</div>
+        <div class="item content1">content1</div>
+        <div class="item content2">content2</div>
+        <div class="item content3">content3</div>
+        <div class="item footer">Footer</div>
+    </div>
+</body>
+</html>

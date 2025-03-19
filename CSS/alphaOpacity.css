@@ -1,0 +1,9 @@
+div{
+    height: 300px;
+    width: 300px;
+    background-color: rgba(120,255,0,0.4);  /*alpha value is only applied for the color*/
+}
+#opacity{
+    /* background-color: orange;              /*opacity sets for the elements visibility*/ 
+    opacity:0.5;
+}

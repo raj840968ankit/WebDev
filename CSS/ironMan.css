@@ -1,0 +1,30 @@
+h1{
+    text-align: right;
+    font-weight: bolder;   /*greater than 800*/
+    text-decoration: underline;
+    letter-spacing: 5px;
+    border:solid;
+    width:50%;
+    font-family: papyrus, didot, sans-serif;  /* by default browser will detect font-family*/
+}
+
+h2{
+    text-align: left;
+    font-weight: bold;     /*700*/
+    text-decoration: dotted red line-through;
+    font-family: impact;
+}
+h3{
+    text-align: right;
+    font-weight: 600; 
+    text-decoration: double black overline;
+}
+p{
+    text-align:justify;
+    font-weight: light;
+    line-height: 1.5;
+    font-size:15px;
+}
+a{
+    text-decoration: none;
+}

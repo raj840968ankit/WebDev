@@ -1,0 +1,20 @@
+#outer{
+    height: 400px;
+    width:400px;
+    border: 2px solid black;
+    font-size:30px;
+}
+#inner{
+    border: 2px solid black;
+    height:200px;
+    width:200px;
+    margin:25%;          /*25% margin relative to his parent outer*/
+    padding:1em;         /* em will change a/c to parent font size*/
+}
+button{
+    font-size: 25px;
+    background-color: rgb(55, 229, 229);
+    border-radius: 25px;
+    padding-left: 1.4em;
+    padding-right:1.4em;
+}

@@ -1,0 +1,13 @@
+span{
+    display: block;
+    border: 5px solid black;
+    width:50%;
+    height:350px;
+}
+h2{
+    
+    border: 5px solid black;
+    width:50%;
+    height:350px;
+    display: inline;        /*height and width property will not work because it is behaving as inline*/       
+}

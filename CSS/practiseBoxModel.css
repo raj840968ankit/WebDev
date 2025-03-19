@@ -1,0 +1,32 @@
+.main{
+    height:440px;
+    width:160px;
+    border:5px solid black;
+}
+.child1{
+    border:2px solid black;
+    height:130px;
+    margin-top: 10px;
+    width:130px;
+    border-radius: 50%;
+    margin-left: 13px;
+    background-color: red;
+}
+.child2{
+    border:2px solid black;
+    height:130px;
+    margin-top: 10px;
+    width:130px;
+    border-radius: 50%;
+    margin-left: 13px;
+    background-color: yellow;
+}
+.child3{
+    border:2px solid black;
+    height:130px;
+    margin-top: 10px;
+    width:130px;
+    border-radius: 50%;
+    margin-left: 13px;
+    background-color: #0f0;
+}

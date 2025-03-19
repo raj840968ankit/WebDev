@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+</head>
+<body>
+    <h2>Basic form elements</h2>
+    <form action="/action">
+        <label for="username"> Username</label>
+        <input type="text" placeholder="Enter Username" id="username" name="username">
+        <br>
+        <label for="email">Email</label>    
+        <input type="email" placeholder="@gmail.com" id="email" name ="email">
+        <br>
+        <label for="password">Password</label>
+        <input type="Password" placeholder="Enter Password" id="password" name="password">
+        <br>
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date">
+        <br>
+        <label for="time">Time</label>
+        <input type="time" id="time" name="time">
+        <br>
+        <label for="color">Color</label name="color">
+        <input type="color" id="color">
+        <br>
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+    </form>
+    <hr>
+
+   <h2>Checkbox</h2>
+   <form action="/action">
+     <input type="checkbox" id="age" name="Ankit" value="18+">
+     <label for="age">yes I am 18+</label>
+     <input type="checkbox" id="adult" name="Ankit" value="adult">
+     <label for="adult">yes I am adult</label>
+     <br>
+     <button>Submit</button>
+   </form>
+   <hr>
+
+   <h2>Radio</h2>
+   <form action="/action">
+    <label for="mgender,fgender">Gender</label> 
+    <input type="radio" id="mgender" name="gender" value="male">
+    <label for="mgender">Male</label>
+    <input type="radio" id="fgender" name="gender" value="Female">
+    <label for="fgender">Female</label>
+    <br>
+    <button>Submit</button>
+  </form>
+   
+  <hr>
+
+   <h2>Select drop down list</h2>
+   <form action="/action">
+     <label for="profession">Choose your profession</label>
+     <select name="profession" id="profession">
+        <option value="studying">studying</option>
+        <option value="employed">employed</option>
+     </select>
+     <br> 
+     <button>submit</button> 
+   </form>
+
+    <hr>
+    <h2>Range</h2>
+   <form action="/action">
+        <label for="range">Select volume level</label>
+        <input type="range" min="0" max="100" name="range" id="range" step="10" value="0">
+        <button>Submit</button>
+   </form>
+
+   <hr>
+   <h2>text area</h2>
+   <form action="/action">
+        <label for="feedback">Give your feedback</label>
+        <textarea name="feedback" id="feedback" placeholder="Give your feedback"></textarea>
+        <br>
+        <button>Submit</button> 
+   </form>
+</body>
+</html>

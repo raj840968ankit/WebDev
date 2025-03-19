@@ -1,0 +1,85 @@
+<!--...............DOM (Document Object Model)............-->
+<!--diagram and notes are in notes copy-->
+<!--selectors and editing elements operation performed in browser console-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learning DOM</title>
+    <style>
+        .bg-black{
+            background-color: #212121;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-black">
+    <div>
+        <h1 id = "title" class="heading">DOM Learning on chai aur code <span style="display: none;">Span content</span></h1>
+        <h2 class = "hello">Lorem ipsum dolor sit.</h2>
+        <h2 class = "hello">Lorem ipsum dolor sit.</h2>
+        <h2 class = "hello">Lorem, ipsum.</h2>
+        <p>Lorem ipsum dolor sit amet.</p>
+        <ul>
+            <li class = "list-item">One</li>
+            <li class = "list-item">Two</li>
+            <li class = "list-item">Three</li>
+        </ul>
+    </div>
+</body>
+<!-- open browser console to view the Javascript output-->
+<script>
+    //id selector - It will select a particular id
+    const title = document.getElementById("title")
+    console.log(title);
+
+    //.getAttribute(attributeType) ->to fetch the attribute value
+    const attr = title.getAttribute("class")
+    console.log(attr);
+    
+    //.setAttribute(attributeType, attributeValue) -> to set the attribute value
+    title.setAttribute("id","id-heading")  //you can check in browser elements section
+
+    //Extract content from element
+    console.log(title.innerText);   // it will display visible content
+    console.log(title.textContent); // it will display visible and invisible content both
+
+    //Change content of element
+    title.innerHTML = "DOM learning with Ankit"
+
+    //apply CSS style
+    title.style.color = "red"
+
+    //querySelector("CssSelectorFormat") -> single element selector
+    const ele = document.querySelector("h2")  //it will select first tag h2 present in the document
+    console.log(ele);
+    ele.style.color = "purple"
+    const ele2 = document.querySelector("ul li:nth-child(2)")  //it will select the 2nd children in ul
+    console.log(ele2);
+    ele2.style.color = "wheat"
+
+    //querySelectorAll("CssSelectorFormat") -> selects all similar elements in document
+    //it returns Node List that looks similar as array but it is not the array
+    const nodeList = document.querySelectorAll("li")
+    console.log(nodeList);
+    //so for using this collection as JS array we will use Array.from()
+    const jsArray = Array.from(nodeList)
+    console.log(jsArray);
+    //now we can use array properties
+    jsArray.forEach( (item) => {
+        item.style.backgroundColor = "black"
+    })
+     
+    
+    //ClassName Selector -> it also return html collection  
+    const classCollection = document.getElementsByClassName("hello")
+    console.log(classCollection);
+    const jsArray2 = Array.from(classCollection)
+    console.log(jsArray2);
+    jsArray2.forEach( (item) => {
+        item.style.backgroundColor = "black"
+        item.style.padding = "20px"
+        item.style.borderRadius = "20px"
+    })
+</script>
+</html>

@@ -1,0 +1,8 @@
+div{
+    width:200px;
+    height: 50px;
+    background-color: hsla(108, 23%, 56%, 0.404);
+    text-align: center;
+    margin:10px auto;
+    box-shadow: 2px 2px 10px black;  /* x-axis y-axis blur color*/
+}
