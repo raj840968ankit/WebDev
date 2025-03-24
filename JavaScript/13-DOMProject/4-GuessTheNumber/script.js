@@ -5,7 +5,7 @@ let randomNumber = Math.floor(Math.random() * (max - min + 1) + min)
 const userInput = document.querySelector("#guessField")
 const button = document.querySelector("#subt")
 const prevGuess = document.querySelector(".guesses")
-const remainining = document.querySelector(".lastResult")
+const remaining = document.querySelector(".lastResult")
 const lowOrHigh = document.querySelector(".lowOrHi")
 const finalRes = document.querySelector(".resultParas")
 
@@ -56,7 +56,7 @@ function updateParameter(num){
     //updateParameters
     prevGuess.innerHTML += `${num}, `
     guessNo++;
-    remainining.innerHTML = `${10 - guessNo}`
+    remaining.innerHTML = `${10 - guessNo}`
     userInput.value = ''
   }
   else{
@@ -84,7 +84,7 @@ function start(){
     guessArr = []
     guessNo = 0;
     prevGuess.innerHTML = ''
-    remainining.innerHTML = '10'
+    remaining.innerHTML = '10'
     userInput.removeAttribute('disabled')
     finalRes.removeChild(p)
     play = true;
