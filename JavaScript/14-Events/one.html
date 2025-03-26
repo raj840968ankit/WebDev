@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: #414141; color: aliceblue;">
+    <h2>Amazing image</h2>
+    <div >
+        <ul id="images">
+            <li><img width="200px" id="photoshop" src="https://images.pexels.com/photos/3561339/pexels-photo-3561339.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt="photoshop"></li>
+            <li><img width="200px" id="japan" src="https://images.pexels.com/photos/3532553/pexels-photo-3532553.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt=""></li>
+            <li><img width="200px" id="river" src="https://images.pexels.com/photos/3532551/pexels-photo-3532551.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt=""></li>
+            <li><img width="200px" id="owl" src="https://images.pexels.com/photos/3532552/pexels-photo-3532552.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt="" ></li>
+            <li><img width="200px" id="prayer" src="https://images.pexels.com/photos/2522671/pexels-photo-2522671.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt=""></li>
+            <li><a style="color: aliceblue;" href="https://google.com" id="google">Google</a></li>
+        </ul>
+   </div>
+</body>
+<script>
+    // document.getElementById('owl').addEventListener("click", function(event){
+    //     console.log(event) //show event function in console
+    //     // Event Object Properties in JavaScript
+
+    //     // type - The type of event (e.g., "click", "keydown", "mousemove").
+    //     console.log(event.type);
+
+    //     // timestamp - The time (in milliseconds) at which the event occurred.
+    //     console.log(event.timestamp);
+
+    //     // preventDefault() - Prevents the default action of the event (e.g., stopping form submission).
+    //     event.preventDefault();
+
+    //     // target - The element that triggered the event.
+    //     console.log(event.target);
+
+    //     // toElement - The element the cursor is moving to (used in mouseenter/mouseleave).
+    //     console.log(event.toElement);
+
+    //     // srcElement - Similar to target, used in older versions of Internet Explorer.
+    //     console.log(event.srcElement);
+
+    //     // currentTarget - The element to which the event handler is attached (useful in event delegation).
+    //     console.log(event.currentTarget);
+
+    //     // clientX - The X-coordinate of the mouse relative to the browser window (viewport).
+    //     console.log(event.clientX);
+
+    //     // clientY - The Y-coordinate of the mouse relative to the browser window.
+    //     console.log(event.clientY);
+
+    //     // screenX - The X-coordinate of the mouse relative to the entire screen.
+    //     console.log(event.screenX);
+
+    //     // screenY - The Y-coordinate of the mouse relative to the entire screen.
+    //     console.log(event.screenY);
+
+    //     // altKey - true if the Alt key was pressed during the event.
+    //     console.log(event.altKey);
+
+    //     // ctrlKey - true if the Ctrl key was pressed during the event.
+    //     console.log(event.ctrlKey);
+
+    //     // shiftKey - true if the Shift key was pressed during the event.
+    //     console.log(event.shiftKey);
+
+    //     // keyCode - Numeric code of the key pressed (deprecated, use event.key instead).
+    //     console.log(event.keyCode);
+    // }, false)  // if we don't give false as a third parameter of event listener then it is by default false
+
+    //now we understand the concept of "Bubbling" and "Capturing"...............
+
+    // //..........Bubbling(first child then parent)...........
+    // document.getElementById("images").addEventListener('click', function(e){
+    //     console.log("parent images div is clicked")
+    // },false)
+    
+    // document.getElementById('owl').addEventListener('click', function(e){
+    //     console.log('child owl is click')
+    //     //e.stopPropagation();  //can stop propagation and don't move to parent's event
+    // },false)
+
+    // //..........Capturing(first parent then child)...........
+    // document.getElementById("images").addEventListener('click', function(e){
+    //     console.log("parent images div is clicked")
+    //     //e.stopPropagation();  //can stop propagation and don't move to child's event
+    // },true)
+    
+    // document.getElementById('owl').addEventListener('click', function(e){
+    //     console.log('child owl is click')
+    // },true)
+
+    // document.getElementById('google').addEventListener('click', function(e){
+    //     e.preventDefault()
+    //     console.log("google clicked");
+    // },false)
+
+    //remove an element in ul after clicking
+    document.getElementById('images').addEventListener('click', function(e){
+        //console.log(e.target); // it will give the current element on which you click(e.g. here images)
+        console.log(e.target.parentElement);
+        console.log(e.target.tagName)
+        if(e.target.tagName === 'IMG'){
+            const removeElement = e.target.parentElement
+            removeElement.remove();
+        }
+    })
+</script>
+</html>
