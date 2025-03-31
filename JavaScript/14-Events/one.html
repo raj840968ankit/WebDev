@@ -100,7 +100,7 @@
     document.getElementById('images').addEventListener('click', function(e){
         //console.log(e.target); // it will give the current element on which you click(e.g. here images)
         console.log(e.target.parentElement);
-        console.log(e.target.tagName)
+        console.log(e.target.tagName)    //tell the tag name
         if(e.target.tagName === 'IMG'){
             const removeElement = e.target.parentElement
             removeElement.remove();
