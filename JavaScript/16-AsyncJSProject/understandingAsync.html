@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Chai aur code</h1>
+    <button id="stop" style="width: 50px; height: 30px;">stop</button>
+</body>
+<script>
+    //setTimeout executes only once after a given time value
+    setTimeout(() => {
+        console.log("ankit");
+    }, 2000)
+
+    const changeText = function(){
+        document.querySelector('h1').innerHTML = "Welcome Ankit"
+    }
+    //setTimeout(changeText, 5000);
+
+    //if my setTimeout doesn't execute at a given time the we can clear that by using "clearTimeout"
+    //clear time out needs a reference so we will take the reference of setTimeout
+    const ref = setTimeout(changeText, 5000);
+    document.querySelector('#stop').addEventListener('click', () => {
+        clearTimeout(ref)
+        console.log("stopped");
+    })
+</script>
+</html>

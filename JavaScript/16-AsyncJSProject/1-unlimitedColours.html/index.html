@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Chai aur code</h1>
+    <button id="stop" style="width: 50px; height: 30px;">stop</button>
+    <button id="start" style="width: 50px; height: 30px;">start</button>
+</body>
+<script>
+    //this function will generate random colors
+    let randomColors = () => {
+        let hexCode = "0123456789ABCDEF"
+        let color ='#'
+        for(let i = 0; i < 6; i++){
+            const random = Math.floor(Math.random() * 16)
+            color += hexCode[random]
+        }
+        return color
+    };
+
+    //this function will change color when start button is clicked
+    let intervalRef = null
+    const startChangingColors = function () {
+        if( !intervalRef){   //this if statement is handling for intervalRef become null is stopChangingColors
+            intervalRef = setInterval(() => {
+            document.body.style.backgroundColor = randomColors()
+            }, 1000)
+        }
+        
+    }
+    document.querySelector("#start").addEventListener('click', startChangingColors)
+
+    //this function will stop changing color when stop button is clicked after taking setInterval as reference
+    const stopChangingColors = () => {
+        clearInterval(intervalRef)
+        intervalRef = null
+    }
+    document.querySelector("#stop").addEventListener('click', stopChangingColors)
+</script>
+</html>
