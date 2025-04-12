@@ -6,6 +6,54 @@
     <title>Document</title>
 </head>
 <body>
-    
+    0	UNSENT	Client has been created. open() not called yet.<br>
+    1	OPENED	open() has been called.<br>
+    2	HEADERS_RECEIVED	send() has been called, and headers and status are available.<br>
+    3	LOADING	Downloading; responseText holds partial data.<br>
+    4	DONE	The operation is complete.
 </body>
+<script>
+    //this is the link for getting data from api's
+    const link = 'https://api.github.com/users/raj840968ankit'
+    //creation of object of XMLHttpRequest
+    const xhr = new XMLHttpRequest()
+    //for fetching data we need to give method and link in open() to make a request
+    //open() syntax :- xhr.open(method, apiURL)
+    xhr.open('GET', link)
+    //onreadystatechange is event handler that run everytime when readyState change and takes takes a function 
+    xhr.onreadystatechange = function(){
+        console.log(xhr.readyState);
+        if(xhr.readyState === 4){
+            const data = JSON.parse(this.responseText) //it takes the data from api and converted to Object because sometimes it gives string value
+            console.log(data)
+            console.log(data.name)
+            //..........creating a div that contain my image and followers.........
+            const image = data.avatar_url
+            const followers = data.followers
+            body = document.body
+            const parentDiv = document.createElement('div')
+            parentDiv.style.height = '500px'
+            parentDiv.style.width = '500px'
+            parentDiv.style.border = '2px solid black'
+            parentDiv.style.padding = '20px'
+            parentDiv.style.display = 'block'
+
+            const imageDiv = document.createElement('div')
+            imageDiv.style.height = '90%'
+            imageDiv.style.width = '100%'
+            const img = document.createElement('IMG')
+            img.setAttribute('src', image)
+            imageDiv.append(img)
+            
+            const followTag = document.createElement('h4')
+            followTag.innerHTML = `followers = ${followers}`
+            followTag.style.textAlign = "center"
+            parentDiv.append(imageDiv)
+            parentDiv.append(followTag)
+            body.append(parentDiv)
+        }
+    }
+    //open() doesn't call itself...it needs send() to call
+    xhr.send()
+</script>
 </html>
