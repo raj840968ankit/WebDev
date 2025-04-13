@@ -93,6 +93,8 @@ consumePromise()
 // }
 // apiData()
 
+
+//fetch returns a promise object
 fetch('https://jsonplaceholder.typicode.com/users').then((response) => {
     return response.json()
 }).then((data) => {
@@ -100,3 +102,5 @@ fetch('https://jsonplaceholder.typicode.com/users').then((response) => {
 }).catch((error) => {
     console.log(error)
 })
+
+//if any request reaches upto network and gives error like 404 then it will be considered as fulfilled
