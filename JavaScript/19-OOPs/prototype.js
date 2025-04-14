@@ -13,7 +13,7 @@ console.log(multipleBy5.prototype);  // it will print empty object({}) because t
 
 
 //creating a constructor function and associating prototype function with it.................
-//Remember - prototype can be only used with constructor function or Object and Array class
+//Remember - prototype can be only used with constructor function or Object,Array and String class
 function createUser(username, score){
     this.username = username
     this.score = score
