@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closure</title>
+</head>
+<body>
+    <button id="orange">Orange</button>
+    <button id="yellow">Yellow</button>
+</body>
+<script>
+    //Closure is nested functions enclosed with the scope
+    function outer(){
+        let name = "ankit"
+        function inner(){
+            console.log("inner "+name) //an inner function can always get access to its outer variables
+        }
+        inner()
+    }
+    outer()
+
+    //.................lexical Scoping..................
+    function outer2(){
+        let name = "myName"
+        function inner2(){
+            console.log("inner2 "+name)  
+        }
+        return inner2 //here it will not return only inner function. It will return whole lexical scope(inner + outer)
+        //because inner function is using outer function context
+    }
+    const myFunc = outer2()
+    myFunc()
+
+    //important use of lexical scoping (understand why it is necessary)................
+    function changeColor(color){
+        function change(){
+            document.body.style.backgroundColor = color
+        }
+        return change
+    }
+    document.querySelector('#orange').addEventListener('click', changeColor('orange'))
+    //here we are not giving function reference, it is executing itself because we passed argument in execution'()'
+    //therefore we have to create lexical scope that return the function changing colors
+    document.querySelector('#yellow').addEventListener('click', changeColor('yellow'))
+</script>
+</html>
