@@ -7,6 +7,7 @@ function SetUsername(username){
 function createUser(username, email, password){
     //if we have to make a function call for current context we have do these things:-
     //function.call() and pass 'this' as an argument that represent current context
+    //.............it is an example of inheritance......................
     SetUsername.call(this, username)
    
     this.email = email
