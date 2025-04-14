@@ -5,7 +5,7 @@
 
 //for cloning github repositories to vs code new folder.....
 //   navigate to that folder in terminal
-//   git clone repository link(link will be provided in github website code -> https section)
+//   git clone repositoryLink(link will be provided in github website code -> https section)
 
 
 //for tracking status of file
@@ -34,6 +34,10 @@
 //   git init
 
 
-//to push on github
-//   git remote add origin "link"
+//to change branch name
+//   git remote -M "new name"
+
+
+//to push a new folder on github new repository
+//   git remote add origin "new repo link"
 //   git push origin main
