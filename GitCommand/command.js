@@ -27,3 +27,13 @@
 
 //to push on github
 //   git push origin main
+
+
+//to initialize a new git repo in our local machine
+//   create a new folder and navigate to that folder
+//   git init
+
+
+//to push on github
+//   git remote add origin "link"
+//   git push origin main
