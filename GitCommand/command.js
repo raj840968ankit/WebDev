@@ -34,10 +34,25 @@
 //   git init
 
 
-//to change branch name
-//   git remote -M "new name"
-
 
 //to push a new folder on github new repository
 //   git remote add origin "new repo link"
 //   git push origin main
+
+
+//.................branch commands.................
+
+//to change branch name
+//   git remote -M "new name"
+
+//to get branch list
+//   git branch
+
+//to create new branch
+//   git checkout -b "new name"
+
+//to navigate to another branch
+//   git checkout branchName
+
+//to delete a branch
+//   git branch -d branchName
