@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio</title>
-    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="style.css">
     
 </head>
 <body>
@@ -52,9 +52,32 @@
             
         </div>
 
-        <div class="grid-item" id="services">Services</div>
-        <div class="grid-item" id="skill">Skill</div>
-        <div class="grid-item" id="Contact">Contact</div>
+        <div class="grid-item" id="skill">
+            <div class="section-title">Skills</div>
+            
+            <div class="skill-container">
+                <div class="skill-card">HTML</div>
+                <div class="skill-card">CSS</div>
+                <div class="skill-card">JavaScript</div>
+                <div class="skill-card">Node.js</div>
+                <div class="skill-card">Express.js</div>
+                <div class="skill-card">React</div>
+                <div class="skill-card">MongoDB</div>
+                <div class="skill-card">SQL</div>
+                <div class="skill-card">Git</div>
+                <div class="skill-card">Java DSA</div>
+              </div>
+          </div>
+
+        <div class="grid-item" id="Contact">
+            <div class="section-title">Contact Me</div>
+            <form class="contact-form">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
     </div>
 
     
