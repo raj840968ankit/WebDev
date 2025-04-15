@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     
 </head>
+  
 <body>
     
     <div class="grid-container">
@@ -28,12 +29,16 @@
         <!-- home -->
         <div class="grid-item" id="home">
             <div class="home-content">
-                <div class="text-1">Hello, my name is</div>
-                <div class="text-2">Ankit Raj</div>
-                <div class="text-3" >And I'm a <span>Web Developer</span></div>
-                <div class="button"><button>Hire Me</button></div>
+            <div class="text-1">Hello, my name is</div>
+            <div class="text-2">Ankit Raj</div>
+            <div class="text-3">
+                And I'm a&nbsp;
+                <span id="typed-text"></span><span class="cursor">|</span>
             </div>
-        </div> 
+            <div class="button"><button>Hire Me</button></div>
+            </div>
+        </div>
+  
 
         <!-- about -->
         <div class="grid-item" id="about">
@@ -80,6 +85,44 @@
         </div>
     </div>
 
-    
+    <!-- Place this script just before </body> -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const texts = ["Web Developer", "MERN Enthusiast"];
+      const typingDelay = 150;
+      const erasingDelay = 100;
+      const newTextDelay = 2000;
+  
+      let textIndex = 0, charIndex = 0;
+      const typedText = document.getElementById("typed-text");
+  
+      function type() {
+        if (charIndex < texts[textIndex].length) {
+          typedText.textContent += texts[textIndex].charAt(charIndex++);
+          setTimeout(type, typingDelay);
+        } else {
+          setTimeout(erase, newTextDelay);
+        }
+      }
+  
+      function erase() {
+        if (charIndex > 0) {
+          typedText.textContent = texts[textIndex].substring(0, --charIndex);
+          setTimeout(erase, erasingDelay);
+        } else {
+          textIndex = (textIndex + 1) % texts.length;
+          setTimeout(type, typingDelay + 500);
+        }
+      }
+  
+      // kick off the typing effect
+      if (typedText) {
+        setTimeout(type, newTextDelay);
+      } else {
+        console.error("Typed-text element not found!");
+      }
+    });
+  </script>
 </body>
+
 </html>

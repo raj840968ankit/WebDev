@@ -314,3 +314,14 @@ body {
   #Contact { padding: 20px 10px; }
   .contact-form { gap: 10px; }
 }
+
+/* blinking cursor */
+.cursor {
+    display: inline-block;
+    color: #872657;     /* same color you used for “Web Developer” */
+    animation: blink 0.7s steps(1) infinite;
+  }
+  
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
