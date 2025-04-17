@@ -17,6 +17,11 @@ const weatherIcon =  document.querySelector('.weather-icon')
 function checkWeather(cityName){
 
     fetch(apiUrl + `${cityName}&appid=${apiKey}`).then(function(response){
+        if(response.status === 404){
+            document.querySelector('.weather').style.display = 'none'
+            document.querySelector('.error').style.display = 'block'
+            return
+        }
         return response.json()
     }).then(function(objectData){
         //not we get the data in objectData variable
@@ -41,6 +46,10 @@ function checkWeather(cityName){
         else if(objectData.weather[0].main === 'Mist'){
             weatherIcon.src = "imagesWeather/mist.png"
         }
+
+        //the weather div will only be displayed if user search some valid city
+        document.querySelector('.weather').style.display = 'block'
+        document.querySelector('.error').style.display = 'none'
     }).catch(function(error){
         console.log(error);
     })
