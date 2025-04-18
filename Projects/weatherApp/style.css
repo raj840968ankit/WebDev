@@ -133,8 +133,8 @@ body{
         outline: 0;
         background: #ebfffc;
         color: #555;
-        padding: 10px 2px;
-        height: 30px;
+        padding: 10px 15px;
+        height: 40px;
         border-radius: 30px;
         flex: 1;
         margin-right: 16px;
@@ -145,12 +145,13 @@ body{
         outline: 0;
         background: #ebfffc;
         border-radius: 50%;
-        width: 25px;
-        height: 25px;
+        width: 30px;
+        height: 30px;
         cursor: pointer;
+        margin-left: -12px;
     }
     .search button img{
-        width: 16px;
+        width: 15px;
     }
     .details{
         display: flex;
