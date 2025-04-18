@@ -14,18 +14,36 @@ const searchBox = document.querySelector('.search input')
 const searchBtn =  document.querySelector('.search button')
 const weatherIcon =  document.querySelector('.weather-icon')
 
+//sounds object
+const sounds = {
+    rain:    new Audio('sound/rain.mp3'),
+    cloud:  new Audio('sound/cloud.mp3'),
+    drizzle: new Audio('sound/drizzle.mp3'),
+};
+
+//for stopping sound once it is played
+function stopAllSounds() {
+    Object.values(sounds).forEach(audio => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+}
+
 function checkWeather(cityName){
 
     fetch(apiUrl + `${cityName}&appid=${apiKey}`).then(function(response){
         if(response.status === 404){
             document.querySelector('.weather').style.display = 'none'
             document.querySelector('.error').style.display = 'block'
+            stopAllSounds()
             return
         }
         return response.json()
     }).then(function(objectData){
         //not we get the data in objectData variable
         //now we will update the parameters like place, temperature, humidity and wind
+        stopAllSounds()
+        
         city.innerHTML = objectData.name
         temperature.innerHTML = `${Math.floor(objectData.main.temp)}°c`
         humidity.innerHTML = `${objectData.main.humidity}%`
@@ -33,15 +51,18 @@ function checkWeather(cityName){
 
         if(objectData.weather[0].main === 'Clouds'){
             weatherIcon.src = "imagesWeather/clouds.png"
+            sounds.cloud.play()
         }
         else if(objectData.weather[0].main === 'Rain'){
             weatherIcon.src = "imagesWeather/rain.png"
+            sounds.rain.play()
         }
         else if(objectData.weather[0].main === 'Clear'){
             weatherIcon.src = "imagesWeather/clear.png"
         }
         else if(objectData.weather[0].main === 'Drizzle'){
             weatherIcon.src = "imagesWeather/drizzle.png"
+            sounds.drizzle.play()
         }
         else if(objectData.weather[0].main === 'Mist'){
             weatherIcon.src = "imagesWeather/mist.png"
