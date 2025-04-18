@@ -135,6 +135,7 @@ body{
         color: #555;
         padding: 10px 15px;
         height: 40px;
+        min-width: 50px;
         border-radius: 30px;
         flex: 1;
         margin-right: 16px;
