@@ -6,8 +6,20 @@ let turn = 'X'
 let isGameOver = false
 const playButton = document.querySelector('#play-again')
 const result = document.querySelector('.result') 
+const sound = {
+    victory : new Audio('victory.mp3')
+}
+
+function stopMusic(){
+    Object.values(sound).forEach((music) =>{
+        music.pause()
+        music.currentTime = 0
+    })
+}
+
 if(!isGameOver){
     boxArr.forEach((box) => {
+        stopMusic()
         box.innerHTML = ""
         result.style.display = "none"
         playButton.style.display = "none"
@@ -31,6 +43,7 @@ if(!isGameOver){
             let box2 = boxArr[winCondition[i][1]].innerHTML
             let box3 = boxArr[winCondition[i][2]].innerHTML
             if(box1 !== '' && box1 === box2 && box1 === box3){
+                sound.victory.play()
                 isGameOver = true
                 result.innerHTML = turn + " Win"
                 result.style.display = "block"
