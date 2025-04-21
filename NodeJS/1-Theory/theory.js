@@ -6,4 +6,7 @@
 //NPM is introduced to manage the packages of node js
 //FNM(fast node manager) is a command line utility that enable us to switch on any node.js version
 
-///
+//REPL(read, evaluate, print, loop) in node js appears when we type node in terminal
+//     it can evaluate only single expression at a time like in browser console
+
+//like browser we have 'window' and 'document', we have 'global' in node js that works slightly as window
