@@ -48,6 +48,6 @@ fs.appendFileSync(filePath, "\nData Appended", 'utf-8')
 //? oldPath: Current file path.
 //? newPath: New file path or name.
 //*-------------------------------------------------------------------------------------*
-const renameFileName = "fileRenamed"
+const renameFileName = "fileRenamed.txt"
 const renameFilePath = path.join(__dirname, renameFileName)
 fs.renameSync(filePath, renameFilePath)
