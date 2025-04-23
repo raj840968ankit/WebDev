@@ -1,5 +1,5 @@
+//....................Synchronous file system handling......................................
 //import fs module
-const { log } = require('console')
 const fs = require('fs')
 const path = require('path')
 const filename = "data.txt"
@@ -10,7 +10,7 @@ const filePath = path.join(__dirname, filename)
 //* fs.writeFileSync(): Writes data to a file. If the file does not exist, it will be created. If the file exists, it overwrites the content.
 //! syntax: fs.writeFileSync(filePath, data, options);
 //? options: Optional. Encoding ('utf8') to get data as a string.
-fs.writeFileSync(filePath, "This file indicates to 6.fileSystemModule.js", 'utf-8')
+fs.writeFileSync(filePath, "This synchronous file handling", 'utf-8')
 
 
 //.............................Reading from a file.......................................................

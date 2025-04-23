@@ -1,2 +1,2 @@
-This file indicates to 6.fileSystemModule.js
+This synchronous file handling
 Data Appended
