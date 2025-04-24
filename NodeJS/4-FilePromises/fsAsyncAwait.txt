@@ -1,0 +1,2 @@
+writing file using async await
+appending file using async await
