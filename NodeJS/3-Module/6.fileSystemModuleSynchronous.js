@@ -32,13 +32,13 @@ console.log(readFile);   //or readFile.toString()
 fs.appendFileSync(filePath, "\nData Appended", 'utf-8')
 
 
-//.....................................Deleting a file........................................
-//*-------------------------------------------------------------------------------------*
-//* Delete File (fs.unlinkSync()) : Deletes a file by its path.
-//! syntax: fs.unlinkSync(filePath);
-//? filePath: The path of the file to delete.
-//*-------------------------------------------------------------------------------------*
-//fs.unlinkSync(filePath)
+// //.....................................Deleting a file........................................
+// //*-------------------------------------------------------------------------------------*
+// //* Delete File (fs.unlinkSync()) : Deletes a file by its path.
+// //! syntax: fs.unlinkSync(filePath);
+// //? filePath: The path of the file to delete.
+// //*-------------------------------------------------------------------------------------*
+// fs.unlinkSync(filePath)
 
 
 //....................................Rename a file......................................
