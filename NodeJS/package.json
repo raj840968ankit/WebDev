@@ -1,0 +1,11 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "Best node tutorial thapa bhai",
+  "main": "1.HTTPModule.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ankit",
+  "license": "ISC"
+}
