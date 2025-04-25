@@ -1,0 +1,1 @@
+this file is using ecmascript imports and __dirname is not defined implicitly
