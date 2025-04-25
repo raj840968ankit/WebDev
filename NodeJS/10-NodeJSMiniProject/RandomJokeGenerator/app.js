@@ -1,8 +1,9 @@
 import https from 'https'
 import chalk from "chalk"
 
+const apiUrl = "https://official-joke-api.appspot.com/random_joke"
+
 const generateJoke = () => {
-    const apiUrl = "https://official-joke-api.appspot.com/random_joke"
     https.get(apiUrl, (response) => {
         let data = ""
         response.on("data", (chunk) => {   //we will get data chunk by chunk
