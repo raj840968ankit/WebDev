@@ -11,6 +11,7 @@
   "type": "module",
   "dependencies": {
     "chalk": "^5.4.1",
+    "crypto": "^1.0.1",
     "express": "^5.1.0"
   }
 }
