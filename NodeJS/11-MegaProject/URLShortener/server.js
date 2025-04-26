@@ -9,7 +9,7 @@ const filepath = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(filepath)
 const jsonFilePath = path.join(__dirname, "data", "links.json")
 
-const port = 3002
+const port = 3001
 
 const serveFile = async (res, filePath, header) => {
     try {
@@ -96,5 +96,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(port, () => {
-    console.log(`Server running at http://localhost${port}`)
+    console.log(`Server running at http://localhost:${port}`)
 })
