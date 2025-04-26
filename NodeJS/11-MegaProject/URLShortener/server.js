@@ -4,10 +4,10 @@ import fs from 'fs/promises'
 import { fileURLToPath } from "url"
 import crypto from "crypto"
 
+
 const filepath = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(filepath)
 const jsonFilePath = path.join(__dirname, "data", "links.json")
-console.log(jsonFilePath);
 
 const port = 3002
 
@@ -26,10 +26,10 @@ const serveFile = async (res, filePath, header) => {
 //reading links from links.json (if not exists then creating that with empty object)
 const loadLinks = async () => {
     try {
-        const data = await fs.readFile(jsonFilePath, "utd-8")
+        const data = await fs.readFile(jsonFilePath, "utf-8")
         return JSON.parse(data)
     } catch (error) {
-        if(error.code === "ENOENT"){
+        if(error.code === "ENOENT"){   //ENOENT = ERROR NO ENTRY
             await fs.writeFile(jsonFilePath, JSON.stringify({} , null, 2))
             return {}
         }
@@ -37,6 +37,9 @@ const loadLinks = async () => {
     }
 }
 
+const saveLinks = async (links) => {
+    await fs.writeFile(jsonFilePath, JSON.stringify(links, null,2))
+}
 //.......................creating server..............................
 const server = http.createServer(async (req, res) => {
     //serving html, css and js file to the server
@@ -53,25 +56,41 @@ const server = http.createServer(async (req, res) => {
         }
     }
 
-    //..............taking the frontend data from the server......................
+    //..............taking the client data from the server and saving data to json file......................
     if(req.method === "POST" && req.url === "/shorten"){
+        //loading json file
         const links = await loadLinks()
 
+        //loading client's request
         let body = ""
-        res.on("data" , (chunk) => {
+        req.on("data", (chunk) => {
             body += chunk
         })
-        res.on("end" , (chunk) => {
+        req.on("end" , async (chunk) => {
             console.log(body);
             const {url, shortCode} = JSON.parse(body)
-            //if there is no url
+            //validate the url
             if(!url){
                 res.writeHead(400, {"Content-Type" : "text/plain"})
                 return res.end("URL is required")
             }
 
-            //checking in the file if shortcode exists otherwise generating
+            //generate shortcode if not provided (if provided then shortCode will conquer here)
             const finalShortCode = shortCode || crypto.randomBytes(4).toString("hex")
+
+            //checking in file if shortCode exists
+            if(links[finalShortCode]){
+                res.writeHead(400, {"Content-Type" : "text/plain"})
+                return res.end("Short code already exists, Please choose another")
+            }
+
+            //if not exists then give value of url to finalShortCode
+            links[shortCode] = url
+            await saveLinks(links)
+
+            //this data is in fetch in frontend
+            res.writeHead(200, {"Content-Type" : "application/json"})
+            res.end(JSON.stringify({success : true, shortCode : finalShortCode}))
         })
     }
 });
