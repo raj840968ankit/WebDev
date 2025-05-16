@@ -56,6 +56,7 @@ const server = http.createServer(async (req, res) => {
             return res.end(JSON.stringify(links))
         }else{                  //if client request any other url(means shortened link url)
             const links = await loadLinks();
+            console.log(req.url);
             const short2 = req.url.slice(1);  // Remove leading '/'
             const [short] = short2.split('%')
             console.log(short);
