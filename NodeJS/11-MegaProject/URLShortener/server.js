@@ -1,7 +1,7 @@
 import http from "http"
 import path from 'path'
 import fs from 'fs/promises'
-import { fileURLToPath } from "url"
+import {fileURLToPath} from "url"
 import crypto from "crypto"
 
 
@@ -46,13 +46,28 @@ const server = http.createServer(async (req, res) => {
     if(req.method === 'GET'){
         if(req.url === '/'){
             return serveFile(res, path.join(__dirname,"index.html"), "text/html")  //we are returning it to server
-        }
-        //adding corresponding css file also
-        if(req.url === '/style.css'){
+        }else if(req.url === '/style.css'){       //adding corresponding css file also
             return serveFile(res, path.join(__dirname,"style.css"), "text/css")   //since html file is calling style.css also
-        }
-        if(req.url === '/script.js'){
+        }else if(req.url === '/script.js'){
             return serveFile(res, path.join(__dirname,"script.js"), "text/javascript")  //since html file is calling script.js also
+        }else if(req.url === '/links'){       //sending data from server to client 
+            const links = await loadLinks()
+            res.writeHead(200, {"Content-Type" : "application/json"})
+            return res.end(JSON.stringify(links))
+        }else{                  //if client request any other url(means shortened link url)
+            const links = await loadLinks();
+            const short2 = req.url.slice(1);  // Remove leading '/'
+            const [short] = short2.split('%')
+            console.log(short);
+            if (links[short]) {
+                console.log(`Redirecting to: ${links[short]}`);
+                res.writeHead(302, { Location: links[short] });
+                return res.end();
+            } else {
+                console.log(`Short code not found: ${short}`);
+                res.writeHead(404, { "Content-Type": "text/plain" });
+                return res.end("Short code doesn't exist");
+            }
         }
     }
 
@@ -66,7 +81,7 @@ const server = http.createServer(async (req, res) => {
         req.on("data", (chunk) => {
             body += chunk
         })
-        req.on("end" , async (chunk) => {
+        req.on("end" , async () => {
             console.log(body);
             const {url, shortCode} = JSON.parse(body)
             //validate the url
@@ -85,7 +100,7 @@ const server = http.createServer(async (req, res) => {
             }
 
             //if not exists then give value of url to finalShortCode
-            links[shortCode] = url
+            links[finalShortCode] = url
             await saveLinks(links)
 
             //this data is in fetch in frontend

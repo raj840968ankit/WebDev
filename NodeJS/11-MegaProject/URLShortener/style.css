@@ -16,7 +16,8 @@ body{
 .container{
     width : 27%;
     min-width: 300px;
-    height: 85%;
+    height: auto;
+    min-height: 630px;
     border: 2px solid black;
     padding: 20px 20px 20px 20px;
     background-color: #e3e3e3;
