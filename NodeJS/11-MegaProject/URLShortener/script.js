@@ -26,10 +26,10 @@ form.addEventListener('submit', async (e) => {
     //sending data from frontend to backend
     try {
             const response = await fetch('/shorten', {
-            method : "POST",
-            headers : {"Content-Type" : "application/json"},
-            body : JSON.stringify({url, shortCode})
-        }) 
+                method : "POST",
+                headers : {"Content-Type" : "application/json"},
+                body : JSON.stringify({url, shortCode})
+            }) 
         if(response.ok){
             displayLinks()
             alert("form submitted successfully")
