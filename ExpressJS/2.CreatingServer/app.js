@@ -16,9 +16,9 @@ app.get('/about', (req, res) => {  //here get method is used to send response fr
     return res.send("<h1>Hello About page!!</h1>")
 })
 
-const port = 3000
+// const port = 3000
+const port = process.env.PORT //when working with environment variable
 app.listen(port, () =>{
     console.log(`Server is listening at http://localhost:${port}.....`);
 })
-
 

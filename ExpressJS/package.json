@@ -7,7 +7,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "nodemon --env-file=.env 2.CreatingServer\\app.js"
   },
   "dependencies": {
     "crypto": "^1.0.1",

@@ -9,7 +9,7 @@
 //dependency symbol in package.json
 //   ^ -> patch and minor updates or 4.x
 //   ~ -> only patch updates or 4.1.x
-//   4.1.1 -> exact version
+//   4.1.1 -> exact version  (e.g. npm i express@5.0.0)
 
 
 //npm outdated -> show outdated packages

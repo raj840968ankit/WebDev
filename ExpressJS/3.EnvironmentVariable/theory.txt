@@ -1,0 +1,19 @@
+//Environment variable is used to store configuration like port, apiKeys, database URLs. (simply private data)
+
+//access Environment variable using 'process.env.variableName' where process is global object in nodeJS
+
+//to set Environment variable (older method) :-
+    macOS & linux terminal - export variableName=value; "node run command(e.g. node filename.js)"
+    powershell - $env:variableName=value; "node run command(e.g. node filename.js)"
+    command prompt - set variableName=value && "node run command(e.g. node filename.js)"
+
+//to set Environment variable (newer method) :- 
+    step 1 : create .env file in project folder (like package.json)
+    step 2 : add variableName=value in .env file (e.g. PORT=3000)
+    step 3 : in 'package.json' add a key-value in 'scripts' ("dev" : "nodemon --env-file=.env relativeFilePath(e.g. Server/app.js)")
+            ----adding this key-value pair will become very easy to run any file using "npm run dev"----------
+
+//after creation of '.env' file, create '.env-example' file (best practice to give hint to other user. ' variableName="" ')  
+    because '.env' is private file and developer don't share it and give 
+
+
