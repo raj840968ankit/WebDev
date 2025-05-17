@@ -8,9 +8,14 @@ const displayLinks = async () => {
         const linkList = document.querySelector("#shortened-urls")
         linkList.innerHTML = ""
 
-        Object.keys(links).forEach((key) => {
+        Object.keys(links).forEach((link) => {
             const li = document.createElement("li");
-            li.innerHTML = `<a href="/${key} target="_blank" >${window.location.origin}/${key}</a> - ${links[key]}`
+            li.innerHTML = `<a href="/${link}" target="_blank">${window.location.origin}/${link}</a> - ${links[link]}`
+            // target="_blank": Opens the link in a new tab.
+            // window.location.origin returns the current page’s origin (protocol + host), e.g.:
+            // http://localhost:3000 (for local development)
+            // https://myshortener.com (in production)
+
             linkList.appendChild(li)
         })
     } catch (error) {
