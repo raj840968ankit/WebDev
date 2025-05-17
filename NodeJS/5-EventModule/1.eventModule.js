@@ -1,5 +1,4 @@
-//eventEmitter is a core module in Node js use to create and handle custom events
-//eventEmitter is a part of event module
+//EventEmitter is a class in event module in Node js use to create and handle custom events
 
 // Import EventEmitter class
 const EventEmitter = require("events"); 

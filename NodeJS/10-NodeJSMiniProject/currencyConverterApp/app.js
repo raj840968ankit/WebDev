@@ -1,4 +1,4 @@
-import https from 'https'
+import https from 'https'  //here we are using https module because api uses https endpoint
 import readline from 'readline'  // deals with CLI
 import chalk from 'chalk'
 
