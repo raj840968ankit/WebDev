@@ -1,4 +1,17 @@
 //Open project folder only in vs code
 
-//create package.json file and add(scripts {start and dev} e.g. URL shortener)
+//create package.json file and add(scripts {start and dev} e.g. URL shortener) and type = module
 
+//add git repository
+    1. git init (initialize repo)
+    2. git add .
+    3. git commit -m "message"
+    4. open github website and create a new repository, after that copy html link of that repo
+    5. git remote add "html link of repo"
+    6. git branch -M main
+    7. git push origin main
+
+//open render website (host node, react, python)
+    1. sign in using github
+    2. open workspace and click on new
+    3. through git repo upload project repo and check run command before deploying
