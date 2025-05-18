@@ -1,5 +1,5 @@
 import express from 'express'
-
+import {port} from './2.ValidateEnv.js'
 //creating an instance of express
 const app = express()
 //"app" variable holds the created express app which i can use for :-
@@ -16,8 +16,8 @@ app.get('/about', (req, res) => {  //here get method is used to send response fr
     return res.send("<h1>Hello About page!!</h1>")
 })
 
-const port = 3000
+// const port = 3000
+//const port = process.env.PORT || 3000 //when working with environment variable (.env file)
 app.listen(port, () =>{
     console.log(`Server is listening at http://localhost:${port}.....`);
 })
-

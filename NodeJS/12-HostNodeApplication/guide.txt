@@ -1,0 +1,4 @@
+//Open project folder only in vs code
+
+//create package.json file and add(scripts {start and dev} e.g. URL shortener)
+

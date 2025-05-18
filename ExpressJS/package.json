@@ -8,10 +8,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev" : "nodemon --env-file=.env 2.CreatingServer\\app.js"
+    "dev": "nodemon --env-file=.env 3.EnvironmentVariable\\3.app.js"
   },
   "dependencies": {
     "crypto": "^1.0.1",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "zod": "^3.24.4"
   }
 }
