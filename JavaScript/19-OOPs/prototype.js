@@ -44,4 +44,4 @@ String.prototype.trueLength = function(){
     return `${this.trim().length}`
 }
 const name = '    ankit    '
-console.log(name.trueLength());
+console.log(name.trueLength())
