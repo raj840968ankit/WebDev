@@ -1,0 +1,5 @@
+//Route parameter in expressJS are dynamic part of the URL that can be changed accessed using 'req,params';
+
+//to use route parameter (e.g. http://localhost:3000/profile/:username) here //:username is route parameter
+
+//Access the value of route parameter via 'req.params.id' (e.g. req.params.username) 

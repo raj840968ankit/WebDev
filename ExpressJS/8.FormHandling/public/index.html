@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/contact" method="post">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+        <!-- user[name] means {user : {name : value}} in backend
+        <input type="text" id="name" name=user[name] required><br><br> -->
+
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" rows="5" cols="30" required></textarea><br><br>
+        <!-- user[name] and user[message] means {user : {name : value, message : value}} in backend.....
+        <textarea id="message" name=user[message] rows="5" cols="30" required></textarea><br><br> -->
+
+        <button>Submit</button>
+    </form>
+</body>
+</html>

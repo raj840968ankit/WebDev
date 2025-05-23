@@ -1,0 +1,10 @@
+//by default form uses get method and we can handle it using app.get and accessed by req.query
+//'action' attribute specify the url where form data ig going to submitted
+
+//since 'get' method sends data in 'url' and url has length limit so better to use 'post' method for form submission
+
+//post method send data in request body that allow larger amount of data
+
+//to access data from a post request, use 'urlencoded()' middleware to parse the request body
+
+//use req.body in app.post for accessing form data using post method

@@ -1,0 +1,6 @@
+//Query parameters are key-value pairs appended to the urls (https://www.youtube.com/search?q=dog&limit=10)
+'q and limit' are key and 'dog and 10' are value
+
+//it can be accessed using 'req.query.id' (e.g. req.query.q)
+
+//it will always comes after route parameters (http://localhost:3000/profile/ankit/article?search=articleName)
