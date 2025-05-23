@@ -82,7 +82,7 @@ app.get('/:shortCode', async (req, res) => {
         if(!links[shortCode]){
             return res.status(404).send("404 error occurred")
         }
-        res.redirect(links[shortCode])
+        return res.redirect(links[shortCode])
     } catch (error) {
         console.log(error);
         return res.status(500).send("Internal server error")
