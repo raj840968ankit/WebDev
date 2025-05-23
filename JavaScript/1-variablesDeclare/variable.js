@@ -1,3 +1,4 @@
+
 //used to declare constant variables
 const id = 1234;
 //used to declare variable and scopeless
