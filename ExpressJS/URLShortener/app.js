@@ -88,6 +88,8 @@ app.get('/:shortCode', async (req, res) => {
         return res.status(500).send("Internal server error")
     }
 });
+
+
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`)
 })
