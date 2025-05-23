@@ -12,4 +12,4 @@ const PI = 3.142
 
 // export default add; //we can give any name while importing by using default
 
-export {add, sub, PI}
+export default {add, sub, PI}

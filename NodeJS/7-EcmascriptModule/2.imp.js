@@ -6,8 +6,8 @@
 // console.log(sub(100, 50));
 // console.log(PI);
 
-import * as math from './1.exp.js' //alternative way of importing multiple functions
-console.log(math.add(100, 50));
-console.log(math.sub(101, 50));
-console.log(math.PI);
+import takku from './1.exp.js' //alternative way of importing multiple functions
+console.log(takku.add(100, 50));
+console.log(takku.sub(101, 50));
+console.log(takku.PI);
 
