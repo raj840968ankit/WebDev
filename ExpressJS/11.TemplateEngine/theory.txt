@@ -1,0 +1,47 @@
+//A template engine in Express.js is used to render dynamic HTML by injecting data into templates.
+
+//Popular engines like EJS, Pug, or Handlebars can be integrated with Express. 
+
+//All engines have different syntax similar to HTML, but it helps to pass down dynamic values from express to HTML. 
+
+//Set the engine using app.set('view engine', 'ejs') and specify the template folder with app.set('views', './views'). 
+
+//Render templates using res.render('templateName', {key: value }). 
+    res.render('index', { title: 'Welcome', message: 'Hello World' }); 
+
+//Install the engine using npm (e.g., npm install ejs) and create templates with placeholders like <%= title %> for data insertion.
+
+/*
+    We will be using Ejs in this course. 
+    EJS (Embedded JavaScript) is a simple templating engine for generating dynamic HTML pages. 
+    It integrates JavaScript logic into HTML using special tags like <%= %>. 
+    Supports JavaScript features like loops, conditionals, and partials. 
+    Escapes HTML by default to prevent injection, with options for unescaped output. 
+    Widely used with Express.js for rendering views dynamically.
+*/
+
+//For using template goto URLShortener Project.....
+//    1. Create views folder 
+//    2. create fileName.ejs file and write html code there
+//    3. first use 'app.set('views', './views')' to specify views folder
+//    4. use 'app.set('view engine', 'ejs')' middleware to use the file     
+//    5. use router.get('/url', (req, res) => {
+//              res.render('ejsfilename')
+//       })
+//    6.
+
+
+
+//.............DynamicEditing can be done in ejs file by...................
+//for adding comment -> <%# this is a comment %>
+
+//for adding content only -> <%= title %> in ejs file
+//                           res.render('index', {title : 'Welcome'}) in route file  
+
+//for adding raw html -> <%- content %> in ejs file
+//                       res.render('index', {content : '<h1> Hello </h1>'}) in route file
+
+//..................partials.................................
+//for using common templates like(header, footer) -> <%- include('header') %>   
+//       make sure header.ejs and footer.ejs are in views folder
+

@@ -22,8 +22,11 @@
         </form>
         <h2>Shortened URLs</h2>
         <ul>
-            <!-- this is provided so that it can be manipulated directly using expressJS -->
-            {{ shortened_url }}
+            <% for(let link in links) { %>
+                <li>
+                <a href="/<%= link %>" target="_blank"><%= req.host %>/<%= link %></a> - <%= links[link] %>
+                </li>
+            <% } %>
         </ul>
      </div>
      <!-- <script src="script.js"></script> -->

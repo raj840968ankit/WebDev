@@ -71,3 +71,96 @@ form button{
         width: auto;
     } */
 }
+
+/* Full-width, fixed-top navbar */
+.navbar {
+    width: 100%;
+    background-color: #333;
+    padding: 1rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+
+/* Navbar links container */
+.navbar-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Individual link items */
+.navbar-links li {
+    margin: 0 1.5rem;
+}
+
+/* Link styling */
+.navbar-links a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+    padding-bottom: 3px;
+}
+
+/* Hover effect */
+.navbar-links a:hover {
+    color: #ffcc00;
+    border-bottom: 2px solid #ffcc00;
+}
+
+/* Style for the main report section */
+.report-section {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Section heading */
+.report-section h1 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+/* List styling reset */
+.student-data {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+/* Card structure for each student */
+.student-data li {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 250px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+/* Hover effect */
+.student-data li:hover {
+  transform: translateY(-5px);
+}
+
+/* Paragraphs inside the card */
+.student-data p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #444;
+}

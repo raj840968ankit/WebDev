@@ -1,0 +1,17 @@
+//A router in expressJS is used to define modules and reusable routes in expressJS
+
+//it is created by 'express.Router()'
+
+//router can be defined using 'router.get()' and 'router.post()'
+
+//router can be mounted in main app using 'app.use('/basepath', router)'
+
+//......To see example then goto URLShortener project in 'routes folder'(initially created to use router)
+//      1.create 'routes' folder
+//      2.create 'routerFileName.routes.js' file
+//      3.cut content and paste in router file (get, post) only
+//      4.create router instance using express.Router()
+//      5.replace app with router
+//      6.export router to use in app.js
+//      7.use router using app.use(exported router)
+//      8.if any path related problem then send req.appRoute using middleware and can be accessed in only req-res cycle(get and post method only)
