@@ -1,0 +1,31 @@
+/*
+MVC is a software design pattern that separates an application into three distinct layers: 
+    Model, View, and Controller, each with a specific responsibility. 
+
+Model: Manages Data and Logic 
+    Represents the data of the application, handles business logic, and interacts with the database (e.g., CRUD operations). 
+
+View: Handles User Interface 
+    Displays the data to the user. It's responsible for rendering the presentation (HTML, CSS, JavaScript) based on the data provided by the Controller. 
+
+Controller: The Mediator 
+    Acts as the intermediary between the Model and View. It handles user input, interacts with the Model to fetch or update data, and passes the data to the View for display
+*/
+
+
+//..........................Using a controller(it also manage routes) check in 'shortener.routes.js'...........................
+//          1.Copy 'req,res' function of 'get or post' method from 'shortener.routes.js'
+//          2.create a directory 'controllers'
+//          3.create a file 'filename.controller.js'
+//          4.create a function in that file
+//          5.import needed package there used by the function
+//          6.send required function used by function in controller from route file
+//          7.export function of controller file to import in route file to use.
+
+
+//..........................Using a model(it manages data (CRUD operation)) check in 'shortener.routes.js'....................
+//          1.Copy CRUD performing function from 'shortener.routes.js'
+//          2.create a directory 'models'
+//          3.create a file 'filename.model.js'
+//          4.import needed package there used by the function
+//          5.export function of controller file to import in route file to use.

@@ -6,9 +6,9 @@
 
 //router can be mounted in main app using 'app.use('/basepath', router)'
 
-//......To see example then goto URLShortener project in 'routes folder'(initially created to use router)
+//......To see example then goto URLShortener project in 'routes folder' and 'app.js'(initially created to use router)
 //      1.create 'routes' folder
-//      2.create 'routerFileName.routes.js' file
+//      2.create 'shortener.routes.js' file
 //      3.cut content and paste in router file (get, post) only
 //      4.create router instance using express.Router()
 //      5.replace app with router

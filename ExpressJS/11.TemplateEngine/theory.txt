@@ -20,7 +20,7 @@
     Widely used with Express.js for rendering views dynamically.
 */
 
-//For using template goto URLShortener Project.....
+//For using template goto URLShortener Project(check in views and app.js).....
 //    1. Create views folder 
 //    2. create fileName.ejs file and write html code there
 //    3. first use 'app.set('views', './views')' to specify views folder
@@ -41,7 +41,7 @@
 //for adding raw html -> <%- content %> in ejs file
 //                       res.render('index', {content : '<h1> Hello </h1>'}) in route file
 
-//..................partials.................................
+//..................partials(check in report.ejs).................................
 //for using common templates like(header, footer) -> <%- include('header') %>   
 //       make sure header.ejs and footer.ejs are in views folder
 

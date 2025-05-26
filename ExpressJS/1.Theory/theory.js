@@ -6,6 +6,8 @@
 //..................in a project.................
 // Folders like :-
 //         data - will contain files containing data (e.g. json)
-//         views - will contain html file
+//         views - will contain ejs files
 //         public - will contain static file( css, js, fonts, images)
 //         routes - will contain route files
+//         controllers - manage the routes
+//         models - manage data performing operation files

@@ -4,30 +4,38 @@
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
-body{
+body {
     width: 100%;
-    height: 100vh;
-    text-align: center;
+    margin: 0;
+    padding: 40px 0;
     display: flex;
     justify-content: center;
-    align-items: center;
     background-color: #515151;
+    align-items: center;
+    /* ❌ Remove height: 100vh and align-items: center */
 }
-.container{
-    width : 27%;
+.container {
+    width: 27%;
     min-width: 300px;
     height: auto;
-    min-height: 630px;
     border: 2px solid black;
-    padding: 20px 20px 20px 20px;
+    padding: 20px;
     background-color: #e3e3e3;
     border-radius: 20px;
+
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-content: space-between;
+
     gap: 40px;
+
+    /* Remove vertical centering to avoid cutting content */
+    /* justify-content: center; */
+    /* align-content: space-between; */
+
+    /* Let it grow naturally */
     min-height: 550px;
+    text-align: center;
+    align-items: center; 
 }
 form{
     width : 100%;
@@ -163,4 +171,30 @@ form button{
   margin: 0.5rem 0;
   font-size: 1rem;
   color: #444;
+}
+
+.shorten-links {
+    width: 85%;
+    display: flex;
+    flex-wrap: wrap; /* Wrap items to the next line if needed */
+    justify-content: center; /* Center the items horizontally */
+    list-style: none;
+    padding: 0;
+    margin: 20px auto; /* Auto for horizontal centering */
+    gap: 15px;
+    height: auto; /* Allows height to grow as needed */
+}
+
+.shorten-links li {
+    background-color: #f0f0f0;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.shorten-links a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
 }
