@@ -1,0 +1,19 @@
+/*
+    -MongoDB is a NoSQL database that stores data in a flexible, JSON-like format called BSON (Binary JSON). 
+    -It is document-oriented, meaning data is stored as documents in collections instead of rows and tables. 
+    -MongoDB supports dynamic schemas, allowing fields to vary between documents in the same collection. 
+    -MongoDB provides features like indexing, aggregation pipelines, and replication for high performance and reliability. 
+    -Commonly used for applications requiring flexible data models
+*/
+
+--Collection - group of documents (similar to tables in SQL)
+--document - basic unit of data (similar to a entry in table in SQL but in key-value pair)
+
+//........................Installing MongoDB and connecting with NodeJS........................
+//    1.Download community server MongoDB from MongoDB website
+//    2.Install complete version
+//    3.Open MongoDB compass
+//    4.Add new connection
+//    5.Start the connection in MongoDB compass
+//    6.Go to MongoDB driver website (click on NodeJS -> again click on NodeJS) for reading manual
+//    7.use 'npm i mongodb' to for using mongodb with NodeJS
