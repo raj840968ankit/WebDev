@@ -1,22 +1,29 @@
 import crypto from 'crypto'
-import { saveLinks, loadLinks } from '../models/data.model.js';
+import { saveLinks, loadLinks, getLinksByShortcode } from '../models/data.model.js';
 
 const postUrlShortener = async (req, res) => {
     try {
         const {url, shortCode} = req.body;
-        const links = await loadLinks(req.appRoot)
-
+        const links = await loadLinks()
         const finalShortCode = shortCode || crypto.randomBytes(4).toString("hex")
-
-            //checking in file if shortCode exists
-            if(links[finalShortCode]){
+        console.log(links);
+        
+        // //checking in file if shortCode exists
+        // if(links[finalShortCode]){
+        //     return res.status(400).send("Short code already exists, Please choose another")
+        // }
+        links.forEach(({url, shortCode}) => {
+            if(shortCode){
                 return res.status(400).send("Short code already exists, Please choose another")
             }
+        })
 
-            //if not exists then give value of url to finalShortCode
-            links[finalShortCode] = url
-            await saveLinks(req.appRoot, links)
-            return res.redirect('/');
+        //if not exists then give value of url to finalShortCode
+        // links[finalShortCode] = url
+        // await saveLinks(links)
+
+        await saveLinks({shortCode, url}) 
+        return res.redirect('/');
     } catch (error) {
         console.log(error);
     }
@@ -34,7 +41,7 @@ const getReport = (req,res) => {
 
 const getUrlShortener = async (req, res) => {
   try {
-    const links = await loadLinks(req.appRoot);
+    const links = await loadLinks();
     res.render('index', { links, req });  // passing req so you can use req.headers.host in ejs
   } catch (error) {
     console.log(error);
@@ -45,11 +52,19 @@ const getUrlShortener = async (req, res) => {
 const getShortLink = async (req, res) => {
     try {
         const {shortCode} = req.params
-        const links = await loadLinks(req.appRoot)
-        if(!links[shortCode]){
-            return res.status(404).send("404 error occurred")
+        // const links = await loadLinks()
+        //checking in database existence of url
+        const link = await getLinksByShortcode(shortCode)
+        console.log(link);
+    
+        // if(!links[shortCode]){
+        //     return res.status(404).send("404 error occurred")
+        // }
+
+        if(!link.shortCode){
+            return res.redirect('/404')
         }
-        return res.redirect(links[shortCode])
+        return res.redirect(link.url)
     } catch (error) {
         console.log(error);
         return res.status(500).send("Internal server error")

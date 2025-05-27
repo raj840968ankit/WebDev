@@ -22,9 +22,9 @@
         </form>
         <h2>Shortened URLs</h2>
         <ul class="shorten-links">
-            <% Object.keys(links).map((link) => { %>
+            <% links.map(({shortCode, url}) => { %>
                 <li>
-                <a href="/<%= link %>" target="_blank"><%= req.host %>/<%= link %></a> - <%= links[link] %>
+                <a href="/<%= shortCode %>" target="_blank"><%= req.host %>/<%= shortCode %></a> - <%= url %>
                 </li>
             <% }) %>
         </ul>

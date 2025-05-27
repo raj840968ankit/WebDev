@@ -11,4 +11,4 @@
 //         routes - will contain route files
 //         controllers - manage the routes
 //         models - manage data performing operation files
-//         config - in env.js env file validation
+//         config - in env.js env file validation and db-client.js has crud operations
