@@ -1,0 +1,48 @@
+//..................Installation of MySQL...............................
+//      1.go to MySQL community downloads
+//      2.download for windows(download community but not web community)
+//..................During Installation.......................
+//      1.choose setup type 'custom'
+//      2.click '+' mysql sever -> '+' mysql sever -> '+' mysql sever 8.0 -> select topmost item and click green(->) button
+//      3.click '+' application -> '+' mysql workbench -> '+' mysql workbench 8.0 -> select topmost item and click green(->) button
+//      4.click '+' application -> '+' mysql shell -> '+' mysql shell 8.0 -> select topmost item and click green(->) button
+//      5.proceed the Installation without no changes
+//      6.give password and remember everytime
+//      7.goto 'services' searching in windows -> search for mysql -> right click -> properties -> select startup type "automatic" (mandatory)
+
+
+//********after running any Queries -> refresh schema using refresh icon in mysql workbench
+
+
+//...............................MySQL Queries...............................................
+//   for creating database -> create database mysql_test;
+
+//   accessing database -> use dbname;
+
+//   for deleting database -> drop database dbname;
+
+//   for creating table -> create table users(
+//                         id int auto_increment primary key,
+//                         name varchar(100) not null,
+//                         email varchar(100) not null unique
+//                         );
+
+//   for inserting data in table -> insert into users(name, email) values("ankit", "ankit@gmail.com");
+
+//   for retrieving data from table -> select * from tableName;
+
+//   for inserting multiple entries -> INSERT INTO users (name, email) VALUES 
+//                                     ('Alice', 'alice@example.com'), 
+//                                     ('Bob', 'bob@example.com'), 
+//                                     ('Charlie', 'charlie@example.com'), 
+//                                     ('David', 'david@example.com'), 
+//                                     ('Emma', 'emma@example.com');
+
+//   for retrieving particular entry -> select * from users where name="Emma";
+
+//   for updating any entry -> update users 
+//                             set email="emma@thapa.com"
+//                             where name="eMMa";
+
+//   for deleting any entry -> delete from users
+//                             where name="emma";
