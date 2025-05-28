@@ -46,3 +46,8 @@
 
 //   for deleting any entry -> delete from users
 //                             where name="emma";
+
+
+//.........................Connecting mysql with Node......................................
+//   1.npm i mysql2
+//   2.create a file app.js
