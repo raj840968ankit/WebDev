@@ -1,0 +1,11 @@
+/*
+    -What it is: A Node.js ODM (Object Data Modeling) library for MongoDB.
+
+    -Purpose: Provides a schema-based solution to model your MongoDB data.
+
+    -Level: It's a higher-level abstraction built on top of the MongoDB native driver.
+
+    -Usage: Helps manage relationships, validation, middleware, and queries in a structured way.
+*/
+
+//install via 'npm i mongoose'
