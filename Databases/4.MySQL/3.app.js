@@ -82,5 +82,5 @@ try {
     
 }
 
-const [rows] = await db.execute("Select * from users where name=?", ["ankitraj"])
+const [rows] = await db.execute("Select email from users where name=?", ["ankitraj"])
 console.log(rows);
