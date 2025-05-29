@@ -1,0 +1,18 @@
+//.................Installation.....................................
+//  1.create a package via 'npm init -y' if you are working with a project root folder
+//  2.install prisma via 'npm install prisma --save-dev' and install express also
+//  3.'npx prisma init' that will create '.env', '.gitignore' files and 'prisma' folder
+//  4.install prisma extension in vs code for word suggestions related to prisma
+
+
+//.................Error encountered solution for common js and ecmascript.................................
+//    1. just follow the same by-default functions of 'schema.prisma' file 
+//    2. (alternative) 2.install prisma via 'npm install prisma@6.3.1 --save-dev' and install 'npm install @prisma/client@6.3.1' and then after defining schema 'npx prisma generate'
+
+
+
+//...................use prisma with mysql...................................
+//    1.goto prisma website -> get started -> start from scratch -> relational database -> connect your database -> select language as mysql and js -> copy database url for .env and made the changes in url
+//    2.create a schema in schema.prisma in prisma folder
+//    3.To map your data model to the database schema, you need to use the prisma migrate CLI commands: 'npx prisma migrate dev --name init'...this command will also generate prisma client and create a migration folder
+//    4.now create a file index.js for performing crud operation
