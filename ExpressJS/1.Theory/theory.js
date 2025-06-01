@@ -12,3 +12,4 @@
 //         controllers - manage the routes
 //         models - manage data performing operation files
 //         config - in env.js env file validation and db-client.js has database connection
+//         services - for prisma crud operations

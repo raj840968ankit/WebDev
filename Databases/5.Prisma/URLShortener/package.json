@@ -1,22 +1,21 @@
 {
-  "name": "databases",
+  "name": "urlshortener",
   "version": "1.0.0",
-  "description": "thapa",
+  "description": "",
   "license": "ISC",
   "author": "",
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon --env-file=.env ./URLShortener/app.js"
+    "dev" : "nodemon --env-file=.env app.js"
   },
   "dependencies": {
+    "@prisma/client": "^6.8.2",
     "crypto": "^1.0.1",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
-    "mongodb": "^6.16.0",
-    "mongoose": "^8.15.1",
     "mysql2": "^3.14.1",
-    "zod": "^3.25.30"
+    "zod": "^3.25.46"
   },
   "devDependencies": {
     "prisma": "^6.8.2"

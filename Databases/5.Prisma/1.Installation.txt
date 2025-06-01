@@ -1,7 +1,8 @@
 //.................Installation.....................................
 //  1.create a package via 'npm init -y' if you are working with a project root folder
-//  2.install prisma via 'npm install prisma --save-dev' and install express also
+//  2.install prisma via 'npm install prisma --save-dev' and install express also 
 //  3.'npx prisma init' that will create '.env', '.gitignore' files and 'prisma' folder
+//        alternative -> create a folder named 'prisma' -> Inside prisma, create schema.prisma -> Give 'DATABASE_URL' in .env file (if any error occur after 'npx prisma init')
 //  4.install prisma extension in vs code for word suggestions related to prisma
 
 
@@ -16,3 +17,7 @@
 //    2.create a schema in schema.prisma in prisma folder
 //    3.To map your data model to the database schema, you need to use the prisma migrate CLI commands: 'npx prisma migrate dev --name init'...this command will also generate prisma client and create a migration folder
 //    4.now create a file index.js for performing crud operation
+
+
+
+//     "npx prisma studio to view in browser"
