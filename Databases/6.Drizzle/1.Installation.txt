@@ -1,0 +1,20 @@
+//............................Installation..................................
+//  1.install package using 'npm install drizzle-orm' and mysql2 also
+//  2.install drizzle kit for accessing in browser using 'npm i -D drizzle-kit'
+
+
+//...........................Using Drizzle...................................
+//  1.Give database url in .env file
+//  2.Create database manually
+//  3.create a folder 'config' -> drizzle.db.js for database connection
+//  4.create a folder drizzle -> schema.js
+//  5.create a drizzle config file 'drizzle.config.js' in root folder
+//  6.change script in package.json as shown
+//    i. 'npm run db:generate' for schema creation
+//    ii. 'npm run db:generate'
+//    iii. 'npm run db:studio'
+//  7.create app.js for crud operation
+
+
+
+//....Always run drizzle by npm run start.........

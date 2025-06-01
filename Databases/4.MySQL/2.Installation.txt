@@ -50,4 +50,8 @@
 
 //.........................Connecting mysql with Node......................................
 //   1.npm i mysql2
-//   2.create a file app.js
+//   2.create a file app.
+
+
+//..............................Important for project...............................
+//   1.Create database and table manually first
