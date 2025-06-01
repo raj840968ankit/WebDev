@@ -46,7 +46,7 @@
 
 //...........................after mongodb........................
 
-import { db } from "../config/db-client.js";
+// import { db } from "../config/db-client.js";
 
 //table creation
 // await db.execute(`
@@ -58,16 +58,37 @@ import { db } from "../config/db-client.js";
 // `)
 
 
+// export const loadLinks = async () => {
+//     const [rows] = await db.execute(`select * from shorteners`)
+//     return rows;
+// }
+
+// export const saveLinks = async (link) => {
+//     return await db.execute(`insert into shorteners(shortCode, url) values(?, ?)`, [link.finalShortCode, link.url]);
+// }
+
+// export const getLinksByShortcode = async (shortCode) => {
+//     const [rows] = await db.execute(`select * from shorteners where shortCode=?`, [shortCode]);
+//     return rows[0];
+// }
+
+
+//...........................after prisma........................
+import { db } from "../config/db-client.js"
+import { shortenerTable } from "../drizzle/schema.js" 
+import {eq} from 'drizzle-orm'
+
 export const loadLinks = async () => {
-    const [rows] = await db.execute(`select * from shorteners`)
-    return rows;
+    const links = await db.select().from(shortenerTable)
+    return links;
 }
 
 export const saveLinks = async (link) => {
-    return await db.execute(`insert into shorteners(shortCode, url) values(?, ?)`, [link.finalShortCode, link.url]);
+    return await db.insert(shortenerTable).values({url : link.url, shortCode : link.finalShortCode});
 }
 
 export const getLinksByShortcode = async (shortCode) => {
-    const [rows] = await db.execute(`select * from shorteners where shortCode=?`, [shortCode]);
-    return rows[0];
+    const link = await db.select().from(shortenerTable).where(eq(shortenerTable.shortCode, shortCode));
+    return link[0];
 }
+

@@ -1,35 +1,28 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "43be927a-3fe9-4664-8c78-c6632433b6e8",
+  "id": "d4ffab4f-1504-4f34-b1d4-e7183e2ac639",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "users_table": {
-      "name": "users_table",
+    "shortener": {
+      "name": "shortener",
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": true
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
+        "url": {
+          "name": "url",
+          "type": "varchar(512)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "age": {
-          "name": "age",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "email": {
-          "name": "email",
+        "shortCode": {
+          "name": "shortCode",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
@@ -39,18 +32,18 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "users_table_id": {
-          "name": "users_table_id",
+        "shortener_id": {
+          "name": "shortener_id",
           "columns": [
             "id"
           ]
         }
       },
       "uniqueConstraints": {
-        "users_table_email_unique": {
-          "name": "users_table_email_unique",
+        "shortener_shortCode_unique": {
+          "name": "shortener_shortCode_unique",
           "columns": [
-            "email"
+            "shortCode"
           ]
         }
       },

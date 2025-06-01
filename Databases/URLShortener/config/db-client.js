@@ -7,8 +7,8 @@
 
 // export {dbClient}
 
-import mysql from 'mysql2/promise'
-import {env} from './env.js'
+// import mysql from 'mysql2/promise'
+// import {env} from './env.js'
 
 // // Step 1: Connect without specifying the database
 // const tempDb = await mysql.createConnection({
@@ -22,10 +22,15 @@ import {env} from './env.js'
 // await tempDb.end();
 
 // Step 3: Connect to the actual database
-export const db = await mysql.createConnection({
-  host: env.DATABASE_HOST,
-  user: env.DATABASE_USER,
-  password: env.DATABASE_PASSWORD,
-  database: env.DATABASE_NAME
-});
+// export const db = await mysql.createConnection({
+//   host: env.DATABASE_HOST,
+//   user: env.DATABASE_USER,
+//   password: env.DATABASE_PASSWORD,
+//   database: env.DATABASE_NAME
+// });
+
+
+import {drizzle} from "drizzle-orm/mysql2"
+
+export const db = drizzle(process.env.DATABASE_URL);   //connection created
 

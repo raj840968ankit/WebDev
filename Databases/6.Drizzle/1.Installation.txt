@@ -11,7 +11,7 @@
 //  5.create a drizzle config file 'drizzle.config.js' in root folder
 //  6.change script in package.json as shown
 //    i. 'npm run db:generate' for schema creation
-//    ii. 'npm run db:generate'
+//    ii. 'npm run db:migrate'
 //    iii. 'npm run db:studio'
 //  7.create app.js for crud operation
 

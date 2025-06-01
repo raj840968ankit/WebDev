@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import { saveLinks, loadLinks, getLinksByShortcode } from '../services/shortener.servies.js';
+import { saveLinks, loadLinks, getLinksByShortcode } from '../models/data.model.js';
 
 const postUrlShortener = async (req, res) => {
     try {
