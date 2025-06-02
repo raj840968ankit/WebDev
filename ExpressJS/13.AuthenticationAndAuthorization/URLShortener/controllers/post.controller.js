@@ -45,15 +45,19 @@ const getShortenerPage = async (req, res) => {
   try {
     const links = await loadLinks();
 
-    //!getting cookie detail
-    let isLoggedIn = req.headers.cookie;
-    isLoggedIn = Boolean(isLoggedIn?.split('=')[1])   //extracting 'isLoggedIn=true' value to 'true' only
-    console.log("Logged in value -> ",isLoggedIn);
-    
+    //!getting cookie detail (complex)
+    // let isLoggedIn = req.headers.cookie;
+    // isLoggedIn = Boolean(isLoggedIn?.split('=')[1])   //extracting 'isLoggedIn=true' value to 'true' only
+    // console.log("Logged in value -> ",isLoggedIn);
+
+    //!getting cookie detail via cookieParser
+    let isLoggedIn = req.cookies.isLoggedIn
+    console.log(isLoggedIn);
+
 
     res.render('index', { links, req, isLoggedIn });  // passing req so you can use req.headers.host in ejs
   } catch (error) {
-    console.log(error);
+    console.error("Error in getShortenerPage:", error);
     return res.status(500).send("Internal server error");
   }
 }

@@ -12,10 +12,14 @@ export const getLoginPage = (req, res) => {
 }
 
 export const postLogin = (req, res) => {
-    //! use of cookies and path is "/" because session starts from out home page and every url starting from "/"
-    res.setHeader('Set-Cookie', 'isLoggedIn=true; path=/;')
-    //?go to getShortenerPage route to check cookie value
+    //! setting of cookies and path is "/" because session starts from out home page and every url starting from "/".... (complex)
+    // res.setHeader('Set-Cookie', 'isLoggedIn=true; path=/;')
+    //?go to getShortenerPage route to get cookie value
 
+    //! setting of cookie via cookie parser
+    res.cookie("isLoggedIn", true)
+    //?go to getShortenerPage route to get cookie value
+    
     res.redirect('/')
 }
 

@@ -1,7 +1,9 @@
 //....................Use of cookies.........................
-//  - auth.controller.js ('postLogin' method)
+//  - set cookies in auth.controller.js ('postLogin' method)
 //  - check cookies status in browser -> inspect -> applications -> cookies
+//  - handle cookies on path = '/' means 'getShortenerPage' controller (complex Handling)
 
 
 //.......Handling cookies easily with cookie parser middleware.................................
 //   1.install via 'npm i cookie-parser'
+//   2.first import cookieParser and use this middleware via 'app.use(cookieParser)' in (app.js)

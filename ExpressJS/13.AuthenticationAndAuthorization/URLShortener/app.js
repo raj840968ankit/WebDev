@@ -3,6 +3,7 @@ import express from 'express'
 import { shortenerRouter } from './routes/shortener.routes.js'
 import {env} from './config/env.js'
 import { authRouter } from './routes/auth.routes.js'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -13,6 +14,7 @@ app.use(express.static(path.join(appRoot, "public")))
 
 app.use(express.urlencoded({extended : true}))  //parses post request body
 
+app.use(cookieParser())   //use cookie parser early
 
 app.set('views', path.join(appRoot, "views"))   //manually give path to ejs files(dynamic html)
 app.set('view engine', 'ejs')  //using template engine(dynamic html)
