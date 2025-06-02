@@ -1,0 +1,14 @@
+//.....................Using bcrypt(made for js)......................
+//  1.install via 'npm i bcrypt'
+//  2.check usage in auth.services.js via auth.controller.js 
+
+
+//................Comparing hash (bcrypt vs argon2) -> hash.test.js (URLShortener)...................
+//  Note :- bcryptJS matches only first 72 character of hashed password (not recommended) 
+//  Note :- argon2 can match above 72 character of hashed password (Recommended)
+
+
+
+//...................Using argon2...............................
+//  1.install via 'npm i argon2'
+//  2.check usage in auth.services.js via auth.controller.js

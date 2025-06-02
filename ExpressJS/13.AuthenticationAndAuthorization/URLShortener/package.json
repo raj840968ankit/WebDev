@@ -15,6 +15,9 @@
   },
   "dependencies": {
     "@prisma/client": "^6.8.2",
+    "argon2": "^0.43.0",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "crypto": "^1.0.1",
     "drizzle-orm": "^0.44.1",
