@@ -22,4 +22,13 @@
 //  3.send cookie to client's browser with token value -> run and inspect in browser -> inspect -> application
 //  4.now we will do the verification of JWT token
 //     4.1 use verifyAuthentication user defined function middleware just after cookie parser
+
+
+//..........................Send user details after verifying decoded token..................
+//  1.Use middleware in app.js (req.locals.user = req.user)
+//  2.and directly go to index.ejs and we can user 'user'
+
+
+//....................create a protected route like dashboard......................
+//  1.check usage in auth.route.js
  

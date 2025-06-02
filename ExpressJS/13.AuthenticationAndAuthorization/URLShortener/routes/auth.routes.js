@@ -7,5 +7,11 @@ router.route('/auth/register').get(authController.getRegisterPage).post(authCont
 
 router.route('/auth/login').get(authController.getLoginPage).post(authController.postLogin)
 
+//created a dashboard using json-web-token
+router.route('/me').get(authController.getMe)
+
+//clearing cookie here after logout
+router.route('/auth/logout').get(authController.getLogoutUser)
+
 export const authRouter = router
 

@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <% if(isLoggedIn) { %>
+    <%- include('partials/header') %>
+
+    <%# if(isLoggedIn) { %> <%# this is ejs comment %>
+    <% if(user) { %>
         <h2>You are Logged In</h2>
     <% } else { %>
         <h2>You are not Logged In</h2>

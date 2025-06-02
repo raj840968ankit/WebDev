@@ -51,12 +51,12 @@ const getShortenerPage = async (req, res) => {
     // console.log("Logged in value -> ",isLoggedIn);
 
     //!getting cookie detail via cookieParser
-    
-    let isLoggedIn = req.cookies.isLoggedIn
+    // let isLoggedIn = req.cookies.isLoggedIn
     //console.log(isLoggedIn);
+    // return res.render('index', { links, req, isLoggedIn });  // passing req so you can use req.headers.host in ejs
 
-
-    return res.render('index', { links, req, isLoggedIn });  // passing req so you can use req.headers.host in ejs
+    //! we are trying to send user details after verifying JWT token and using middleware in app.js
+    return res.render('index', { links, req });
   } catch (error) {
     console.error("Error in getShortenerPage:", error);
     return res.status(500).send("Internal server error");

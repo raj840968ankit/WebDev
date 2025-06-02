@@ -15,10 +15,19 @@ app.use(express.static(path.join(appRoot, "public")))
 
 app.use(express.urlencoded({extended : true}))  //parses post request body
 
-app.use(cookieParser())   //use cookie parser early
+app.use(cookieParser())   //use cookie parser before hitting routes
 
 //use verifyAuthentication middleware just after cookie parser
 app.use(verifyAuthentication)   //for verification of JWT token
+
+app.use((req, res, next) => { 
+    res.locals.user = req.user; 
+    return next()
+});  // -> How It Works: 
+// This middleware runs on every request before reaching the route handlers. 
+//? res.locals is an object that persists throughout the request-response cycle. 
+// If req.user exists (typically from authentication, like Passport.js), it's stored in res.locals.user. 
+//Views (like EJS, Pug, or Handlebars) can directly access user without manually passing it in every route.
 
 app.set('views', path.join(appRoot, "views"))   //manually give path to ejs files(dynamic html)
 app.set('view engine', 'ejs')  //using template engine(dynamic html)

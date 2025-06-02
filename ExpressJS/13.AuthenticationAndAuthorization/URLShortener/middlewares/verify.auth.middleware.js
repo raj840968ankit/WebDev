@@ -1,12 +1,12 @@
 import { verifyJWTToken } from "../services/auth.services.js";
 
 export const verifyAuthentication = (req, res, next) => { 
-    console.log(req.cookies);
+    //console.log(req.cookies);
     // ↓↓↓ use brackets, not dot with a hyphen ↓↓↓
     const token = req.cookies["access-token"];
 
     if(!token){
-        console.log("[verifyAuthentication] → No token found, setting req.user = null");
+        //console.log("[verifyAuthentication] → No token found, setting req.user = null");
         req.user = null;   //defining user property null if token is not found
         return next();
     }

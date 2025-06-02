@@ -10,10 +10,18 @@ export const getRegisterPage = (req, res) => {
 }
 
 export const getLoginPage = (req, res) => {
+    if(req.user) {
+        return redirect('/');   //via JWT token
+    }
+    
     return res.render("auth/login")
 }
 
 export const postLogin = async (req, res) => {
+    if(req.user) {
+        return redirect('/');   //via JWT token
+    }
+
     const {email, password} = req.body;
 
     const user = await getUserByEmail(email);
@@ -75,5 +83,17 @@ export const postRegister = async (req, res) => {
     const [user] = await createUser({name, email, password : hashedPassword});
     console.log(user);
 
+    return res.redirect('/auth/login')
+}
+
+export const getMe = (req, res) => {
+    if(!req.user) {
+        return res.send("Not logged in")
+    }
+    return res.send(`<h1>Hey - ${req.user.name} - ${req.user.email}</h1>`)
+}
+
+export const getLogoutUser = (req, res) => {
+    res.clearCookie('access-token')
     return res.redirect('/auth/login')
 }
