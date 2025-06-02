@@ -38,7 +38,7 @@ const getReport = (req,res) => {
         {name : 'Kabir', grade : "8th", favoriteSubject : 'Chemistry'},
         {name : 'Gaurav', grade : "10th", favoriteSubject : 'Physics'}
     ];
-    res.render("report", { student })
+    return res.render("report", { student })
 }
 
 const getShortenerPage = async (req, res) => {
@@ -51,11 +51,12 @@ const getShortenerPage = async (req, res) => {
     // console.log("Logged in value -> ",isLoggedIn);
 
     //!getting cookie detail via cookieParser
+    
     let isLoggedIn = req.cookies.isLoggedIn
-    console.log(isLoggedIn);
+    //console.log(isLoggedIn);
 
 
-    res.render('index', { links, req, isLoggedIn });  // passing req so you can use req.headers.host in ejs
+    return res.render('index', { links, req, isLoggedIn });  // passing req so you can use req.headers.host in ejs
   } catch (error) {
     console.error("Error in getShortenerPage:", error);
     return res.status(500).send("Internal server error");
@@ -64,20 +65,16 @@ const getShortenerPage = async (req, res) => {
 
 const getShortLink = async (req, res) => {
     try {
-        const {shortCode} = req.params
-        // const links = await loadLinks()
-        //checking in database existence of url
-        const link = await getLinksByShortcode(shortCode)
-        console.log(link);
-    
-        // if(!links[shortCode]){
-        //     return res.status(404).send("404 error occurred")
-        // }
+        const { shortCode } = req.params;
+        const link = await getLinksByShortcode(shortCode);
 
-        if(!link || !link.shortCode){
-            return res.redirect('/404')
+        if (!link) {
+        // don't log anything here if you don’t want tons of "undefined"
+        return res.status(404).send('Not found');
         }
-        return res.redirect(link.url)
+
+        console.log('Found link:', link);
+        return res.redirect(link.url);
     } catch (error) {
         console.log(error);
         return res.status(500).send("Internal server error")

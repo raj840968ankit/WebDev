@@ -1,4 +1,4 @@
-import { getUserByEmail, createUser, hashPassword, comparePassword } from "../services/auth.services.js";
+import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken } from "../services/auth.services.js";
 
 export const getRegisterPage = (req, res) => {
     try {
@@ -16,16 +16,16 @@ export const getLoginPage = (req, res) => {
 export const postLogin = async (req, res) => {
     const {email, password} = req.body;
 
-    const userExist = await getUserByEmail(email);
-    //console.log("user exists : ",userExist);
+    const user = await getUserByEmail(email);
+    console.log("user exists : ",user);
 
 
-    if(!userExist){
+    if(!user){
         return res.redirect('/auth/login')
     }
 
     //!comparing userExist.password(hashed One) with password
-    const isValidPassword = await comparePassword(password, userExist.password)
+    const isValidPassword = await comparePassword(password, user.password)
 
     //if user exist then check for password
     // if(userExist.password !== hashedPassword){
@@ -41,11 +41,21 @@ export const postLogin = async (req, res) => {
     // res.setHeader('Set-Cookie', 'isLoggedIn=true; path=/;')
     //?go to getShortenerPage route to get cookie value
 
-    //! setting of cookie via cookie parser
-    res.cookie("isLoggedIn", true)
+    //! setting of cookie via cookie parser(Recommended)
+    // res.cookie("isLoggedIn", true)
     //?go to getShortenerPage route to get cookie value
+
+
+    //!Creating a JWT token here
+    const token = generateToken({
+        id : user.id,
+        name : user.name,
+        email : user.email
+    })
+    //?After generating token we will send the cookie to client's browser with token value
+    res.cookie('access-token', token);
     
-    res.redirect('/')
+    return res.redirect('/')
 }
 
 export const postRegister = async (req, res) => {

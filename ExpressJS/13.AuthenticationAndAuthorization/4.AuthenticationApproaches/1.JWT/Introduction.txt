@@ -1,0 +1,25 @@
+//.................Session and cookie working.........................
+//first the user send the request to server then server checks the credentials(login credentials)
+//if the credentials matches with the stored data (database) then the server stores the info(session expiry, IP address etc)
+//after then server send cookie to the browser as response to the client and stored in the browser
+//and whenever user try to access protected then again it send request with cookies in header and matches whether the session is expired or not in database
+//if not then server send the access to protected page to the client
+
+//.........................JWT working..............................
+//first the user send the request to server(login credentials)
+//then the server creates the JWT tokens and signature (done by the programmer)
+//then the server send cookies and JWT token as response to the client and stored in the browser
+//and whenever user try to access protected then again it send request with cookies in header with token value
+//then the server verify that the token is valid or not
+//if it is valid then the server send the response data to the client
+
+//****JWT consists of header, payload(actual data) and signature
+
+
+//...........................Using JWT.............................
+//  1.install via 'npm i jsonwebtoken'
+//  2.check the usage in auth.controller.js(create JWT token using sign() method just after defining secret key in .env file)
+//  3.send cookie to client's browser with token value -> run and inspect in browser -> inspect -> application
+//  4.now we will do the verification of JWT token
+//     4.1 use verifyAuthentication user defined function middleware just after cookie parser
+ 
