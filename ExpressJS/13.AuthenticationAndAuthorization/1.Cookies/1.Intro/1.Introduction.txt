@@ -1,0 +1,7 @@
+//....................Use of cookies.........................
+//  - auth.controller.js ('postLogin' method)
+//  - check cookies status in browser -> inspect -> applications -> cookies
+
+
+//.......Handling cookies easily with cookie parser middleware.................................
+//   1.install via 'npm i cookie-parser'

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <% if(isLoggedIn) { %>
+        <h2>You are Logged In</h2>
+    <% } else { %>
+        <h2>You are not Logged In</h2>
+    <% } %>
+    <div class="container">
+    <h1>URL Shortener</h1>
+    <form action="/" method="post">
+        <div class="input-field">
+            <label for="url">Enter URL:</label>
+            <input type="url" id="url" name="url" required>
+        </div>
+        <div class="input-field">
+            <label for="shortCode">Custom Short URL (Optional) : </label>
+            <input type="text" id="shortCode" name="shortCode">
+        </div>
+        <button type="submit">Shorten</button>
+    </form>
+    <h2>Shortened URLs</h2>
+    <ul class="shorten-links">
+        <% links.map(({shortCode, url}) => { %>
+            <li>
+            <a href="/<%= shortCode %>" target="_blank"><%= req.host %>/<%= shortCode %></a> - <%= url %>
+            </li>
+        <% }) %>
+    </ul>
+    </div>
+</body>
+</html>

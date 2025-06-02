@@ -1,0 +1,396 @@
+*{
+    margin : 0;
+    padding : 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+:root {
+  /* Colors */
+  --background: #fafafa;
+  --foreground: #171717;
+  --muted: #737373;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --border: #e5e5e5;
+  --ring: rgba(37, 99, 235, 0.3);
+  --surface: #ffffff;
+  --error: #ef4444;
+  --success: #10b981;
+  --warning: #f59e0b;
+
+  /* Shadows */
+  --shadow-sm: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 0.4rem 0.6rem -0.1rem rgba(0, 0, 0, 0.1),
+    0 0.2rem 0.4rem -0.1rem rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 1rem 1.5rem -0.3rem rgba(0, 0, 0, 0.1),
+    0 0.4rem 0.6rem -0.2rem rgba(0, 0, 0, 0.05);
+
+  /* Spacing */
+  --spacing-1: 0.4rem;
+  --spacing-2: 0.8rem;
+  --spacing-3: 1.2rem;
+  --spacing-4: 1.6rem;
+  --spacing-5: 2.4rem;
+  --spacing-6: 3.2rem;
+  --spacing-8: 4.8rem;
+
+  /* Radius */
+  --radius-sm: 0.2rem;
+  --radius-md: 0.4rem;
+  --radius-lg: 0.8rem;
+}
+body {
+    width: 100%;
+    margin: 0;
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+    background-color: #515151;
+    align-items: center;
+    /* ❌ Remove height: 100vh and align-items: center */
+}
+.container {
+    width: 27%;
+    min-width: 300px;
+    height: auto;
+    border: 2px solid black;
+    padding: 20px;
+    background-color: #e3e3e3;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 40px;
+
+    /* Remove vertical centering to avoid cutting content */
+    /* justify-content: center; */
+    /* align-content: space-between; */
+
+    /* Let it grow naturally */
+    min-height: 550px;
+    text-align: center;
+    align-items: center; 
+}
+form{
+    width : 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+}
+.input-field{
+    width : 100%
+}
+.input-field label{
+    display: block;
+    text-align: left;
+}
+.input-field input{
+    width: 100%;
+    height: 40px;
+    border-radius: 7px;
+    padding: 2px 10px;
+    font-size: 20px;
+    outline: 0;
+    flex : 1;
+    border : 0.2px solid black;
+}
+form button{
+    width : 100px;
+    height: 40px;
+    background-color: #0866ff;
+    border : 0;
+    outline : 0;
+    color: white;
+    font-size: 20px;
+    border-radius: 10px;
+}
+@media (max-height: 670px) and (max-width: 375px){
+    /* .container{
+        height: auto;
+        width: auto;
+    } */
+}
+
+/* Full-width, fixed-top navbar */
+.navbar {
+    width: 100%;
+    background-color: #333;
+    padding: 1rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+
+/* Navbar links container */
+.navbar-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Individual link items */
+.navbar-links li {
+    margin: 0 1.5rem;
+}
+
+/* Link styling */
+.navbar-links a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+    padding-bottom: 3px;
+}
+
+/* Hover effect */
+.navbar-links a:hover {
+    color: #ffcc00;
+    border-bottom: 2px solid #ffcc00;
+}
+
+/* Style for the main report section */
+.report-section {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Section heading */
+.report-section h1 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+/* List styling reset */
+.student-data {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+/* Card structure for each student */
+.student-data li {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 250px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+/* Hover effect */
+.student-data li:hover {
+  transform: translateY(-5px);
+}
+
+/* Paragraphs inside the card */
+.student-data p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #444;
+}
+
+.shorten-links {
+    width: 85%;
+    display: flex;
+    flex-wrap: wrap; /* Wrap items to the next line if needed */
+    justify-content: center; /* Center the items horizontally */
+    list-style: none;
+    padding: 0;
+    margin: 20px auto; /* Auto for horizontal centering */
+    gap: 15px;
+    height: auto; /* Allows height to grow as needed */
+}
+
+.shorten-links li {
+    background-color: #f0f0f0;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.shorten-links a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.signup-wrapper {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    margin: auto;
+    margin-top: 10vh;
+}
+
+.signup-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333333;
+    font-size: 1.8rem;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.signup-label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #444444;
+}
+
+.signup-input {
+    padding: 0.7rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.signup-input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+.signup-button {
+    padding: 0.8rem;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.signup-button:hover {
+    background-color: #0056b3;
+}
+
+
+.login-container {
+    background-color: #f9f9f9;
+    padding: 2rem;
+    width: 350px;
+    margin: 10vh auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.login-heading {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #444;
+}
+
+.login-input {
+    padding: 0.7rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.login-input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+.login-button {
+    padding: 0.8rem;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+}
+
+
+.custom-header {
+  width: 100%;
+  background-color: #333;
+  padding: 10px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.custom-nav {
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.custom-nav-list {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.custom-nav-item {
+}
+
+.custom-nav-link {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.custom-nav-link:hover {
+  color: #ffcc00;
+}
+
+/* Add padding-top to body to avoid content hiding behind fixed header */
+body {
+  padding-top: 60px;
+}
+
