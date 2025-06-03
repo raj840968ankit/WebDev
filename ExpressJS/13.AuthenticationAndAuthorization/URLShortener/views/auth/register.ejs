@@ -19,6 +19,12 @@
             <label class="signup-label" for="password">Password</label>
             <input class="signup-input" type="password" id="password" name="password" required>
 
+            <% if(errors && errors.length > 0) { %>
+                <% errors.forEach((error) => { %>
+                    <p class="flash-error"><%= error %></p>
+                <% }); %>
+            <% } %>
+
             <button class="signup-button" type="submit">Register</button>
         </form>
     </div>

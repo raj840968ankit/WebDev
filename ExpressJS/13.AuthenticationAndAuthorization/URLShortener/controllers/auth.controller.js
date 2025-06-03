@@ -2,7 +2,12 @@ import { getUserByEmail, createUser, hashPassword, comparePassword, generateToke
 
 export const getRegisterPage = (req, res) => {
     try {
-        return res.render("auth/register")
+        if(req.user) {
+            return redirect('/');   //via JWT token
+        }
+
+        //?sending error is user exists while registering and stored via flash's error datatype
+        return res.render("auth/register", {errors : req.flash('errors')})
     } catch (error) {
         console.error("Render error:", error);
         return res.status(500).send("Internal Server Error 2")
@@ -13,8 +18,9 @@ export const getLoginPage = (req, res) => {
     if(req.user) {
         return redirect('/');   //via JWT token
     }
-    
-    return res.render("auth/login")
+
+    //?sending error is user exists while logging and stored via flash's error datatype
+    return res.render("auth/login", {errors : req.flash('errors')})
 }
 
 export const postLogin = async (req, res) => {
@@ -29,6 +35,8 @@ export const postLogin = async (req, res) => {
 
 
     if(!user){
+        //!using flash-connect to store in session using 'errors' datatype
+        req.flash("errors", "Invalid Email or Password!!");
         return res.redirect('/auth/login')
     }
 
@@ -40,7 +48,9 @@ export const postLogin = async (req, res) => {
     //     return res.redirect('/auth/login')
     // }
 
+    
     if(!isValidPassword){
+        req.flash("errors", "Invalid Email or Password!!");
         return res.redirect('/auth/login')
     }
 
@@ -74,6 +84,9 @@ export const postRegister = async (req, res) => {
 
 
     if(userExist){
+        //!using flash-connect to store in session using 'errors' datatype
+        req.flash("errors", "User already exists!");
+        
         return res.redirect('/auth/register')
     }
 

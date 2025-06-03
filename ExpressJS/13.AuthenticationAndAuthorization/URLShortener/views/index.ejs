@@ -8,34 +8,36 @@
 </head>
 <body>
     <%- include('partials/header') %>
-
-    <%# if(isLoggedIn) { %> <%# this is ejs comment %>
-    <% if(user) { %>
-        <h2>You are Logged In</h2>
-    <% } else { %>
-        <h2>You are not Logged In</h2>
-    <% } %>
-    <div class="container">
-    <h1>URL Shortener</h1>
-    <form action="/" method="post">
-        <div class="input-field">
-            <label for="url">Enter URL:</label>
-            <input type="url" id="url" name="url" required>
+    <div class="page-wrapper">
+        <%# if(isLoggedIn) { %> <%# this is ejs comment %>
+        <% if(user) { %>
+            <h2 class="login-status">You are Logged In</h2>
+        <% } else { %>
+            <h2 class="login-status2">You are not Logged In</h2>
+        <% } %>
+        <div class="container">
+            <h1>URL Shortener</h1>
+            <form action="/" method="post">
+                <div class="input-field">
+                    <label for="url">Enter URL:</label>
+                    <input type="url" id="url" name="url" required>
+                </div>
+                <div class="input-field">
+                    <label for="shortCode">Custom Short URL (Optional) : </label>
+                    <input type="text" id="shortCode" name="shortCode">
+                </div>
+                <button type="submit">Shorten</button>
+            </form>
+            <h2>Shortened URLs</h2>
+            <ul class="shorten-links">
+                <% links.map(({shortCode, url}) => { %>
+                    <li>
+                    <a href="/<%= shortCode %>" target="_blank"><%= req.host %>/<%= shortCode %></a> - <%= url %>
+                    </li>
+                <% }) %>
+            </ul>
         </div>
-        <div class="input-field">
-            <label for="shortCode">Custom Short URL (Optional) : </label>
-            <input type="text" id="shortCode" name="shortCode">
-        </div>
-        <button type="submit">Shorten</button>
-    </form>
-    <h2>Shortened URLs</h2>
-    <ul class="shorten-links">
-        <% links.map(({shortCode, url}) => { %>
-            <li>
-            <a href="/<%= shortCode %>" target="_blank"><%= req.host %>/<%= shortCode %></a> - <%= url %>
-            </li>
-        <% }) %>
-    </ul>
     </div>
+    
 </body>
 </html>

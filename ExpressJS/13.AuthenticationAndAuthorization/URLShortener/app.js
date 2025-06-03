@@ -5,6 +5,8 @@ import {env} from './config/env.js'
 import { authRouter } from './routes/auth.routes.js'
 import cookieParser from 'cookie-parser'
 import { verifyAuthentication } from './middlewares/verify.auth.middleware.js'
+import session from 'express-session'
+import flash from 'connect-flash'
 
 const app = express()
 
@@ -16,6 +18,11 @@ app.use(express.static(path.join(appRoot, "public")))
 app.use(express.urlencoded({extended : true}))  //parses post request body
 
 app.use(cookieParser())   //use cookie parser before hitting routes
+
+app.use(           //using error handler and flash messages
+    session({ secret: "my-secret", resave: true, saveUninitialized: false }) 
+); 
+app.use(flash());
 
 //use verifyAuthentication middleware just after cookie parser
 app.use(verifyAuthentication)   //for verification of JWT token

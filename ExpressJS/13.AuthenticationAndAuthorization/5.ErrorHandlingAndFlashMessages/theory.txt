@@ -1,0 +1,10 @@
+//........................Installation................................
+//   1.install via 'npm i express-session' - contain session store messages
+//   2.install via 'npm i connect-flash' - used to set success message or error message
+
+
+//....................using....................................
+//   1.import in app.js for using middleware
+//   2.use middleware between 'cookieParser' and 'verifyAuthentication'
+//   3.go to auth.controller.js(postRegister and getRegisterPage) for checking usage 
+//   4.after registering errors go to register.ejs file
