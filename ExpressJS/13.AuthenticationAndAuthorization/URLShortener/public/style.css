@@ -423,8 +423,8 @@ body {
 .flash-error{
     color : red;
     background-color: rgba(255,0,0,0.1);
-    width: 70%;
-    height: 30px;
+    width: 80%;
+    height: 20%;
     padding-left: 5px;
     display: flex;
     flex-direction: column;

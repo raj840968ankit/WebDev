@@ -1,4 +1,5 @@
 import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken } from "../services/auth.services.js";
+import { loginUserSchema, registerUserSchema } from "../validators/auth.validator.js";
 
 export const getRegisterPage = (req, res) => {
     try {
@@ -27,9 +28,19 @@ export const postLogin = async (req, res) => {
     if(req.user) {
         return redirect('/');   //via JWT token
     }
+    // const {email, password} = req.body;
 
-    const {email, password} = req.body;
+    //!using zod schema validation
+    const {data, error} = loginUserSchema.safeParse(req.body)
+    //console.log(data);
+    if(error){
+        const errors = error.errors[0].message;
+        req.flash("errors", errors);
+        return res.redirect('/auth/login')
+    }
+    const {email, password} = data;
 
+    
     const user = await getUserByEmail(email);
     console.log("user exists : ",user);
 
@@ -77,7 +88,18 @@ export const postLogin = async (req, res) => {
 }
 
 export const postRegister = async (req, res) => {
-    const {name, email, password} = req.body;
+    // const {name, email, password} = req.body;
+
+    //!using zod schema validation
+    const {data, error} = registerUserSchema.safeParse(req.body)
+    //console.log(data);
+    if(error){
+        const errors = error.errors[0].message;
+        req.flash("errors", errors);
+        return res.redirect('/auth/register')
+    }
+ 
+    const {name, email, password} = data
 
     const userExist = await getUserByEmail(email);
     //console.log("user exists : ",userExist);
