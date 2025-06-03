@@ -14,3 +14,4 @@
 //         config - in env.js env file validation and db-client.js has database connection
 //         services - for prisma and drizzle crud operations and authentications services(generating and verifying token)
 //         middlewares - for user defined middlewares
+//         validators - for form validation
