@@ -1,0 +1,6 @@
+//....connect userTable with shortenerTable in URLShortener Project.......................
+//    1. Add createdAt and updatedAt in both tables
+//    2. Add PK of userTable as FK in shortenerTable
+//    3. Define relation between both tables if working with drizzle
+//    4. Delete all existing entries of tables in database before (generate and migrate)
+//    5.Goto post.contoller.js to check usage

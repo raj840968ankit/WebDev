@@ -31,7 +31,7 @@
             <h2>Shortened URLs</h2>
             <ul class="shorten-links">
                 <% links.map(({shortCode, url}) => { %>
-                    <li>
+                    <li class="list-item">
                     <a href="/<%= shortCode %>" target="_blank"><%= req.host %>/<%= shortCode %></a> - <%= url %>
                     </li>
                 <% }) %>

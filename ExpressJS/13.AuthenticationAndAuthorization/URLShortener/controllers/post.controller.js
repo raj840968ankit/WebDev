@@ -3,6 +3,9 @@ import { saveLinks, loadLinks, getLinksByShortcode } from '../models/data.model.
 
 const postShortener = async (req, res) => {
     try {
+        if(!req.user){
+            return res.redirect('/auth/login');
+        }
         const {url, shortCode} = req.body;
         const links = await loadLinks()
         const finalShortCode = shortCode || crypto.randomBytes(4).toString("hex")
@@ -24,7 +27,11 @@ const postShortener = async (req, res) => {
         // links[finalShortCode] = url
         // await saveLinks(links)
 
-        await saveLinks({finalShortCode, url}) 
+        // await saveLinks({finalShortCode, url }) 
+
+        //!after making relation between table
+        await saveLinks({finalShortCode, url, userId : req.user.id}) 
+
         return res.redirect('/');
     } catch (error) {
         console.log(error);
@@ -43,7 +50,13 @@ const getReport = (req,res) => {
 
 const getShortenerPage = async (req, res) => {
   try {
-    const links = await loadLinks();
+    if(!req.user){
+        return res.redirect('/auth/login');
+    }
+    // const links = await loadLinks();
+
+    //!after making relation between table
+    const links = await loadLinks(req.user.id);
 
     //!getting cookie detail (complex)
     // let isLoggedIn = req.headers.cookie;

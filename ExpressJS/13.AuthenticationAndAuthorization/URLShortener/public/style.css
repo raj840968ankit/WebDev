@@ -432,3 +432,40 @@ body {
     border : 1px solid red;
     border-left: 3px solid red;
 }
+
+
+
+.container {
+  /* existing styles */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.shorten-links {
+  width: 97%;
+  padding: 0;
+  margin: 20px auto;
+  list-style-type: none;
+  word-break: break-word;
+}
+
+.shorten-links .list-item {
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.shorten-links .list-item a {
+  text-decoration: none;
+  color: blue;
+  word-break: break-word;
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
