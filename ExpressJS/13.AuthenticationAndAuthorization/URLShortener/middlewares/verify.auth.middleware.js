@@ -1,4 +1,5 @@
-import { verifyJWTToken } from "../services/auth.services.js";
+import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
+import { refreshTokens, verifyJWTToken } from "../services/auth.services.js";
 
 //! verifying access token for JWT only
 // export const verifyAuthentication = (req, res, next) => { 
@@ -25,7 +26,7 @@ import { verifyJWTToken } from "../services/auth.services.js";
 
 
 //! verifying access token for hybrid authentication ( JWT + session)
-export const verifyAuthentication = (req, res, next) => {
+export const verifyAuthentication = async (req, res, next) => {
     const accessToken = req.cookies.access_token;
     const refreshToken = req.cookies.refresh_token;
 
@@ -38,15 +39,40 @@ export const verifyAuthentication = (req, res, next) => {
 
     //if access token is found decode it and add req.user property
     if(accessToken){
-        const decodedToken = verifyJWTToken(accessToken);
-        req.user = decodedToken;
-    }
-
-    if(refreshToken){
         try {
-            
+            const decodedToken = verifyJWTToken(accessToken);
+            req.user = decodedToken;
+            return next();
         } catch (error) {
-            console.error("Refresh Token Error : ",error)
+            console.error("Access Token Verification Error:", error.message);
         }
     }
+
+    //if access token not found then generate access token using refresh token
+    if(refreshToken){
+        try {
+            const {newAccessToken, newRefreshToken, user} = await refreshTokens(refreshToken)
+            req.user = user;
+            //now we have successfully refreshed tokens and created newAccessToken and newRefreshToken
+
+            //now we will send cookie as response
+            
+            const baseConfig = { httpOnly : true, secure : true} 
+        
+            res.cookie('access_token', newAccessToken, {
+                ...baseConfig,   
+                maxAge : ACCESS_TOKEN_EXPIRY
+            })
+        
+            res.cookie('refresh_token', newRefreshToken, {
+                ...baseConfig,   
+                maxAge : REFRESH_TOKEN_EXPIRY
+            })
+
+            return next();
+        } catch (error) {
+            console.error("Verification Refresh Token Error : ",error)
+        }
+    }
+    return next()
 }

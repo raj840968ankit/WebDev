@@ -26,9 +26,13 @@
 
 //..........................Send user details after verifying decoded token..................
 //  1.Use middleware in app.js (req.locals.user = req.user)
-//  2.and directly go to index.ejs and we can user 'user'
+//  2.and directly go to index.ejs and we can use 'user'
 
 
 //....................create a protected route like dashboard......................
 //  1.check usage in auth.route.js
+
+//how to proper logout from JWT access token
+//       - clear access token cookie(auth.controller.js -> getLogoutUser)
+
  

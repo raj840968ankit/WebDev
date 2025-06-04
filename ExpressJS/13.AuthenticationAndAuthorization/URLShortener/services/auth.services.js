@@ -53,3 +53,53 @@ export const createRefreshToken = (sessionId) => {
         expiresIn : REFRESH_TOKEN_EXPIRY / MILLISECONDS_PER_SECOND  //expires in 1 Week
     })
 }
+
+export const findSessionById = async (sessionId) => {
+    const [session] = await db.select().from(sessionsTable).where(eq(sessionsTable.id, sessionId))
+
+    return session;
+}
+
+export const findUserById = async (userId) => {
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId))
+
+    return user;
+}
+
+export const refreshTokens = async (refreshToken) => {
+    try {
+        const decodedToken = verifyJWTToken(refreshToken);
+        //now we know refreshToken has only sessionId, so with the help of it we will regenerate access_token
+        //first we will get session entry that contains user id from session table and user table
+
+        const currentSession = await findSessionById(decodedToken.sessionId)
+
+        if(!currentSession || !currentSession.valid){
+            throw new Error("Invalid session")
+        }
+
+        const user = await findUserById(currentSession.userId)
+        if(!user){
+            throw new Error('Invalid user')
+        }
+
+        //if we get the user then we will again generate access token and refresh token
+        const userInfo = {
+            id : user.id,
+            name : user.name,
+            email : user.email,
+            sessionId : currentSession.id
+        }
+
+        const newAccessToken = createAccessToken(userInfo)
+        const newRefreshToken = createRefreshToken(currentSession.id)
+
+        return {newAccessToken, newRefreshToken, user : userInfo}
+    } catch (error) {
+        console.error('Refreshing Token Error : ',error)
+    }
+}
+
+export const clearUserSession = async (sessionId) => {
+    return await db.delete(sessionsTable).where(eq(sessionsTable.id, sessionId));
+}

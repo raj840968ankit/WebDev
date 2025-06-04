@@ -1,7 +1,7 @@
 //In hybrid Authentication we will use both 'JWT + session'
 //Here we will use two tokens and one session table:-
-//  1. Access token with time limit of 10 - 15 min
-//  2. Refresh token when Access token expires or being stolen then refresh token will generate new token again
+//  1. Access token with time limit of 10 - 15 min (info like - user info + session id)
+//  2. Refresh token when Access token expires or being stolen then refresh token will generate new token again (info like - session id only)
 //  3. Session table stores refresh token and access token normally works as JWT
 
 
@@ -32,3 +32,10 @@
 //step 5 : for verifying access token repeat same verification step of JWT(using middleware and auth.middleware.js)
 
 //step 6 : refreshing access token when it expires
+//       - (auth.middleware.js) -> if not understand then please read refreshingTokenSteps.png
+
+//Step 7 : how to proper logout while using hybrid Authentication
+//       - delete user session and  clear access token and refresh-token cookie(auth.controller.js -> getLogoutUser)
+
+
+//................Auto login directly after signup only(no need for manual login).............................

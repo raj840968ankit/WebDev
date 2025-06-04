@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
-import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken } from "../services/auth.services.js";
+import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession } from "../services/auth.services.js";
 import { loginUserSchema, registerUserSchema } from "../validators/auth.validator.js";
 
 export const getRegisterPage = (req, res) => {
@@ -18,7 +18,7 @@ export const getRegisterPage = (req, res) => {
 
 export const getLoginPage = (req, res) => {
     if(req.user) {
-        return redirect('/');   //via JWT token
+        return res.redirect('/');   //via JWT token
     }
 
     //?sending error is user exists while logging and stored via flash's error datatype
@@ -161,8 +161,13 @@ export const getMe = (req, res) => {
     return res.send(`<h1>Hey - ${req.user.name} - ${req.user.email}</h1>`)
 }
 
-export const getLogoutUser = (req, res) => {
-    res.clearCookie('access-token')
+export const getLogoutUser = async (req, res) => {
+    //!clear session and cookie for proper logout
+    await clearUserSession(req.user.sessionId)
+
+    res.clearCookie('access_token')
+    res.clearCookie('refresh_token')
+
     return res.redirect('/auth/login')
 }
 
