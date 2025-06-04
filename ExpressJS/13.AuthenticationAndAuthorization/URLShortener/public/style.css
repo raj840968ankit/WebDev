@@ -469,3 +469,301 @@ body {
   max-width: 100%;
   overflow-wrap: break-word;
 }
+
+
+/* edit page styling */
+
+/* Main container */
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  min-height: 100vh;
+}
+
+/* URL Shortener Section */
+.url-shortener2 {
+  width: 100%;
+  max-width: 500px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.shortener-content2 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Status Badge */
+.user-status .status-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.status-badge.success {
+  background-color: #e0f7e9;
+  color: #2e7d32;
+  border-left: 5px solid #2e7d32;
+}
+
+.status-badge.warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border-left: 5px solid #856404;
+}
+
+.status-badge i {
+  font-size: 20px;
+}
+
+/* Form Styles */
+.shortener-form2 .form-title2 {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.url-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group2 {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fafafa;
+}
+
+.form-group2 label {
+  margin-right: 10px;
+  color: #555;
+  font-size: 18px;
+}
+
+.form-group2 input {
+  border: none;
+  outline: none;
+  flex: 1;
+  background: transparent;
+  font-size: 16px;
+  padding: 8px;
+}
+
+/* Flash Errors */
+.flash-error {
+  color: #d93025;
+  background: #fce8e6;
+  padding: 8px 12px;
+  border-left: 4px solid #d93025;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Submit Button */
+.form-button {
+  display: flex;
+  justify-content: center;
+}
+
+.form-submit {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.form-submit:hover {
+  background: #125ea7;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .url-shortener2 {
+    padding: 20px;
+  }
+
+  .form-group2 input {
+    font-size: 14px;
+  }
+
+  .form-submit {
+    font-size: 15px;
+    padding: 10px 20px;
+  }
+}
+
+.shorten-links .list-item {
+  position: relative;
+  padding: 20px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centers URL content */
+  text-align: center;
+  word-break: break-word;
+}
+
+.content-area {
+  max-width: 100%;
+  margin-bottom: 30px; /* leave space for icons */
+}
+
+.content-area a {
+  font-weight: bold;
+  color: blue;
+  text-decoration: none;
+}
+
+.content-area p {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+/* Bottom-right action buttons */
+.url-actions {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+/* Buttons */
+.copy-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #444;
+  transition: color 0.2s;
+}
+
+.copy-btn:hover {
+  color: #1976d2;
+}
+
+.edit-btn a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.copy-btn,
+.edit-btn {
+  padding: 6px;
+  border-radius: 4px;
+}
+
+/* Parent icon container */
+.url-actions {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px; /* evenly space icons */
+}
+
+/* Normalize all clickable icons: button, a, form > button */
+.url-actions .icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #444;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: color 0.2s;
+  width: 32px;
+  height: 32px;
+}
+
+.url-actions .icon-btn:hover {
+  color: #1976d2;
+}
+
+/* Remove extra margin or alignment shifts in anchor */
+.url-actions a.icon-btn {
+  text-decoration: none;
+}
+
+
+.custom-header {
+  background-color: #393737; /* grey background */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  flex-wrap: wrap;
+  
+}
+
+.custom-header-title {
+  flex: 1;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.custom-header-title h1 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.site-title {
+  color : white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.site-title:hover {
+  text-decoration: underline;
+}
+
+.custom-nav {
+  flex: 2;
+  text-align: center;
+}
+
+.custom-nav-list {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.custom-nav-item .custom-nav-link {
+  text-decoration: none;
+  color : white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.custom-nav-link:hover {
+  text-decoration: underline;
+}
+

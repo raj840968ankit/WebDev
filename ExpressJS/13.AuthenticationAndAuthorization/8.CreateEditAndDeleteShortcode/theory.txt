@@ -1,0 +1,6 @@
+//...to add icon -> ZMDI Material Design Iconic Font CDN (index.ejs)
+//validate the shortener form first using zod validation(shortener.validator.js)
+
+//.........................usage(edit icon)............................
+//create a route first for redirecting after clicking on edit icon(shortener.route.js -> post.controller.js -> data.model.js -> index.ejs and edit-shortlink.ejs)
+

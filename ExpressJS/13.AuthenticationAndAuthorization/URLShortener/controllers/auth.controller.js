@@ -132,3 +132,7 @@ export const getLogoutUser = (req, res) => {
     res.clearCookie('access-token')
     return res.redirect('/auth/login')
 }
+
+export const getShortenerEditPage = (req, res) => {
+    res.render('edit-shortlink')
+}

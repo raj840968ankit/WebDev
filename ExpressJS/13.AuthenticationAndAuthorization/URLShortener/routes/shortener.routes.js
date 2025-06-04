@@ -18,6 +18,11 @@ router.post('/', shortened.postShortener)  //using controller.js
 
 router.get('/:shortCode', shortened.getShortLink);
 
+router.route('/edit/:id').get(shortened.getShortenerEditPage).post(shortened.postShortenerEdit)
+
+//we are using post in delete because we are not getting any page from server
+router.route('/delete/:id').post(shortened.postShortenerDelete)
+
 //default export
 // export default router
 

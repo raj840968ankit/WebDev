@@ -14,7 +14,7 @@ export const verifyAuthentication = (req, res, next) => {
     try {
         const decodedToken = verifyJWTToken(token);
         req.user = decodedToken;
-        console.log('req.user : ',req.user);
+        //console.log('req.user : ',req.user);
     } catch (error) {
         req.user = null
         console.error('JWT verification error -> ',error);

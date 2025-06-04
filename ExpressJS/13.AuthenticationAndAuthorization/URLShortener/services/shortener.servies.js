@@ -22,3 +22,4 @@ export const getLinksByShortcode = async (shortCode) => {
     })
     return existCheck
 }
+

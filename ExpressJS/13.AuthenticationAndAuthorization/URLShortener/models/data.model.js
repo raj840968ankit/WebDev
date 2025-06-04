@@ -92,12 +92,25 @@ export const loadLinks = async (userId) => {
 //     return await db.insert(shortenerTable).values({url : link.url, shortCode : link.finalShortCode});
 // }
 
-export const saveLinks = async (link) => {
-    return await db.insert(shortenerTable).values({url : link.url, shortCode : link.finalShortCode, userId : link.userId});
+export const saveLinks = async ({finalShortCode, url, userId}) => {
+    return await db.insert(shortenerTable).values({url, shortCode : finalShortCode, userId});
 }
 
 export const getLinksByShortcode = async (shortCode) => {
     const link = await db.select().from(shortenerTable).where(eq(shortenerTable.shortCode, shortCode));
-    return link[0];
+    return link;
 }
 
+export const findShortLinkById = async (id) => {
+    const [result] = await db.select().from(shortenerTable).where(eq(shortenerTable.id, id))
+    return result
+}
+
+export const updateShortLinkById = async ({id, url, shortCode}) => {
+    const [data] = await db.update(shortenerTable).set({url : url, shortCode : shortCode}).where(eq(shortenerTable.id, id));
+    return data;
+}
+
+export const deleteShortCodeById = async (id) => {
+    return await db.delete(shortenerTable).where(eq(shortenerTable.id, id));
+}

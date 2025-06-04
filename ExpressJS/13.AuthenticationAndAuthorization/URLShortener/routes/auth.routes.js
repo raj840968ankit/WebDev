@@ -13,5 +13,7 @@ router.route('/me').get(authController.getMe)
 //clearing cookie here after logout
 router.route('/auth/logout').get(authController.getLogoutUser)
 
+
+
 export const authRouter = router
 
