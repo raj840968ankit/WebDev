@@ -38,4 +38,4 @@
 //       - delete user session and  clear access token and refresh-token cookie(auth.controller.js -> getLogoutUser)
 
 
-//................Auto login directly after signup only(no need for manual login).............................
+
