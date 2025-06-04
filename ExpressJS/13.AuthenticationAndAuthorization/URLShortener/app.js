@@ -1,12 +1,14 @@
 import path from 'path'
-import express from 'express'
-import { shortenerRouter } from './routes/shortener.routes.js'
-import {env} from './config/env.js'
-import { authRouter } from './routes/auth.routes.js'
-import cookieParser from 'cookie-parser'
-import { verifyAuthentication } from './middlewares/verify.auth.middleware.js'
-import session from 'express-session'
 import flash from 'connect-flash'
+import express from 'express'
+import session from 'express-session'
+import cookieParser from 'cookie-parser'
+import requestIp from 'request-ip'
+
+import { authRouter } from './routes/auth.routes.js'
+import {env} from './config/env.js'
+import { shortenerRouter } from './routes/shortener.routes.js'
+import { verifyAuthentication } from './middlewares/verify.auth.middleware.js'
 
 const app = express()
 
@@ -23,6 +25,8 @@ app.use(           //using error handler and flash messages
     session({ secret: "my-secret", resave: true, saveUninitialized: false }) 
 ); 
 app.use(flash());
+
+app.use(requestIp.mw());   //for getting clientIP
 
 //use verifyAuthentication middleware just after cookie parser
 app.use(verifyAuthentication)   //for verification of JWT token

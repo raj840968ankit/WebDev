@@ -1,0 +1,34 @@
+//In hybrid Authentication we will use both 'JWT + session'
+//Here we will use two tokens and one session table:-
+//  1. Access token with time limit of 10 - 15 min
+//  2. Refresh token when Access token expires or being stolen then refresh token will generate new token again
+//  3. Session table stores refresh token and access token normally works as JWT
+
+
+//..............Flow of hybrid approach................................
+//1. Login 
+//2. Sends request to Server 
+//3. Creates session and store in database. Creates both refresh token, and access token. 
+//4. Set-Cookie as response with two tokens 
+//5. Access protected page. 
+//6. Sends request with Cookie in headers 
+//   6.1 if server finds access token
+//       6.1.1 Verifies access token, and decodes user information from it, without needing to call database
+//       6.1.2 Responds data and also both access token and refresh token 
+//   6.2 if server doesn't finds access token
+//       6.2.1 Verifies session in DB with session id, if it exits then server creates new access token by refresh token
+//       6.2.2 Responds data and also both access token and refresh token
+
+
+
+//.....................Start Using Hybrid Authentication..............................
+
+//Step 1 : Create session schema/Table and relationship b/w tables(schema.js)
+//        - install 'npm i request-ip' for sending user ip
+//        - import requestIp for using as middleware in app.js
+//step 2 : creating session (auth.controller.js -> postLogin)
+//step 3 : create access token and refresh token (auth.controller.js -> postLogin)
+//step 4 : send cookie with extra information
+//step 5 : for verifying access token repeat same verification step of JWT(using middleware and auth.middleware.js)
+
+//step 6 : refreshing access token when it expires

@@ -1,4 +1,5 @@
-import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken } from "../services/auth.services.js";
+import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
+import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken } from "../services/auth.services.js";
 import { loginUserSchema, registerUserSchema } from "../validators/auth.validator.js";
 
 export const getRegisterPage = (req, res) => {
@@ -42,7 +43,7 @@ export const postLogin = async (req, res) => {
 
     
     const user = await getUserByEmail(email);
-    console.log("user exists : ",user);
+    //console.log("user exists : ",user);
 
 
     if(!user){
@@ -76,14 +77,46 @@ export const postLogin = async (req, res) => {
 
 
     //!Creating a JWT token here
-    const token = generateToken({
+    // const token = generateToken({
+    //     id : user.id,
+    //     name : user.name,
+    //     email : user.email
+    // })
+    //?After generating token we will send the cookie to client's browser with token value
+    // res.cookie('access-token', token);
+
+    //!Using Hybrid Authentication..............
+    //?we need to create a session first
+    const session =  await createSession(user.id, {
+        ip : req.clientIp,
+        userAgent : req.headers['user-agent']
+    })
+    
+    //?now we need to create accessToken
+    const accessToken = createAccessToken({
         id : user.id,
         name : user.name,
-        email : user.email
+        email : user.email,
+        sessionId : session.id,
     })
-    //?After generating token we will send the cookie to client's browser with token value
-    res.cookie('access-token', token);
-    
+
+    //?now we need to create refreshToken
+    const refreshToken = createRefreshToken(session.id);
+
+    //?send cookie with extra information
+    const baseConfig = { httpOnly : true, secure : true} //httpOnly means no one can access with JS DOM, and secure means runs on https 
+
+    //?After generating tokens we will send the cookie to client's browser with token value
+    res.cookie('access_token', accessToken, {
+        ...baseConfig,   //...baseConfig (destructuring) means 'httpOnly : true, secure : true'
+        maxAge : ACCESS_TOKEN_EXPIRY
+    })
+
+    res.cookie('refresh_token', refreshToken, {
+        ...baseConfig,   //...baseConfig (destructuring) means 'httpOnly : true, secure : true'
+        maxAge : REFRESH_TOKEN_EXPIRY
+    })
+
     return res.redirect('/')
 }
 

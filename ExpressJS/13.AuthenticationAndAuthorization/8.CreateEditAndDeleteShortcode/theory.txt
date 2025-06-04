@@ -4,3 +4,7 @@
 //.........................usage(edit icon)............................
 //create a route first for redirecting after clicking on edit icon(shortener.route.js -> post.controller.js -> data.model.js -> index.ejs and edit-shortlink.ejs)
 
+//.........................usage(delete icon)..........................
+//create a route first for redirecting after clicking on edit icon(shortener.route.js -> post.controller.js -> data.model.js -> index.ejs)
+//we will use post method in backend because we are not getting from server. it's just an action
+//we will use form with post method in frontend because we always use form in post method of backend

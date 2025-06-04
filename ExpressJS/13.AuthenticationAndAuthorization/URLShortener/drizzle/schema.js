@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { int, mysqlTable, varchar, timestamp } from 'drizzle-orm/mysql-core';
+import { boolean, int, mysqlTable, varchar, timestamp, text } from 'drizzle-orm/mysql-core';
 
 export const shortenerTable = mysqlTable('shortener', {
   id: int().autoincrement().primaryKey(),
@@ -19,17 +19,39 @@ export const usersTable = mysqlTable("users", {
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(), 
 });
 
+//!for using hybrid authentication
+export const sessionsTable = mysqlTable("sessions", { 
+  id: int().autoincrement().primaryKey(), 
+  userId: int("user_id") .notNull() .references(() => usersTable.id, { onDelete: "cascade" }), //?'onDelete' means if user doesn't exists then delete data
+  valid: boolean().default(true).notNull(), 
+  userAgent: text("user_agent"),
+  //!userAgent stores header info such as user used OS, browser, device etc 
+  ip: varchar({ length: 255 }), 
+  createdAt: timestamp("created_at").defaultNow().notNull(), 
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(), 
+});
 
-//!Define relation between both tables if working with drizzle
-//?A user can create multiple shortLinks
+
+//!Define relation between both tables 'usersTable and shortenerTable' if working with drizzle
+//?A user can create multiple shortLinks and can have many sessions
 export const userRelation = relations(usersTable, ({many}) => ({
-  shortLink : many(shortenerTable)
+  shortLink : many(shortenerTable),
+  session : many(sessionsTable)
 }))
 
-//?A shortLink belong to a user
+//?A shortLink belongs to a single user
 export const shortenerRelation = relations(shortenerTable, ({one}) => ({
   user : one(usersTable, {
     fields : [shortenerTable.userId],  //it is showing FK of shortenerTable
+    references : [usersTable.id]
+  })
+}))
+
+
+//?A session belongs to a single user
+export const sessionRelation = relations(sessionsTable, ({one}) => ({
+  user : one(usersTable, {
+    fields : [sessionsTable.userId],  //it is showing FK of shortenerTable
     references : [usersTable.id]
   })
 }))

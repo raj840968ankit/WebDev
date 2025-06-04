@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1748816345920,
-      "tag": "0000_real_wasp",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1748832192544,
-      "tag": "0001_youthful_rumiko_fujikawa",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1748915687909,
-      "tag": "0002_fat_eternity",
+      "when": 1749003112968,
+      "tag": "0000_amusing_wasp",
       "breakpoints": true
     }
   ]

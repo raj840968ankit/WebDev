@@ -1,9 +1,10 @@
 import { db } from "../config/db-client.js";
-import { usersTable } from "../drizzle/schema.js";
+import { sessionsTable, usersTable } from "../drizzle/schema.js";
 import { eq } from "drizzle-orm";
 import bcrypt from 'bcrypt'
 import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
+import { ACCESS_TOKEN_EXPIRY, MILLISECONDS_PER_SECOND, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
 
 export const getUserByEmail = async (email) => {
     const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email))
@@ -34,3 +35,21 @@ export const verifyJWTToken = (token) => {
     //syntax - 
     return jwt.verify(token, process.env.JWT_SECRET)
 };
+
+
+export const createSession = async (userId, {ip, userAgent}) => {
+    const [session] = await db.insert(sessionsTable).values({userId, ip, userAgent}).$returningId();
+    return session;
+}
+
+export const createAccessToken = ({id, name, email, sessionId}) => {
+    return jwt.sign({id, name, email, sessionId}, process.env.JWT_SECRET, {
+        expiresIn : ACCESS_TOKEN_EXPIRY / MILLISECONDS_PER_SECOND   //imported from config/constant/js
+    })
+}
+
+export const createRefreshToken = (sessionId) => {
+    return jwt.sign({sessionId}, process.env.JWT_SECRET, {
+        expiresIn : REFRESH_TOKEN_EXPIRY / MILLISECONDS_PER_SECOND  //expires in 1 Week
+    })
+}
