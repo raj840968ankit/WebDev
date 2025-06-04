@@ -1,0 +1,25 @@
+//................Auto login directly after signup only(no need for manual login).............................
+//Think what we done in signup-----------------
+//   - get user, email and password
+//   - check for same email existing user converted password to hash password
+//   - saved in database 
+
+//Think what we done in login-----------------
+//   - get user email and password
+//   - get user by email from database
+//   - compare with hashed password
+//   - created session and tokens
+//   - send cookie 
+
+
+//In login step we were doing extra things like reading user from database and comparing password then giving access with tokens and session
+
+
+//.....................KeY Idea for direct login after registration (modern approach).....................................
+//   - after saving user details in database in registration steps we can directly create sessions and tokens
+//   - and send cookies to user
+
+//....................How to do these things.........................
+//   -copy session and token creation, cookie sending from postLogin
+//   -use copied code in registration directly after saving details of new user
+//   -cross check every variable after pasting code

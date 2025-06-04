@@ -149,9 +149,45 @@ export const postRegister = async (req, res) => {
     const hashedPassword = await hashPassword(password)
     
     const [user] = await createUser({name, email, password : hashedPassword});
-    console.log(user);
+    //console.log(user);  //here we are getting id only
 
-    return res.redirect('/auth/login')
+    // return res.redirect('/auth/login')
+
+    //!copy and pasting session and token creation, cookie sending from postLogin for skipping manual login.........
+    //!Using Hybrid Authentication..............
+    //?we need to create a session first
+    const session =  await createSession(user.id, {
+        ip : req.clientIp,
+        userAgent : req.headers['user-agent']
+    })
+    
+    //?now we need to create accessToken
+    const accessToken = createAccessToken({
+        id : user.id,
+        name : name,
+        email : email,
+        sessionId : session.id,
+    })
+
+    //?now we need to create refreshToken
+    const refreshToken = createRefreshToken(session.id);
+
+    //?send cookie with extra information
+    const baseConfig = { httpOnly : true, secure : true} //httpOnly means no one can access with JS DOM, and secure means runs on https 
+
+    //?After generating tokens we will send the cookie to client's browser with token value
+    res.cookie('access_token', accessToken, {
+        ...baseConfig,   //...baseConfig (destructuring) means 'httpOnly : true, secure : true'
+        maxAge : ACCESS_TOKEN_EXPIRY
+    })
+
+    res.cookie('refresh_token', refreshToken, {
+        ...baseConfig,   //...baseConfig (destructuring) means 'httpOnly : true, secure : true'
+        maxAge : REFRESH_TOKEN_EXPIRY
+    })
+
+    return res.redirect('/')
+    
 }
 
 export const getMe = (req, res) => {
