@@ -210,3 +210,11 @@ export const getLogoutUser = async (req, res) => {
 export const getShortenerEditPage = (req, res) => {
     res.render('edit-shortlink')
 }
+
+export const getUserProfilePage = (req, res) => {
+    try {
+        return res.render('auth/profile');
+    } catch (error) {
+        console.log("profile page error : ",error.message);
+    }
+}

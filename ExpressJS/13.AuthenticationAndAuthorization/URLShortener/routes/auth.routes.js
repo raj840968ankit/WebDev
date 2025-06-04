@@ -13,7 +13,7 @@ router.route('/me').get(authController.getMe)
 //clearing cookie here after logout
 router.route('/auth/logout').get(authController.getLogoutUser)
 
-
+router.route('/auth/profile').get(authController.getUserProfilePage)
 
 export const authRouter = router
 

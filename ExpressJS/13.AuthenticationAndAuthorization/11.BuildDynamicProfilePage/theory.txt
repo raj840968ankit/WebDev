@@ -1,0 +1,3 @@
+//...............Creating a dynamic profile page.......................
+//   - create a ejs profile page
+//   - 
