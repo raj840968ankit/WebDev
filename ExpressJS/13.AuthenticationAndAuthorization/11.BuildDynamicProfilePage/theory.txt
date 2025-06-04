@@ -1,3 +1,6 @@
 //...............Creating a dynamic profile page.......................
 //   - create a ejs profile page
-//   - 
+//   - create a route and define in controller
+//   - get the user details from database with help of user id
+//   - get shortLinks of user by particular user id
+//   - pass the information to to ejs file while rendering

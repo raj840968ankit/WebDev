@@ -1,5 +1,5 @@
 import { db } from "../config/db-client.js";
-import { sessionsTable, usersTable } from "../drizzle/schema.js";
+import { sessionsTable, shortenerTable, usersTable } from "../drizzle/schema.js";
 import { eq } from "drizzle-orm";
 import bcrypt from 'bcrypt'
 import argon2 from 'argon2'
@@ -102,4 +102,8 @@ export const refreshTokens = async (refreshToken) => {
 
 export const clearUserSession = async (sessionId) => {
     return await db.delete(sessionsTable).where(eq(sessionsTable.id, sessionId));
+}
+
+export const getAllShortLinks = async (userId) => {
+    return await db.select().from(shortenerTable).where(eq(shortenerTable.userId, userId));
 }

@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
-import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession } from "../services/auth.services.js";
+import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession, findUserById, getAllShortLinks } from "../services/auth.services.js";
 import { loginUserSchema, registerUserSchema } from "../validators/auth.validator.js";
 
 export const getRegisterPage = (req, res) => {
@@ -211,9 +211,28 @@ export const getShortenerEditPage = (req, res) => {
     res.render('edit-shortlink')
 }
 
-export const getUserProfilePage = (req, res) => {
+export const getUserProfilePage = async (req, res) => {
     try {
-        return res.render('auth/profile');
+        if (!req.user){
+            return res.redirect('/auth/login')
+        }
+
+        const user = await findUserById(req.user.id)
+
+        if(!user){
+            return res.redirect('/auth/login')
+        }
+
+        const userShortLinks = await getAllShortLinks(user.id)
+        return res.render('auth/profile', {
+            user : {
+                id : user.id,
+                name : user.name,
+                email : user.email,
+                createdAt : user.createdAt,
+                shortLinks : userShortLinks
+            }
+        });
     } catch (error) {
         console.log("profile page error : ",error.message);
     }

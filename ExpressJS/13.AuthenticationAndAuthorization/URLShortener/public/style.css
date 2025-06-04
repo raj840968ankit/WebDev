@@ -43,11 +43,11 @@ body {
     width: 100%;
     margin: 0;
     padding: 40px 0;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
+    /* display: flex;
+    flex-wrap: nowrap; */
+    justify-content: center; 
     background-color: #515151;
-    align-items: center;
+    /* align-items: center; */
     /* ❌ Remove height: 100vh and align-items: center */
 }
 .page-wrapper {
@@ -76,7 +76,7 @@ body {
     border-left: 3px solid rgb(3, 66, 3);
 }
 .container {
-    width: 27%;
+    /* width: 27%; */
     min-width: 300px;
     height: auto;
     border: 2px solid black;
@@ -265,7 +265,7 @@ form button{
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 350px;
+    width: 300px;
     margin: auto;
     margin-top: 10vh;
 }
@@ -318,62 +318,97 @@ form button{
 }
 
 
-.login-container {
-    background-color: #f9f9f9;
-    padding: 2rem;
-    width: 350px;
-    margin: 10vh auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+/* Login Container */
+/* .login-container {
+  background-color: #f9f9f9;
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 8vh auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+} */
 
+/* Heading */
 .login-heading {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    color: #333;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  color: #333;
 }
 
+/* Form */
 .login-form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Labels */
 .login-label {
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #444;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #444;
 }
 
+/* Inputs */
 .login-input {
-    padding: 0.7rem;
-    margin-bottom: 1.2rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
+  padding: 0.7rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+  width: 100%;
 }
 
 .login-input:focus {
-    border-color: #007BFF;
-    outline: none;
+  border-color: #007BFF;
+  outline: none;
 }
 
+/* Button */
 .login-button {
-    padding: 0.8rem;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  padding: 0.8rem;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .login-button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
+/* Error Message */
+.flash-error {
+  color: #d93025;
+  background-color: #ffeaea;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+/* Responsive Media Query */
+@media (max-width: 500px) {
+  .login-container {
+    padding: 1.5rem;
+    margin: 5vh auto;
+    border-radius: 10px;
+  }
+
+  .login-heading {
+    font-size: 1.6rem;
+  }
+
+  .login-button {
+    font-size: 0.95rem;
+  }
+}
 
 .custom-header {
   width: 100%;
@@ -929,3 +964,219 @@ body {
     justify-content: center;
   }
 }
+
+
+.profile-verification {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-left: 5px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.verification-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.verification-label {
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.verification-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.verification-badge.verified {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.verification-badge.not-verified {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.verify-link {
+  margin-left: auto;
+  padding: 0.4rem 0.75rem;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.verify-link:hover {
+  background-color: #0056b3;
+}
+
+
+/*————————————————————————————————————————————
+  1. RESET & ROOT VARIABLES (unchanged)
+————————————————————————————————————————————*/
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
+  /* …your color & spacing variables… */
+}
+
+/*————————————————————————————————————————————
+  2. BODY
+————————————————————————————————————————————*/
+
+
+/*————————————————————————————————————————————
+  3. HEADER (custom-header / navbar)
+  No changes needed here unless you want to tweak mobile wrapping
+————————————————————————————————————————————*/
+.custom-header {
+  background-color: #393737;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  flex-wrap: wrap;
+}
+
+.site-title {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.site-title:hover {
+  text-decoration: underline;
+}
+
+.custom-nav-list {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.custom-nav-item .custom-nav-link {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.custom-nav-link:hover {
+  text-decoration: underline;
+}
+
+/*————————————————————————————————————————————
+  4. LOGIN-CONTAINER (only one copy, mobile-first)
+————————————————————————————————————————————*/
+.login-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem 1rem;
+
+  width: 100%;
+  max-width: 400px;
+  margin: 5vh auto 2rem;
+}
+
+
+
+/* LOGIN FORM CONTENT */
+.login-heading {
+  text-align: center;
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.login-label {
+  font-size: 0.95rem;
+  color: #444;
+  margin-bottom: 0.25rem;
+}
+
+.login-input {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+.login-input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.flash-error {
+  background-color: #ffecec;
+  color: #c72c41;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.login-button {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+.login-button:hover {
+  background-color: #0056b3;
+}
+@media (max-width: 480px) {
+  .login-container {
+    width: 90%;
+    margin: 3vh auto 1.5rem;
+    padding: 1rem;
+  }
+}
+/*————————————————————————————————————————————
+  5. MOBILE BREAKPOINT (≤ 480px)
+  Let the login-container expand to ~95% of viewport
+————————————————————————————————————————————*/
+
+
