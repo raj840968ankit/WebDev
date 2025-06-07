@@ -11,7 +11,8 @@
 //         routes - will contain route files
 //         controllers - manage the routes
 //         models - manage data performing operation files
-//         config - in env.js env file validation and db-client.js has database connection
+//         config - in env.js env file validation and db-client.js has database connection and constants
 //         services - for prisma and drizzle crud operations and authentications services(generating and verifying token)
 //         middlewares - for user defined middlewares
 //         validators - for form validation
+//         lib - contains library files like nodeMailer library

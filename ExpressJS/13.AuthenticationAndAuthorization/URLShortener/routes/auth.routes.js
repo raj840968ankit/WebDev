@@ -19,5 +19,7 @@ router.route('/verify-email').get(authController.getVerifyEmailPage)
 
 router.route('/resend-verification-link').post(authController.resendVerificationLink)
 
+router.route('/verify-email-token').get(authController.verifyEmailToken)
+
 export const authRouter = router
 

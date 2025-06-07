@@ -89,7 +89,7 @@ const getShortenerPage = async (req, res) => {
     // return res.render('index', { links, req, isLoggedIn });  // passing req so you can use req.headers.host in ejs
 
     //! we are trying to send user details after verifying JWT token and using middleware in app.js
-    return res.render('index', { links, req, errors : req.flash('errors')});
+    return res.render('index', { links, req, errors : req.flash('errors'), success : req.flash('success')});
   } catch (error) {
     console.error("Error in getShortenerPage:", error);
     return res.status(500).send("Internal server error");
@@ -166,7 +166,7 @@ const postShortenerEdit = async (req, res) => {
         const updatedData = await updateShortLinkById({id : req.params.id, url, shortCode})
         if(updatedData.affectedRows > 0){
             req.flash('success', 'shortcode is updated')
-            return res.redirect(`/edit/${req.params.id}`)
+            return res.redirect(`/`)
         }
         return res.redirect('/')
     }catch(error){

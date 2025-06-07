@@ -1,0 +1,12 @@
+//SQL joins are used only when there is relation between tables means at least one column should be same.
+
+//Most commonly used joins :- Inner join, Right join, Left join
+
+//Inner join - It will give you only matching result of both the tables
+//  - Syntax - Select * from tableName1 inner join tableName2 on table1.id = table2.id where table1.id = 3
+
+//Right join - It select the whole table data from right and only matching data from left and put null if not matches..
+//    - Syntax - Select * from tableName1 right join tableName2 on table1.id = table2.id where table1.id = 3
+
+//Left join - It select the whole table data from left and only matching data from right and put null if not matches..
+//    - Syntax - Select * from tableName1 left join tableName2 on table1.id = table2.id where table1.id = 3

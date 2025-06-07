@@ -1,11 +1,12 @@
 import { db } from "../config/db-client.js";
 import { sessionsTable, shortenerTable, usersTable, verifyEmailTokensTable } from "../drizzle/schema.js";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, gte, lt, sql } from "drizzle-orm";
 import bcrypt from 'bcrypt'
 import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
 import { ACCESS_TOKEN_EXPIRY, MILLISECONDS_PER_SECOND, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
 import crypto from 'crypto'
+import { log } from "console";
 
 export const getUserByEmail = async (email) => {
     const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email))
@@ -111,7 +112,7 @@ export const getAllShortLinks = async (userId) => {
 }
 
 
-export const generateRandomToken = async (digit = 8) => {
+export const generateRandomToken = (digit = 8) => {
     const min = 10 ** (digit - 1)  //10000000
     const max = 10 ** (digit)  //100000000
     return crypto.randomInt(min, max).toString();
@@ -119,16 +120,108 @@ export const generateRandomToken = async (digit = 8) => {
 
 
 export const insertVerifyEmailToken = async ({userId, token}) => {
-    //?it will check each row and delete the tokens of every user whose token expires matching with current timestamp
-    await db.delete(verifyEmailTokensTable).where(lt(verifyEmailTokensTable.expiresAt, sql`CURRENT_TIMESTAMP`))
+    //!using of transaction is needed because if any action fails then it will be rollback or either complete full execution
+    return db.transaction(async (tx) => {
+        try {
+            //?it will check each row and delete the tokens of every user whose token expires matching with current timestamp
+            await tx.delete(verifyEmailTokensTable).where(lt(verifyEmailTokensTable.expiresAt, sql`CURRENT_TIMESTAMP`))
 
-    await db.insert(verifyEmailTokensTable).values({userId, token})
+            //?delete the entries having multiple tokens stored for a single specific user
+            await tx.delete(verifyEmailTokensTable).where(eq(verifyEmailTokensTable.userId, userId))
+
+            await tx.insert(verifyEmailTokensTable).values({userId, token})
+        } catch (error) {
+            consol.error('insertVerifyEmailToken error : ',error)
+        }
+    })
+    
 }
 
+//! Creating Email Verification Link (Not recommended)
 //add 'FRONTEND_URL' to .env file first
-export const createVerifyEmailLink = async(email , token) => {
-    const uriEncodedEmail = encodeURIComponent(email) //this will convert ankit@gmail.com to 'ankit%40gmail.com' that browser url uses
+// export const createVerifyEmailLink = async({email , token}) => {
+//     const uriEncodedEmail = encodeURIComponent(email) //this will convert ankit@gmail.com to 'ankit%40gmail.com' that browser url uses
     
-    //? '/verify-email-token' this i have given in form action after clicking verify code, the get method will append the value to it as a query parameter
-    return `${process.env.FRONTEND_URL}/verify-email-token?token=${token}&email=${uriEncodedEmail}`
+//     //? '/verify-email-token' this i have given in form action after clicking verify code, the get method will append the value to it as a query parameter
+//     return `${process.env.FRONTEND_URL}/verify-email-token?token=${token}&email=${uriEncodedEmail}`
+// }
+
+
+//! The URL API in JavaScript provides an easy way to construct, manipulate, and parse URLs without manual string concatenation. It ensures correct encoding, readability, and security when handling URLs.
+
+//? const url = new URL("https://example.com/profile?id=42&theme=dark");
+
+//! console.log(url.hostname); // "example.com"
+//! console.log(url.pathname); // "/profile"
+//! console.log(url.searchParams.get("id")); // "42"
+//! console.log(url.searchParams.get("theme")); // "dark"
+
+//* 💡 Why Use the URL API?
+//? ✅ Easier URL Construction – No need for manual ? and & handling.
+//? ✅ Automatic Encoding – Prevents issues with special characters.
+//? ✅ Better Readability – Clean and maintainable code.
+
+//! Creating Email Verification Link (Recommended by using URL API)
+export const createVerifyEmailLink = async({email , token}) => {
+    // const uriEncodedEmail = encodeURIComponent(email) //this will convert ankit@gmail.com to 'ankit%40gmail.com' that browser url uses
+    
+    // //? '/verify-email-token' this i have given in form action after clicking verify code, the get method will append the value to it as a query parameter
+    // return `${process.env.FRONTEND_URL}/verify-email-token?token=${token}&email=${uriEncodedEmail}`
+
+    const url = new URL(`${process.env.FRONTEND_URL}/verify-email-token`)
+
+    url.searchParams.append('token', token)
+    url.searchParams.append('email', email)
+
+    return url.toString();
+}
+
+
+export const findVerificationEmailToken = async ({token, email}) => {
+    //verifying token here (if found then verified)
+    const tokenData = await db
+        .select({
+            userId : verifyEmailTokensTable.userId,
+            token : verifyEmailTokensTable.token,
+            expiresAt : verifyEmailTokensTable.expiresAt,
+        })
+        .from(verifyEmailTokensTable)
+        .where(and( eq(verifyEmailTokensTable.token, token), gte(verifyEmailTokensTable.expiresAt, sql`CURRENT_TIMESTAMP` )))
+
+    if(!tokenData.length){
+        return null;
+    }
+
+    const {userId} = tokenData[0]
+
+    //verifying email here (if found then verified)
+    const userData = await db
+        .select({
+            userId : usersTable.id,
+            email : usersTable.email,
+        }) 
+        .from(usersTable)
+        .where(eq(usersTable.id, userId))
+
+    if(!userData.length){
+        return null;
+    }
+
+    return {
+        userId : userData[0].userId,
+        email : userData[0].email,
+        token : tokenData[0].token,
+        expiresAt : tokenData[0].expiresAt
+    }
+}
+
+
+export const verifyUserEmailAndUpdate = async (email) => {
+    return db.update(usersTable).set({isEmailValid : true}).where(eq(usersTable.email, email))
+}
+
+export const clearVerifyEmailTokens = async (userId) => {
+    return await db
+        .delete(verifyEmailTokensTable)
+        .where(eq(verifyEmailTokensTable.userId, userId))
 }

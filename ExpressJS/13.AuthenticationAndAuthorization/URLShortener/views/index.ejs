@@ -37,6 +37,12 @@
                     <% }); %>
                 <% } %>
 
+                <% if(success && success.length > 0) { %>
+                    <% success.forEach((suc) => { %>
+                        <h3 class="login-status"><%= suc %></h3>
+                    <% }); %>
+                <% } %>
+
                 <button type="submit">Shorten</button>
             </form>
             <h2>Shortened URLs</h2>

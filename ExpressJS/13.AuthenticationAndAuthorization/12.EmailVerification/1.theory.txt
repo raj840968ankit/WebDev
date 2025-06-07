@@ -1,4 +1,4 @@
-//..................How to verify email............................
+//..................How to verify email (Test Email using ethereal and nodemailer)............................
 //Step 1 - add a attribute to userTable 'isEmailValid' for email verification icon in profile.ejs (schema.js) 
 //  - send the value of isEmailValid to profile.ejs (auth.controller.js -> getProfilePage)
 //  - update the email verification icon in profile.ejs
@@ -16,3 +16,18 @@
 
 //Step 4 - Send Emails in NodeJS using NodeMailer and ethereal
 //  - 'npm i nodemailer'
+//  - check usage in auth.controller.js -> resend-verification-link
+//  - create a 'lib' folder -> nodemailer.js file
+//  - copy code of 'using an ethereal-test-account' from 'nodemailer website' and paste to nodemailer.js
+//  - after clicking on resend (verify-email.ejs), we will get a ethereal link in our console 
+
+step 5 - Using DBMS transaction
+//  - using DBMS transaction in 'insertVerifyEmailToken' (auth.services.js)
+
+Step 6 - Using URL API of JS 
+//  - made easy for generating 'emailVerificationLink' that we previously generated in step 3
+
+Step 7 - Last step of verification
+//  - create a route for 'verify-email-token' for verifying the ethereal mail generated link or token 
+//  - Do the zod validation for email and token before getting value from URL(validators -> auth.validator.js)
+//  - in verifyEmailToken router we have taken the data from url and 
