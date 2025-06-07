@@ -9,11 +9,11 @@
     <!-- Font Icon -->
     <link
       rel="stylesheet"
-      href="fonts/material-icon/css/material-design-iconic-font.min.css"
+      href="https://cdn.jsdelivr.net/npm/material-design-iconic-font@2.2.0/dist/css/material-design-iconic-font.min.css"
     />
 
     <!-- Main css -->
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
     <%- include('../partials/header') %>
@@ -27,8 +27,8 @@
         <div class="user-status">
               <% if(user) { %>
                   <div class="status-badge success">
-                  <i class="zmdi zmdi-check-circle"></i>
-                  <span>You are logged in</span>
+                    <i class="zmdi zmdi-check-circle"></i>
+                    <span>You are logged in</span>
                   </div>
               <% } else { %>
                   <div class="status-badge warning">
@@ -76,7 +76,7 @@
             <span class="verification-badge not-verified">
               <i class="zmdi zmdi-alert-circle"></i> Not Verified
             </span>
-            <a href="/resend-verification" class="verify-link">
+            <a href="/verify-email" class="verify-link">
               <i class="zmdi zmdi-mail-send"></i> Verify Now
             </a>
             <% } %>

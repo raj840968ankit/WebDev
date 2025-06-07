@@ -1,0 +1,13 @@
+//.................how to apply css fonts in html (font-awesome)............................
+//   -goto 'fontawesome.com' website
+//   - click on 'start for free' -> give email -> confirm email and then login
+//   - add a new kit and after you have your own kit 
+//   - goto your kit and copy 'script' html tag and paste in html file
+//   - after that goto 'icons' tab -> search for any icon -> click that icon (set attributes if needed) -> copy 'i' tag -> paste to html
+//   - add css if needed by copying "i" tag's class name in css file
+
+
+//...............how to apply css fonts in html (material design icon)..........................
+// paste this tag in html - '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-design-iconic-font@2.2.0/dist/css/material-design-iconic-font.min.css">'
+// go to this site - 'https://zavoloklom.dev/material-design-iconic-font/icons.html#social'
+// in the right side see the list of icons -> select the icon type and then select icon and use

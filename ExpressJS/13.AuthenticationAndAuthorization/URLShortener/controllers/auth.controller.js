@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
-import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession, findUserById, getAllShortLinks } from "../services/auth.services.js";
+import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession, findUserById, getAllShortLinks, generateRandomToken, insertVerifyEmailToken, createVerifyEmailLink } from "../services/auth.services.js";
 import { loginUserSchema, registerUserSchema } from "../validators/auth.validator.js";
 
 export const getRegisterPage = (req, res) => {
@@ -97,6 +97,7 @@ export const postLogin = async (req, res) => {
         id : user.id,
         name : user.name,
         email : user.email,
+        isEmailValid : user.isEmailValid,
         sessionId : session.id,
     })
 
@@ -166,6 +167,7 @@ export const postRegister = async (req, res) => {
         id : user.id,
         name : name,
         email : email,
+        isEmailValid : false,
         sessionId : session.id,
     })
 
@@ -229,11 +231,46 @@ export const getUserProfilePage = async (req, res) => {
                 id : user.id,
                 name : user.name,
                 email : user.email,
+                isEmailValid : user.isEmailValid,
                 createdAt : user.createdAt,
-                shortLinks : userShortLinks
+                shortLinks : userShortLinks,
             }
         });
     } catch (error) {
         console.log("profile page error : ",error.message);
     }
+}
+
+export const getVerifyEmailPage = async (req, res) => {
+    if(!req.user){
+        res.redirect('/')
+    }
+
+    const user = await findUserById(req.user.id)
+
+    if(!user || user.isEmailValid){
+        res.redirect('/')
+    }
+}
+
+export const resendVerificationLink = async (req,res) => {
+    if(!req.user){
+        res.redirect('/')
+    }
+
+    const user = await findUserById(req.user.id)
+
+    if(!user || user.isEmailValid){
+        res.redirect('/')
+    }
+
+    //?Generating random token
+    const randomToken = generateRandomToken()
+
+    await insertVerifyEmailToken({userId : req.user.id, token : randomToken})
+
+    const verifyEmailLink = await createVerifyEmailLink({
+        email : req.user.email,
+        token : randomToken,
+    })
 }

@@ -14,6 +14,9 @@ const app = express()
 
 const appRoot = import.meta.dirname;
 
+app.set('views', path.join(appRoot, "views"))   //manually give path to ejs files(dynamic html)
+app.set('view engine', 'ejs')  //using template engine(dynamic html)
+
 //serving static file to the server
 app.use(express.static(path.join(appRoot, "public")))
 
@@ -40,8 +43,6 @@ app.use((req, res, next) => {
 // If req.user exists (typically from authentication, like Passport.js), it's stored in res.locals.user. 
 //Views (like EJS, Pug, or Handlebars) can directly access user without manually passing it in every route.
 
-app.set('views', path.join(appRoot, "views"))   //manually give path to ejs files(dynamic html)
-app.set('view engine', 'ejs')  //using template engine(dynamic html)
 
 
 app.use((req, res, next) => {    //this middleware executes first then give access to route

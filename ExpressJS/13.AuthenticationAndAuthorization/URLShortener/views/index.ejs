@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>URL Shortener</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <!-- ZMDI Material Design Iconic Font CDN -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/material-design-iconic-font@2.2.0/dist/css/material-design-iconic-font.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-design-iconic-font@2.2.0/dist/css/material-design-iconic-font.min.css">
+    
 </head>
 <body>
     <%- include('partials/header') %>
@@ -64,7 +62,7 @@
                             <!-- using form for delete because post route always performed in a form -->
                             <form action="/delete/<%= id %>" method="post">
                                 <button class="icon-btn">
-                                <i class="zmdi zmdi-delete"></i>
+                                    <i class="zmdi zmdi-delete"></i>
                                 </button>
                             </form>
                         </div>

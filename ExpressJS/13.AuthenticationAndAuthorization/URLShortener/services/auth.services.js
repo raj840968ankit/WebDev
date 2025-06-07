@@ -1,10 +1,11 @@
 import { db } from "../config/db-client.js";
-import { sessionsTable, shortenerTable, usersTable } from "../drizzle/schema.js";
-import { eq } from "drizzle-orm";
+import { sessionsTable, shortenerTable, usersTable, verifyEmailTokensTable } from "../drizzle/schema.js";
+import { eq, sql } from "drizzle-orm";
 import bcrypt from 'bcrypt'
 import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
 import { ACCESS_TOKEN_EXPIRY, MILLISECONDS_PER_SECOND, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
+import crypto from 'crypto'
 
 export const getUserByEmail = async (email) => {
     const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email))
@@ -42,8 +43,8 @@ export const createSession = async (userId, {ip, userAgent}) => {
     return session;
 }
 
-export const createAccessToken = ({id, name, email, sessionId}) => {
-    return jwt.sign({id, name, email, sessionId}, process.env.JWT_SECRET, {
+export const createAccessToken = ({id, name, email, isEmailValid, sessionId}) => {
+    return jwt.sign({id, name, email, isEmailValid, sessionId}, process.env.JWT_SECRET, {
         expiresIn : ACCESS_TOKEN_EXPIRY / MILLISECONDS_PER_SECOND   //imported from config/constant/js
     })
 }
@@ -88,6 +89,7 @@ export const refreshTokens = async (refreshToken) => {
             id : user.id,
             name : user.name,
             email : user.email,
+            isEmailValid : user.isEmailValid,
             sessionId : currentSession.id
         }
 
@@ -106,4 +108,27 @@ export const clearUserSession = async (sessionId) => {
 
 export const getAllShortLinks = async (userId) => {
     return await db.select().from(shortenerTable).where(eq(shortenerTable.userId, userId));
+}
+
+
+export const generateRandomToken = async (digit = 8) => {
+    const min = 10 ** (digit - 1)  //10000000
+    const max = 10 ** (digit)  //100000000
+    return crypto.randomInt(min, max).toString();
+}
+
+
+export const insertVerifyEmailToken = async ({userId, token}) => {
+    //?it will check each row and delete the tokens of every user whose token expires matching with current timestamp
+    await db.delete(verifyEmailTokensTable).where(lt(verifyEmailTokensTable.expiresAt, sql`CURRENT_TIMESTAMP`))
+
+    await db.insert(verifyEmailTokensTable).values({userId, token})
+}
+
+//add 'FRONTEND_URL' to .env file first
+export const createVerifyEmailLink = async(email , token) => {
+    const uriEncodedEmail = encodeURIComponent(email) //this will convert ankit@gmail.com to 'ankit%40gmail.com' that browser url uses
+    
+    //? '/verify-email-token' this i have given in form action after clicking verify code, the get method will append the value to it as a query parameter
+    return `${process.env.FRONTEND_URL}/verify-email-token?token=${token}&email=${uriEncodedEmail}`
 }

@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "323878a5-146c-47c8-88ec-ba04f33ce2c7",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "07bd250b-00ba-4e60-a9c8-0302e1413568",
+  "prevId": "323878a5-146c-47c8-88ec-ba04f33ce2c7",
   "tables": {
     "sessions": {
       "name": "sessions",
@@ -246,6 +246,74 @@
           ]
         }
       },
+      "checkConstraint": {}
+    },
+    "is_email_valid": {
+      "name": "is_email_valid",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "token": {
+          "name": "token",
+          "type": "varchar(8)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(CURRENT_TIMESTAMP + INTERVAL 1 DAY)"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "is_email_valid_user_id_users_id_fk": {
+          "name": "is_email_valid_user_id_users_id_fk",
+          "tableFrom": "is_email_valid",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "is_email_valid_id": {
+          "name": "is_email_valid_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
       "checkConstraint": {}
     }
   },

@@ -1,2 +1,18 @@
 //..................How to verify email............................
-//
+//Step 1 - add a attribute to userTable 'isEmailValid' for email verification icon in profile.ejs (schema.js) 
+//  - send the value of isEmailValid to profile.ejs (auth.controller.js -> getProfilePage)
+//  - update the email verification icon in profile.ejs
+//  - update isEmailValid everywhere related to token(createAccessToken, refreshAccessToken(middleware), postLogin and postRegister)
+
+//Step 2 - create a email schema (verifyEmailTokenTable) for verification of email(schema.js) (!important)
+//  - npm run db:generate && npm run db:migrate
+//  - create a route '/verify-email' after clicking on verify-email button in 'profile.ejs'
+
+//Step 3 - Generate and store 8 digit email verification token (verify-email.ejs)
+//  - create a route for 'resend-verification-link' (auth.route.js -> auth.controller.js)
+//  - Generating random token - auth.controller.js 
+//  - insert verification email token in database
+//  - create a verification link with token value and email value
+
+//Step 4 - Send Emails in NodeJS using NodeMailer and ethereal
+//  - 'npm i nodemailer'

@@ -1,4 +1,4 @@
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import { boolean, int, mysqlTable, varchar, timestamp, text } from 'drizzle-orm/mysql-core';
 
 export const shortenerTable = mysqlTable('shortener', {
@@ -10,10 +10,22 @@ export const shortenerTable = mysqlTable('shortener', {
   userId : int("user_id").notNull().references(() => usersTable.id),
 });
 
+//!Creating a schema (verifyEmailTokenTable) for verification of email
+export const verifyEmailTokensTable = mysqlTable('is_email_valid', {
+  id : int().autoincrement().primaryKey(),
+  userId: int("user_id") .notNull() .references(() => usersTable.id, { onDelete: "cascade" }),
+  token : varchar({length : 8}).notNull(),
+  //!expiresAt will tell the expiry of email token
+  expiresAt : timestamp('expires_at').default(sql`(CURRENT_TIMESTAMP + INTERVAL 1 DAY)`).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
 export const usersTable = mysqlTable("users", { 
   id: int().autoincrement().primaryKey(), 
   name : varchar({ length: 255}).notNull(), 
-  email: varchar({ length: 255 }).notNull().unique(), 
+  email: varchar({ length: 255 }).notNull().unique(),
+  //!adding 'isEmailValid' for email verification icon in profile.ejs file
+  isEmailValid : boolean('is_email_valid').default(false).notNull(),
   password: varchar({ length: 255}).notNull(), 
   createdAt: timestamp("created_at").defaultNow().notNull(), 
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(), 
@@ -24,8 +36,8 @@ export const sessionsTable = mysqlTable("sessions", {
   id: int().autoincrement().primaryKey(), 
   userId: int("user_id") .notNull() .references(() => usersTable.id, { onDelete: "cascade" }), //?'onDelete' means if user doesn't exists then delete data
   valid: boolean().default(true).notNull(), 
-  userAgent: text("user_agent"),
   //!userAgent stores header info such as user used OS, browser, device etc 
+  userAgent: text("user_agent"),
   ip: varchar({ length: 255 }), 
   createdAt: timestamp("created_at").defaultNow().notNull(), 
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(), 
