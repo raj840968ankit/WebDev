@@ -7,6 +7,13 @@ import jwt from 'jsonwebtoken'
 import { ACCESS_TOKEN_EXPIRY, MILLISECONDS_PER_SECOND, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
 import crypto from 'crypto'
 import { log } from "console";
+import fs from 'fs/promises'
+import path from 'path'
+import ejs from 'ejs'
+import mjml from 'mjml';
+import mjml2html from "mjml";
+// import { sendEmail } from "../lib/resend.lib.js";
+import { sendEmail } from "../lib/nodemailer.lib.js";
 
 export const getUserByEmail = async (email) => {
     const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email))
@@ -162,13 +169,17 @@ export const insertVerifyEmailToken = async ({userId, token}) => {
 //? ✅ Better Readability – Clean and maintainable code.
 
 //! Creating Email Verification Link (Recommended by using URL API)
-export const createVerifyEmailLink = async({email , token}) => {
+export const createVerifyEmailLink = async({email , token, req}) => {
     // const uriEncodedEmail = encodeURIComponent(email) //this will convert ankit@gmail.com to 'ankit%40gmail.com' that browser url uses
     
     // //? '/verify-email-token' this i have given in form action after clicking verify code, the get method will append the value to it as a query parameter
     // return `${process.env.FRONTEND_URL}/verify-email-token?token=${token}&email=${uriEncodedEmail}`
 
-    const url = new URL(`${process.env.FRONTEND_URL}/verify-email-token`)
+    
+    
+    const baseUrl = `${req.protocol}://${req.get('host')}`; // <-- FIX IS HERE!
+
+    const url = new URL(`${baseUrl}/verify-email-token`);
 
     url.searchParams.append('token', token)
     url.searchParams.append('email', email)
@@ -177,42 +188,82 @@ export const createVerifyEmailLink = async({email , token}) => {
 }
 
 
+// export const findVerificationEmailToken = async ({token, email}) => {
+//     //verifying token here (if found then verified)
+//     const tokenData = await db
+//         .select({
+//             userId : verifyEmailTokensTable.userId,
+//             token : verifyEmailTokensTable.token,
+//             expiresAt : verifyEmailTokensTable.expiresAt,
+//         })
+//         .from(verifyEmailTokensTable)
+//         .where(and( eq(verifyEmailTokensTable.token, token), gte(verifyEmailTokensTable.expiresAt, sql`CURRENT_TIMESTAMP` )))
+
+//     if(!tokenData.length){
+//         return null;
+//     }
+
+//     const {userId} = tokenData[0]
+
+//     //verifying email here (if found then verified)
+//     const userData = await db
+//         .select({
+//             userId : usersTable.id,
+//             email : usersTable.email,
+//         }) 
+//         .from(usersTable)
+//         .where(eq(usersTable.id, userId))
+
+//     if(!userData.length){
+//         return null;
+//     }
+
+//     return {
+//         userId : userData[0].userId,
+//         email : userData[0].email,
+//         token : tokenData[0].token,
+//         expiresAt : tokenData[0].expiresAt
+//     }
+// }
+
+
+//!Using mySql join here
 export const findVerificationEmailToken = async ({token, email}) => {
-    //verifying token here (if found then verified)
-    const tokenData = await db
+    //verifying token and email both here (if found then verified)
+    try {
+        const tokenData = await db
         .select({
-            userId : verifyEmailTokensTable.userId,
+            userId : usersTable.id,
+            email : usersTable.email,
             token : verifyEmailTokensTable.token,
             expiresAt : verifyEmailTokensTable.expiresAt,
         })
         .from(verifyEmailTokensTable)
-        .where(and( eq(verifyEmailTokensTable.token, token), gte(verifyEmailTokensTable.expiresAt, sql`CURRENT_TIMESTAMP` )))
+        .innerJoin(usersTable, eq(usersTable.id, verifyEmailTokensTable.userId))
+        .where(and( 
+            eq(verifyEmailTokensTable.token, token), 
+            gte(verifyEmailTokensTable.expiresAt, sql`CURRENT_TIMESTAMP`),
+            eq(usersTable.email, email)
+        ))
+        if(!tokenData.length){
+            return null;
+        }
 
-    if(!tokenData.length){
-        return null;
+        console.log(tokenData);
+        
+
+        return {
+            userId : tokenData[0].userId,
+            email : tokenData[0].email,
+            token : tokenData[0].token,
+            expiresAt : tokenData[0].expiresAt
+        }
+    } catch (error) {
+        console.error('findVerificationEmailToken : ',error);
+        
     }
-
-    const {userId} = tokenData[0]
-
-    //verifying email here (if found then verified)
-    const userData = await db
-        .select({
-            userId : usersTable.id,
-            email : usersTable.email,
-        }) 
-        .from(usersTable)
-        .where(eq(usersTable.id, userId))
-
-    if(!userData.length){
-        return null;
-    }
-
-    return {
-        userId : userData[0].userId,
-        email : userData[0].email,
-        token : tokenData[0].token,
-        expiresAt : tokenData[0].expiresAt
-    }
+    
+    
 }
 
 
@@ -224,4 +275,43 @@ export const clearVerifyEmailTokens = async (userId) => {
     return await db
         .delete(verifyEmailTokensTable)
         .where(eq(verifyEmailTokensTable.userId, userId))
+}
+
+export const sendVerificationEmailLink = async ({email, userId, req}) => {
+    //?Generating random token and email verification link
+    const randomToken = generateRandomToken()
+
+    await insertVerifyEmailToken({userId, token : randomToken})
+
+    const verifyEmailLink = await createVerifyEmailLink({
+        email : email,
+        token : randomToken,
+        req : req
+    })
+
+    //!1.Retrieving mjml Template path here
+    const mjmlTemplateFile = await fs.readFile(path.join(import.meta.dirname,"..",'emails', 'verify-email.mjml'), 'utf-8')
+    
+    //!2.To replace the placeholder with actual value of mjml file
+    const filledTemplate = ejs.render(mjmlTemplateFile, {
+      code : randomToken,
+      link : verifyEmailLink
+    })
+
+    //!3Convert mjml to html
+    const { html: newHtmlOutput } = mjml2html(filledTemplate); // Destructure directly for cleaner code
+
+    //! creating a function for sending data to 'node mailer' or 'resend' lib files
+    await sendEmail({
+        //?sending verification mail to user
+        to : email,
+        subject : 'Verify your email',
+        // html : `
+        //     <h1>Click the below link to verify your email</h1>
+        //     <p>You can use this token : <code>${randomToken}</code></p>
+        //     <a href='${verifyEmailLink}'>Verify Email</a>
+        // `
+        //?new mjml dynamic file instead of above html
+        html : newHtmlOutput
+    }).catch(console.error)
 }

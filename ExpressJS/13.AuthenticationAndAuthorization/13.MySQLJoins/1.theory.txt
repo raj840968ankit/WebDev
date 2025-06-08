@@ -10,3 +10,6 @@
 
 //Left join - It select the whole table data from left and only matching data from right and put null if not matches..
 //    - Syntax - Select * from tableName1 left join tableName2 on table1.id = table2.id where table1.id = 3
+
+
+//.........Usage of my Sql join (auth.services.js -> find verification email token).........

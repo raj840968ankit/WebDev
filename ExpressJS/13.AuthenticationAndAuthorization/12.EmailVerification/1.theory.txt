@@ -31,3 +31,28 @@ Step 7 - Last step of verification
 //  - create a route for 'verify-email-token' for verifying the ethereal mail generated link or token 
 //  - Do the zod validation for email and token before getting value from URL(validators -> auth.validator.js)
 //  - in verifyEmailToken router we have taken the data from url and 
+
+
+
+//..............Email Verification just after registration(no manual verifying email)................................
+//  - since we were getting email verification link by clicking on resend verification link button
+//  - so we can copy that resend verification link and can use in registration directly(but after authentication)
+
+
+//.......Use of MJML instead of HTML for sending dynamic email templates........................
+//  - install via 'npm i mjml'
+//  - create a folder 'emails' -> 'verify-email.mjml' file and paste the inbuilt code
+//  - go to (auth.services.js -> sendVerificationEmailLink) and retrieve mjml file instead of html file
+//  - convert mjml to html
+
+
+//..........<<<<<<<<<< Now we can use original gmail verification in our project (limitation using resend api key)>>>>>>>>>>>...............
+//   -we were previously using 'nodemailer' library to send email verification using 'smtp server'
+//   -but in this approach we will use 'resend' library to send email using 'API key' (more secure but need custom verified domain to send to all user)
+//   - install via 'npm i resend'
+//   -check usage in 'resend.lib.js'
+
+
+//..........<<<<<<<<<< Now we can use original gmail verification in our project (Using nodemailer SMTP approach)>>>>>>>>>>>...............
+//   -create app password in gmail first(nvydnchdfkurqndc)
+//   -check usage in nodemailer.lib.js
