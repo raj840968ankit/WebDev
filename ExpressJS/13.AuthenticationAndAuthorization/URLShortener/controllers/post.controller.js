@@ -18,6 +18,7 @@ const postShortener = async (req, res) => {
             return res.redirect('/')
         }
         const {url, shortCode} =  data
+        let modifiedUrl = url.length > 200 ? url.slice(0, 201) : url
         
         // const links = await loadLinks()
         const finalShortCode = shortCode || crypto.randomBytes(4).toString("hex")
@@ -50,7 +51,7 @@ const postShortener = async (req, res) => {
         }
 
         //!after making relation between table
-        await saveLinks({finalShortCode, url, userId : req.user.id}) 
+        await saveLinks({finalShortCode, url : modifiedUrl, userId : req.user.id}) 
 
         return res.redirect('/');
     } catch (error) {

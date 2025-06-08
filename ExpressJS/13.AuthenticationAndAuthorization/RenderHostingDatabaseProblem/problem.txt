@@ -1,0 +1,40 @@
+-----------------------------🔹 1. Create a Free MySQL DB on Clever Cloud-------------------------
+--Go to: https://console.clever-cloud.com
+
+--Sign in or create a new account.
+
+--Click "New" → "Add an Add-on"
+
+--Choose MySQL and proceed.
+
+--Name the database, select a region, and create it.
+
+
+----------------------🔹 2. Get the Connection Info--------------------------------
+--After creating the DB:
+
+--Go to the "Overview" or "Introduction" tab.
+
+--Look for the following variables:
+
+Variable Name	        Meaning
+MYSQL_ADDON_HOST	    Database host (e.g., abc.mysql.db)
+MYSQL_ADDON_PORT	    Port (usually 3306)
+MYSQL_ADDON_DB	        Database name
+MYSQL_ADDON_USER	    Username
+MYSQL_ADDON_PASSWORD	Password
+
+
+--------------------------✅ Step 3: Ensure DATABASE_URL is Set -----------------------------------
+----In PowerShell:
+--to connect with remote db - $env:DATABASE_URL = "mysql://ugo2r8oyfu5hvata:xZJ2PnAC1nuJLwTWj1H5@bhr7k703iwxnw3ums6cy-mysql.services.clever-cloud.com:3306/bhr7k703iwxnw3ums6cy"
+
+-------------------------✅ Step 4: Use the New push Command--------------------------------------
+----Now just run:
+--to push drizzle schema - npx drizzle-kit push
+
+
+
+.....................important thing to remember........................
+--change "start": "node --env-file=.env app.js" to "node app.js" from package.json and 'import 'dotenv/config';' in app.js after installing npm install dotenv\
+
