@@ -1,2 +1,19 @@
 //....................Forget password implementation............................
-//  - create '/reset-password' route first after clicking on forgot-password in login page
+//  - create '/reset-password' route with get method and forget-password.ejs file for rendering after clicking on forgot-password link in login page
+//  - create a password_reset_token schema in schema.js
+//  - create '/reset-password' route with post method for checking entered email in forgot password page
+
+//  - Create reset password link
+//        - generate random password reset token and convert to hash token
+//        - delete all the previous data from passwordResetTokenTable for a specific user
+//        - insert the new tokenHash value in passwordResetTokenTable
+//        - create the link with token value
+
+//  - create a mjml template for sending message to email with reset link (taken from thapa project)
+
+//  - convert mjml to html(lib -> get-html-from-mjml-template.js)
+//        - 1. we need to read the data
+//        - 2. we need to replace the placeholder (ejs.render)
+//        - 3. finally we need to convert the into html
+
+

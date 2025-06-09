@@ -25,7 +25,7 @@ router.route('/edit-profile').get(authController.getEditProfilePage).post(authCo
 
 router.route('/change-password').get(authController.getChangePasswordPage).post(authController.postChangePassword)
 
-router.route('/reset-password').get(authController.getResetPasswordPage)
+router.route('/reset-password').get(authController.getForgetPasswordPage).post(authController.postForgetPassword)
 
 export const authRouter = router
 

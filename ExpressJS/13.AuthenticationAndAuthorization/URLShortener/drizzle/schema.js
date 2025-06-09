@@ -1,6 +1,8 @@
 import { relations, sql } from 'drizzle-orm';
 import { boolean, int, mysqlTable, varchar, timestamp, text } from 'drizzle-orm/mysql-core';
 
+//!............................Schemas.........................................
+
 export const shortenerTable = mysqlTable('shortener', {
   id: int().autoincrement().primaryKey(),
   url: varchar({ length: 512 }).notNull(),
@@ -42,6 +44,18 @@ export const sessionsTable = mysqlTable("sessions", {
   createdAt: timestamp("created_at").defaultNow().notNull(), 
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(), 
 });
+
+//!Creating a schema (passwordResetTokenTable) for forgot password section
+export const passwordResetTokensTable = mysqlTable("password_reset_tokens", { 
+  id: int("id").autoincrement().primaryKey(), 
+  userId: int("user_id").notNull().references(() => usersTable.id, {onDelete: "cascade" }).unique(), 
+  tokenHash: text("token_hash").notNull(), 
+  expiresAt: timestamp("expires_at").default(sql`(CURRENT_TIMESTAMP + INTERVAL 1 HOUR)`).notNull(), 
+  createdAt: timestamp("created_at").defaultNow().notNull(), 
+});
+
+
+//!............................Relations.........................................
 
 
 //!Define relation between both tables 'usersTable and shortenerTable' if working with drizzle

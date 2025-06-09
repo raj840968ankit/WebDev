@@ -1,5 +1,5 @@
 import { db } from "../config/db-client.js";
-import { sessionsTable, shortenerTable, usersTable, verifyEmailTokensTable } from "../drizzle/schema.js";
+import { passwordResetTokensTable, sessionsTable, shortenerTable, usersTable, verifyEmailTokensTable } from "../drizzle/schema.js";
 import { and, eq, gte, lt, sql } from "drizzle-orm";
 import bcrypt from 'bcrypt'
 import argon2 from 'argon2'
@@ -330,4 +330,30 @@ export const saveNewPassword = async ({userId, newPassword}) => {
         .update(usersTable)
         .set({password : newHashPassword})
         .where(eq(usersTable.id, userId))
+}
+
+export const findUserByEmail = async (email) => {
+    const[user] = await db.select().from(usersTable).where(eq(usersTable.email, email))
+    return user;
+}
+
+export const createResetPasswordLink = async ({userId, req}) => {
+    //?1.generating random token
+    const randomToken = crypto.randomBytes(32).toString('hex')
+
+    //?2.converting random token to hash using 'sha256' algorithm
+    const tokenHash = crypto.createHash('sha256').update(randomToken).digest('hex')
+
+    //?3.delete all the previous data from passwordResetTokenTable for a specific user
+    await db.delete(passwordResetTokensTable).where(eq(passwordResetTokensTable.userId, userId))
+
+    //?4.insert the new tokenHash value in passwordResetTokenTable
+    await db.insert(passwordResetTokensTable).values({userId, tokenHash})
+
+    //?5.create the link with token value
+
+    const resetLink = `${req.protocol}://${req.get('host')}/reset-password/${randomToken}`;
+    console.log('link : ',resetLink);
+    
+    return resetLink;
 }

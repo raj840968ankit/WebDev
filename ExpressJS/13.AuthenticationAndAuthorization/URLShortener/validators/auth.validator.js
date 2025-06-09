@@ -6,12 +6,14 @@ export const nameSchema = z
         .min(3, { message: "Name must be at least 3 characters long." })
         .max(100, { message: "Name must be no more than 100 characters." })
 
-export const loginUserSchema = z.object({
-    email : z
+export const emailSchema = z
         .string()
         .trim()
         .email({ message: "Please enter a valid email address." })
-        .max(100, { message: "Email must be no more than 100 characters." }),
+        .max(100, { message: "Email must be no more than 100 characters." })
+
+export const loginUserSchema = z.object({
+    email : emailSchema,
 
     password : z
         .string()

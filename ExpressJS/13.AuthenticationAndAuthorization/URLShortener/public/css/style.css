@@ -2012,6 +2012,7 @@ body {
 
 .forget-password{
   align-self: start;
+  margin-top: 5px;
 }
 .forget-password a {
   text-decoration: none;
@@ -2326,5 +2327,209 @@ body {
 
   .form-submit6 {
     max-width: 200px;
+  }
+}
+/* Section containing the forgot password form */
+.forgot-password7 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 60px); /* Adjust based on header height */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* The white card container */
+.container7 {
+  width: 100%;
+  max-width: 500px; /* Max-width for the form container */
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 30px; /* Padding for content inside the white card */
+  box-sizing: border-box;
+}
+
+/* Content wrapper inside the container */
+.change-password-content7 {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers items horizontally in a column layout */
+  width: 100%; /* Ensure it takes full width for alignment */
+}
+
+/* Styling for the success message (when formSubmitted is true) */
+.change-password-content7 > p { /* Targets the direct paragraph child */
+  padding: 20px;
+  font-size: 1.1em;
+  color: #28a745;
+  background-color: #e6ffe6;
+  border: 1px solid #28a745;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 20px;
+  line-height: 1.5;
+  box-sizing: border-box;
+  width: 100%; /* Take full width of parent */
+}
+
+/* Form Styling */
+.change-password-form7 {
+  width: 100%;
+  text-align: center;
+}
+
+.form-title7 {
+  font-size: 2em;
+  margin-bottom: 25px;
+  color: #333;
+  text-align: center; /* Ensure title is centered */
+}
+
+/* Form element styles */
+.change-password-form7 form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between form groups */
+  width: 100%; /* Ensure the form itself takes full width */
+}
+
+.form-group7 {
+  position: relative; /* If needed for absolute positioning of icons/buttons */
+  margin-bottom: 0; /* Managed by gap in form */
+  width: 100%; /* Take full width of parent form */
+}
+
+/* Input Wrapper for Icon */
+.input-wrapper7 {
+  display: flex;
+  align-items: center;
+  background-color: #f0f2f5;
+  border-radius: 5px;
+  padding: 10px 15px;
+  border: 1px solid #e0e0e0;
+  width: 100%; /* Take full width of form-group */
+  box-sizing: border-box; /* Include padding/border in width */
+}
+
+.input-wrapper7 .prefix-icon {
+  font-size: 1.4em;
+  color: #666;
+  margin-right: 10px;
+}
+
+.form-group7 input[type='email'] {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  padding: 8px 0;
+  font-size: 1em;
+  outline: none;
+  color: #333;
+}
+
+.form-group7 input::placeholder {
+  color: #999;
+}
+
+/* Form Submit Button */
+.form-group7.form-button7 {
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: none;
+  margin-top: 10px;
+  display: flex; /* Make it a flex container to center the button */
+  width: 100%;
+}
+
+.form-submit7 {
+  background-color: #007bff;
+  color: #fff;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 250px; /* Limit button width */
+}
+
+.form-submit7:hover {
+  background-color: #0056b3;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .forgot-password7 {
+    padding: 15px;
+  }
+
+  .container7 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 25px;
+  }
+
+  .form-title7 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+  }
+
+  .input-wrapper7 {
+    padding: 8px 12px;
+  }
+
+  .form-group7 input[type='email'] {
+    padding: 6px 0;
+  }
+
+  .form-submit7 {
+    padding: 10px 25px;
+    font-size: 1em;
+  }
+
+  .change-password-content7 > p {
+    padding: 15px;
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .forgot-password7 {
+     margin-left: auto;
+    margin-right: auto;
+    width: 280px; /* Fixed width as requested */
+    padding: 10px 0; /* Vertical padding, no horizontal as width is fixed */
+    display: block; /* Allows auto margins to center .main6 itself */
+    min-height: auto; /* Allow height to be determined by content */
+  }
+
+  .container7 {
+    width: 100%; /* Takes full width of its parent (.main6) */
+    max-width: none; /* No max-width restriction in small screens */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px; /* Inner padding for small screens */
+  }
+
+  .change-password-content7 {
+    padding: 0; /* Padding is now on container7 */
+  }
+
+  .form-title7 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+  }
+
+  .form-submit7 {
+    max-width: 200px;
+  }
+
+  .change-password-content7 > p {
+    padding: 10px;
+    font-size: 0.9em;
   }
 }

@@ -1,7 +1,8 @@
 import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
+import { getHtmlFromMjmlTemplate } from "../lib/get-html-from-mjml-template.js";
 import { sendEmail } from "../lib/nodemailer.lib.js";
-import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession, findUserById, getAllShortLinks, generateRandomToken, insertVerifyEmailToken, createVerifyEmailLink, findVerificationEmailToken, verifyUserEmailAndUpdate, clearVerifyEmailTokens, sendVerificationEmailLink, updateUserByName, saveNewPassword } from "../services/auth.services.js";
-import { loginUserSchema, nameSchema, registerUserSchema, verifyEmailSchema, verifyPasswordSchema } from "../validators/auth.validator.js";
+import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession, findUserById, getAllShortLinks, generateRandomToken, insertVerifyEmailToken, createVerifyEmailLink, findVerificationEmailToken, verifyUserEmailAndUpdate, clearVerifyEmailTokens, sendVerificationEmailLink, updateUserByName, saveNewPassword, findUserByEmail, createResetPasswordLink } from "../services/auth.services.js";
+import { emailSchema, loginUserSchema, nameSchema, registerUserSchema, verifyEmailSchema, verifyPasswordSchema } from "../validators/auth.validator.js";
 
 export const getRegisterPage = (req, res) => {
     try {
@@ -349,7 +350,6 @@ export const postEditProfile = async (req, res) => {
     const {name} = req.body  //req.body returns object and nameSchema cannot parse object here 
     
     const {data, error} = nameSchema.safeParse(name)
-    console.log(data);
     
    
     if(error){
@@ -403,6 +403,37 @@ export const postChangePassword = async (req, res) => {
     res.redirect('/auth/profile')
 }
 
-export const getResetPasswordPage = (req, res) => {
-    return res.render('auth/reset-password', {errors: null, formSubmitted : null, token : null, })
+export const getForgetPasswordPage = (req, res) => {
+    
+    return res.render('auth/forget-password', {
+        errors: req.flash('errors'), 
+        formSubmitted : req.flash('formSubmitted')[0], 
+    })
+}
+
+export const postForgetPassword = async (req, res) => {
+    //?first validate entered email
+    const email = req.body.email;
+    const {data, error} = emailSchema.safeParse(email);
+    console.log('data : ',data);
+    
+    if(error){
+        const errorMessages = error.errors.map((err) => err.message)
+        req.flash('errors', errorMessages[0])
+        return res.redirect('/reset-password')
+    }
+
+    const user = findUserByEmail(data)
+    const resetPasswordLink = null;
+    if(user){
+        resetPasswordLink = await createResetPasswordLink({userId : user.id, req})
+    }
+
+    //converting mjml template to html 
+    const html = getHtmlFromMjmlTemplate("reset-password-email", {
+        name : user.name,
+        link : resetPasswordLink
+    })
+
+    return res.redirect('/auth/login')
 }
