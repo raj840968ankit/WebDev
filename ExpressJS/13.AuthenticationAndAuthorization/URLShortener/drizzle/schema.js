@@ -7,7 +7,7 @@ export const shortenerTable = mysqlTable('shortener', {
   shortCode: varchar({ length: 255 }).notNull().unique(),
   createdAt: timestamp("created_at").defaultNow().notNull(), 
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(), 
-  userId : int("user_id").notNull().references(() => usersTable.id),
+  userId : int("user_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }),
 });
 
 //!Creating a schema (verifyEmailTokenTable) for verification of email

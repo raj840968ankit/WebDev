@@ -15,6 +15,13 @@
       "when": 1749252344227,
       "tag": "0001_fair_queen_noir",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1749439725591,
+      "tag": "0002_gorgeous_black_crow",
+      "breakpoints": true
     }
   ]
 }

@@ -21,5 +21,11 @@ router.route('/resend-verification-link').post(authController.resendVerification
 
 router.route('/verify-email-token').get(authController.verifyEmailToken)
 
+router.route('/edit-profile').get(authController.getEditProfilePage).post(authController.postEditProfile)
+
+router.route('/change-password').get(authController.getChangePasswordPage).post(authController.postChangePassword)
+
+router.route('/reset-password').get(authController.getResetPasswordPage)
+
 export const authRouter = router
 

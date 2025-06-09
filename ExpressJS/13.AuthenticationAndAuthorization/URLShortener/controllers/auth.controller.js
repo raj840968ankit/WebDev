@@ -1,7 +1,7 @@
 import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
 import { sendEmail } from "../lib/nodemailer.lib.js";
-import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession, findUserById, getAllShortLinks, generateRandomToken, insertVerifyEmailToken, createVerifyEmailLink, findVerificationEmailToken, verifyUserEmailAndUpdate, clearVerifyEmailTokens, sendVerificationEmailLink } from "../services/auth.services.js";
-import { loginUserSchema, registerUserSchema, verifyEmailSchema } from "../validators/auth.validator.js";
+import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession, findUserById, getAllShortLinks, generateRandomToken, insertVerifyEmailToken, createVerifyEmailLink, findVerificationEmailToken, verifyUserEmailAndUpdate, clearVerifyEmailTokens, sendVerificationEmailLink, updateUserByName, saveNewPassword } from "../services/auth.services.js";
+import { loginUserSchema, nameSchema, registerUserSchema, verifyEmailSchema, verifyPasswordSchema } from "../validators/auth.validator.js";
 
 export const getRegisterPage = (req, res) => {
     try {
@@ -216,9 +216,6 @@ export const getLogoutUser = async (req, res) => {
     return res.redirect('/auth/login')
 }
 
-export const getShortenerEditPage = (req, res) => {
-    res.render('edit-shortlink')
-}
 
 export const getUserProfilePage = async (req, res) => {
     try {
@@ -250,7 +247,7 @@ export const getUserProfilePage = async (req, res) => {
 
 export const getVerifyEmailPage = async (req, res) => {
     if(!req.user){
-        res.redirect('/')
+        res.redirect('/auth/register')
     }
 
     const user = await findUserById(req.user.id)
@@ -264,7 +261,7 @@ export const getVerifyEmailPage = async (req, res) => {
 
 export const resendVerificationLink = async (req,res) => {
     if(!req.user){
-        res.redirect('/')
+        res.redirect('/auth/register')
     }
 
     const user = await findUserById(req.user.id)
@@ -326,4 +323,86 @@ export const verifyEmailToken = async (req, res) => {
     await clearVerifyEmailTokens(token.userId).catch(console.error)
 
     return res.redirect('/auth/profile')
+}
+
+export const getEditProfilePage = async (req, res) => {
+    if(!req.user){
+        return res.redirect('/auth/login')
+    }
+
+    const user = await findUserById(req.user.id)
+
+    if(!user){
+        return res.status(404).send("user not found")
+    }
+    return res.render('auth/edit-profile',{
+        name: user.name,
+        errors : req.flash('errors')
+    })
+}
+
+export const postEditProfile = async (req, res) => {
+    if(!req.user){
+        return res.redirect('/auth/login')
+    }
+
+    const {name} = req.body  //req.body returns object and nameSchema cannot parse object here 
+    
+    const {data, error} = nameSchema.safeParse(name)
+    console.log(data);
+    
+   
+    if(error){
+        const errorMessages = error.errors.map((err) => err.message)
+        req.flash('errors', errorMessages)
+        return res.redirect('/edit-profile')
+    }
+    await updateUserByName({userId : req.user.id, name : data})
+
+    return res.redirect('/auth/profile')
+}
+
+export const getChangePasswordPage = async (req, res) => {
+    if(!req.user){
+        return res.redirect('/auth/login')
+    }
+
+    return res.render('auth/change-password', { errors : req.flash('errors')})
+}
+
+export const postChangePassword = async (req, res) => {
+    if(!req.user){
+        return res.redirect('/auth/login')
+    }
+
+    const {data, error} = verifyPasswordSchema.safeParse(req.body)
+
+    if(error){
+        const errorMessages = error.errors.map((err) => err.message)
+        req.flash('errors', errorMessages)
+        return res.redirect('/change-password')
+    }
+    
+    const {currentPassword, newPassword} = data;
+
+    const user = await findUserById(req.user.id)
+
+    if(!user){
+        return res.status(404).send("user not found")
+    }
+    
+    //!comparing user.password(hashed One) with currentPassword
+    const isValidPassword = await comparePassword(currentPassword, user.password)
+
+    if(!isValidPassword){
+        req.flash("errors", "Current password is invalid!!");
+        return res.redirect('/change-password')
+    }
+
+    await saveNewPassword({userId : user.id, newPassword})
+    res.redirect('/auth/profile')
+}
+
+export const getResetPasswordPage = (req, res) => {
+    return res.render('auth/reset-password', {errors: null, formSubmitted : null, token : null, })
 }
