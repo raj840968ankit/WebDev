@@ -40,7 +40,11 @@
         <div class="profile-header">
           <div class="profile-avatar">
             <div class="avatar-placeholder">
-              <span><%= user.name.charAt(0).toUpperCase() %></span>
+              <% if(user.avatarURL) { %>
+                <img class='profile-img' src="<%= user.avatarURL %>" alt="img">
+              <% } else { %>
+                <span><%= user.name.charAt(0).toUpperCase() %></span>
+              <% } %>
             </div>
           </div>
           <div class="profile-info">

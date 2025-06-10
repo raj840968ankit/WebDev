@@ -1,6 +1,6 @@
 import { db } from "../config/db-client.js";
 import { oauthAccountsTable, passwordResetTokensTable, sessionsTable, shortenerTable, usersTable, verifyEmailTokensTable } from "../drizzle/schema.js";
-import { and, eq, gte, lt, lte, sql } from "drizzle-orm";
+import { and, eq, gte, isNull, lt, lte, sql } from "drizzle-orm";
 import bcrypt from 'bcrypt'
 import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
@@ -398,11 +398,16 @@ export const getUserWithOauthId = async ({provider, email}) => {
     return user;
 }
 
-export async function linkUserWithOauth({userId, provider, providerAccountId}){
-    return await db.insert(oauthAccountsTable).values({userId, provider, providerAccountId});
+export async function linkUserWithOauth({userId, provider, providerAccountId, avatarURL}){
+    await db.insert(oauthAccountsTable).values({userId, provider, providerAccountId});
+
+    //saving profile to database if not exists
+    if(avatarURL){
+        await db.update(usersTable).set({avatarURL}).where(and(eq(usersTable.id, userId), isNull(usersTable.avatarURL)))
+    }
 }
 
-export async function createUserWithOauth({name, email, provider, providerAccountId}){
+export async function createUserWithOauth({name, email, provider, providerAccountId, avatarURL}){
     const user = await db.transaction(async (trx) => { 
         const [user] = await trx 
             .insert(usersTable) 
@@ -411,6 +416,7 @@ export async function createUserWithOauth({name, email, provider, providerAccoun
                 name, 
                 // password: 
                 isEmailValid: true, //we know that google's email are valid 
+                avatarURL,
             }) 
             .$returningId(); 
 

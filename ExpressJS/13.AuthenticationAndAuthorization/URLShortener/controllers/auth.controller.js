@@ -4,7 +4,7 @@ import { ACCESS_TOKEN_EXPIRY, OAUTH_EXCHANGE_EXPIRY, REFRESH_TOKEN_EXPIRY } from
 import { getHtmlFromMjmlTemplate } from "../lib/get-html-from-mjml-template.js";
 import { sendEmail, sendResetPasswordEmail } from "../lib/nodemailer.lib.js";
 import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession, findUserById, getAllShortLinks, generateRandomToken, insertVerifyEmailToken, createVerifyEmailLink, findVerificationEmailToken, verifyUserEmailAndUpdate, clearVerifyEmailTokens, sendVerificationEmailLink, updateUserByName, saveNewPassword, findUserByEmail, createResetPasswordLink, getResetPasswordToken, clearResetPasswordToken, getUserWithOauthId, linkUserWithOauth, createUserWithOauth } from "../services/auth.services.js";
-import { emailSchema, loginUserSchema, nameSchema, registerUserSchema, verifyEmailSchema, verifyPasswordSchema, verifyResetPasswordSchema } from "../validators/auth.validator.js";
+import { emailSchema, loginUserSchema, nameSchema, registerUserSchema, setPasswordSchema, verifyEmailSchema, verifyPasswordSchema, verifyResetPasswordSchema } from "../validators/auth.validator.js";
 import { google } from "../lib/oauth/google.js";
 import { github } from "../lib/oauth/github.js";
 
@@ -247,6 +247,7 @@ export const getUserProfilePage = async (req, res) => {
                 email : user.email,
                 isEmailValid : user.isEmailValid,
                 hasPassword : Boolean(user.password),
+                avatarURL : user.avatarURL,
                 createdAt : user.createdAt,
                 shortLinks : userShortLinks,
             }
@@ -347,6 +348,7 @@ export const getEditProfilePage = async (req, res) => {
     }
     return res.render('auth/edit-profile',{
         name: user.name,
+        avatarURL : user.avatarURL,
         errors : req.flash('errors')
     })
 }
@@ -571,7 +573,10 @@ export const getGoogleLoginCallback = async (req, res) => {
 
     const claims = decodeIdToken(tokens.idToken())
 
-    const {sub : googleUserId, name, email} = claims
+    //console.log('google claims : ',claims);  //!so we are also getting picture in claims
+
+    //!we are taking profile as picture here for user
+    const {sub : googleUserId, name, email, picture} = claims
 
     //!Once we get the user details there are few things that we should do 
     //Condition 1: User already exists with google's oauth linked 
@@ -589,7 +594,8 @@ export const getGoogleLoginCallback = async (req, res) => {
         await linkUserWithOauth({ 
             userId: user.id, 
             provider: "google", 
-            providerAccountId: googleUserId, 
+            providerAccountId: googleUserId,
+            avatarURL : picture     //? adding picture if user logged in first time with OAuth
         });
     }
 
@@ -600,6 +606,7 @@ export const getGoogleLoginCallback = async (req, res) => {
             email, 
             provider: "google", 
             providerAccountId: googleUserId,
+            avatarURL : picture     //? adding picture if user logged in first time with OAuth
         })
     }
 
@@ -697,7 +704,9 @@ export const getGithubLoginCallback = async (req, res) => {
     }
 
     const githubUser = await githubUserResponse.json(); 
-    const { id: githubUserId, name} =  githubUser; 
+    //console.log('github claim : ', githubUser);  
+    
+    const { id: githubUserId, name, avatar_url : avatarURL} =  githubUser; //!so we are also getting picture in claims
 
     //for fetching email of user with token value
     const githubEmailResponse = await fetch( "https://api.github.com/user/emails", {
@@ -735,7 +744,8 @@ export const getGithubLoginCallback = async (req, res) => {
         await linkUserWithOauth({ 
             userId: user.id, 
             provider: "github", 
-            providerAccountId: githubUserId, 
+            providerAccountId: githubUserId,
+            avatarURL 
         });
     }
 
@@ -746,6 +756,7 @@ export const getGithubLoginCallback = async (req, res) => {
             email, 
             provider: "github", 
             providerAccountId: githubUserId,
+            avatarURL
         })
     }
 
@@ -793,4 +804,27 @@ export const getSetPasswordPage = async (req, res) => {
     return res.render('auth/set-password', {
         errors : req.flash('errors')
     })
+}
+
+export const postSetPassword = async (req, res) => {
+    const {data, error} = setPasswordSchema.safeParse(req.body)
+
+    if(error){
+        const errorMessages = error.errors.map((err) => err.message)
+        req.flash('errors', errorMessages[0])
+        return res.redirect(`/set-password`)
+    }
+
+    const {newPassword} = data
+
+    const user = await findUserById(req.user.id)
+
+    if(user.password){
+        req.flash('errors', 'You have already your password, instead change your password.')
+        return res.redirect('/set-password')
+    }
+
+    await saveNewPassword({userId : user.id, newPassword})
+    
+    return res.redirect('/auth/profile')
 }

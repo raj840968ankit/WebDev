@@ -29,6 +29,7 @@ export const usersTable = mysqlTable("users", {
   //!adding 'isEmailValid' for email verification icon in profile.ejs file
   isEmailValid : boolean('is_email_valid').default(false).notNull(),
   password: varchar({ length: 255}), 
+  avatarURL : text('avatar_url'),
   createdAt: timestamp("created_at").defaultNow().notNull(), 
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(), 
 });

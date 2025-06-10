@@ -877,7 +877,16 @@ body {
   align-items: center;
   justify-content: center;
 }
-
+.avatar-placeholder{
+  height: 80px;
+  width: 80px;
+}
+.profile-img{
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  
+}
 .avatar-placeholder span {
   font-size: 2rem;
   font-weight: bold;

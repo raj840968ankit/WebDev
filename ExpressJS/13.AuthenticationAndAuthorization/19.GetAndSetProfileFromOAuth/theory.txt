@@ -1,0 +1,10 @@
+//the basic key idea is :-
+//   - we will request profile from OAuth platform
+//   - save that profile in usersTable after adding a profile attribute(avatar_url)
+//   - retrieve profile from usersTable while setting profile pic
+
+// How to do this - 
+//   - add a attribute to usersTable 'avatarURL'
+//   - check usage in '/google/callback' during 'claims' (also check in '/github/callback')
+//   - save picture only if user doesn't linked with OAuth
+//   - go to getProfilePage Route and then set profile picture

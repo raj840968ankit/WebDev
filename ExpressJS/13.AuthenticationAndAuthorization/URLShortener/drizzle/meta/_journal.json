@@ -43,6 +43,13 @@
       "when": 1749529255244,
       "tag": "0005_brave_smiling_tiger",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1749549056044,
+      "tag": "0006_neat_scarecrow",
+      "breakpoints": true
     }
   ]
 }

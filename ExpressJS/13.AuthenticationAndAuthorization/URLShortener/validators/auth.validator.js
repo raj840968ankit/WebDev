@@ -81,3 +81,5 @@ export const verifyResetPasswordSchema = z.object({
     message : "Password don't match",
     path : ['ConfirmPassword']  //if error occur then it will be associated with confirm password field
 })
+
+export const setPasswordSchema = verifyResetPasswordSchema

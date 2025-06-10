@@ -1,0 +1,7 @@
+//Seeding means giving fake entries to the database
+
+//.....................TO use.......................................
+//install via 'npm i drizzle-seed'
+//add a script in package.json
+//create a file seed.js in drizzle folder
+//check usage in seed.js

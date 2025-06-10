@@ -11,7 +11,8 @@
     "start": "node app.js",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:seed" : "node --env-file=.env drizzle/seed.js"
   },
   "dependencies": {
     "@prisma/client": "^6.8.2",
@@ -24,6 +25,7 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.44.1",
+    "drizzle-seed": "^0.3.1",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-session": "^1.18.1",

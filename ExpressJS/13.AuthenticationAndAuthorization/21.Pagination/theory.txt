@@ -1,0 +1,7 @@
+//..................Implementation of paging.............................
+//We need variables likes :-
+//  -totalCounts 
+//  -totalPages
+//  -currentPage
+//  -limit
+//  -offset - if limit = 5 and we are at the second page then offset will be (6-10)
