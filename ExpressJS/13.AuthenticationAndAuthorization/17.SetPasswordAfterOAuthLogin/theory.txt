@@ -1,0 +1,8 @@
+//the basic key idea is :-
+//    - if user has password(manual login) then show change password in profile.ejs
+//    - if user has no password(OAuth login) then show set password in profile.ejs
+
+// how to do this:-
+//    - while rendering 'profile.ejs' page, pass a property 'hasPassword' with boolean value
+//    - add the if-else statement in profile.ejs with the help of 'hasPassword' property
+//    - create a route '/set-password' and 'set-password.ejs' file

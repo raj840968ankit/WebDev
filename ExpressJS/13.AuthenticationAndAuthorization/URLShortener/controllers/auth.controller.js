@@ -1,11 +1,12 @@
 import { log } from "console";
-import {decodeIdToken, generateCodeVerifier, generateState} from 'arctic'
+import {decodeIdToken, generateCodeVerifier, generateState, GitHub} from 'arctic'
 import { ACCESS_TOKEN_EXPIRY, OAUTH_EXCHANGE_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
 import { getHtmlFromMjmlTemplate } from "../lib/get-html-from-mjml-template.js";
 import { sendEmail, sendResetPasswordEmail } from "../lib/nodemailer.lib.js";
 import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession, findUserById, getAllShortLinks, generateRandomToken, insertVerifyEmailToken, createVerifyEmailLink, findVerificationEmailToken, verifyUserEmailAndUpdate, clearVerifyEmailTokens, sendVerificationEmailLink, updateUserByName, saveNewPassword, findUserByEmail, createResetPasswordLink, getResetPasswordToken, clearResetPasswordToken, getUserWithOauthId, linkUserWithOauth, createUserWithOauth } from "../services/auth.services.js";
 import { emailSchema, loginUserSchema, nameSchema, registerUserSchema, verifyEmailSchema, verifyPasswordSchema, verifyResetPasswordSchema } from "../validators/auth.validator.js";
 import { google } from "../lib/oauth/google.js";
+import { github } from "../lib/oauth/github.js";
 
 export const getRegisterPage = (req, res) => {
     try {
@@ -46,11 +47,9 @@ export const postLogin = async (req, res) => {
     }
     const {email, password} = data;
 
-    
     const user = await getUserByEmail(email);
     //console.log("user exists : ",user);
-
-
+    
     if(!user){
         //!using flash-connect to store in session using 'errors' datatype
         req.flash("errors", "Invalid Email or Password!!");
@@ -60,6 +59,7 @@ export const postLogin = async (req, res) => {
     //!condition applied for the user who registered with OAuth only
     if(!user.password){
         req.flash('errors', "You have created account with social login. Please login with your social account.")
+        return res.redirect('/auth/login')
     }
 
     //!comparing userExist.password(hashed One) with password
@@ -246,6 +246,7 @@ export const getUserProfilePage = async (req, res) => {
                 name : user.name,
                 email : user.email,
                 isEmailValid : user.isEmailValid,
+                hasPassword : Boolean(user.password),
                 createdAt : user.createdAt,
                 shortLinks : userShortLinks,
             }
@@ -638,4 +639,158 @@ export const getGoogleLoginCallback = async (req, res) => {
 
     return res.redirect('/')
 
+}
+
+export const getGithubLoginPage = async (req, res) => {
+    if(req.user){
+        return res.redirect('/');
+    }
+
+    //?first import from 'arctic' to use these functions
+    const state = generateState()
+
+    const url = github.createAuthorizationURL(state, ['user:email']);
+
+    const cookieConfig = { 
+        httpOnly: true, 
+        secure: true, 
+        maxAge: OAUTH_EXCHANGE_EXPIRY, 
+        sameSite: "lax", // this is such that when google redirects to our webs, cookies are maintained 
+    }; 
+
+    res.cookie("github_oauth_state", state, cookieConfig); 
+    
+    res.redirect(url.toString())
+}
+
+export const getGithubLoginCallback = async (req, res) => {
+    const { code, state } = req.query; 
+    const { github_oauth_state: storedState} = req.cookies; 
+
+    function handleFailedLogin() { 
+        req.flash("errors", "Couldn't login with GitHub because of invalid login attempt. Please try again!"); 
+        return res.redirect("/auth/login"); 
+    }
+
+    //if any criteria will meet to fail then give error message on login page
+    if (!code || !state || !storedState|| state !== storedState ) {
+        return handleFailedLogin()
+    }
+
+    let tokens; 
+    try { 
+        // arctic will verify the code and return the token 
+        tokens = await github.validateAuthorizationCode(code); 
+    } catch { 
+        return handleFailedLogin()
+    } 
+
+    //for fetching id and name of user with token value
+    const githubUserResponse = await fetch("https://api.github.com/user", { 
+        headers: { 
+            Authorization: `Bearer ${tokens.accessToken()}`, 
+        }, 
+    }); 
+
+    if (!githubUserResponse.ok) {
+        return handleFailedLogin(); 
+    }
+
+    const githubUser = await githubUserResponse.json(); 
+    const { id: githubUserId, name} =  githubUser; 
+
+    //for fetching email of user with token value
+    const githubEmailResponse = await fetch( "https://api.github.com/user/emails", {
+        headers: { 
+            Authorization: `Bearer ${tokens.accessToken()}`, 
+        },
+    })
+
+    if (!githubEmailResponse.ok) {
+        return handleFailedLogin(); 
+    }
+
+    const emails = await githubEmailResponse.json();
+
+    //in github we can have multiple email so we are fetching primary emails from that
+    const email = emails.filter((e) => e.primary)[0].email
+
+    if(!email) {
+        return handleFailedLogin();
+    }
+
+    //!Once we get the user details there are few things that we should do 
+    //Condition 1: User already exists with github's oauth linked 
+    //Condition 2: User already exists with the same email but github's oauth isn't Linked 
+    //Condition 3: User doesn't exist.
+
+    //?if user is already linked (means present in DB in both tables) then we will get the user 
+    let user = await getUserWithOauthId({ 
+        provider: "github", 
+        email, 
+    });
+
+    //?if user exists manually after registration and user is not linked with OAuth
+    if (user && !user.providerAccountId) { 
+        await linkUserWithOauth({ 
+            userId: user.id, 
+            provider: "github", 
+            providerAccountId: githubUserId, 
+        });
+    }
+
+    //? if user doesn't exist 
+    if (!user) { 
+        user = await createUserWithOauth({ 
+            name, 
+            email, 
+            provider: "github", 
+            providerAccountId: githubUserId,
+        })
+    }
+
+    //!now we will insert authenticate user code here(from login or signup)
+    //?we need to create a session first
+    const session =  await createSession(user.id, {
+        ip : req.clientIp,
+        userAgent : req.headers['user-agent']
+    })
+    
+    //?now we need to create accessToken
+    const accessToken = createAccessToken({
+        id : user.id,
+        name : name,
+        email : email,
+        isEmailValid : true,
+        sessionId : session.id,
+    })
+
+    //?now we need to create refreshToken
+    const refreshToken = createRefreshToken(session.id);
+
+    //?send cookie with extra information
+    const baseConfig = { httpOnly : true, secure : true} //httpOnly means no one can access with JS DOM, and secure means runs on https 
+
+    //?After generating tokens we will send the cookie to client's browser with token value
+    res.cookie('access_token', accessToken, {
+        ...baseConfig,   //...baseConfig (destructuring) means 'httpOnly : true, secure : true'
+        maxAge : ACCESS_TOKEN_EXPIRY
+    })
+
+    res.cookie('refresh_token', refreshToken, {
+        ...baseConfig,   //...baseConfig (destructuring) means 'httpOnly : true, secure : true'
+        maxAge : REFRESH_TOKEN_EXPIRY
+    })
+
+
+    return res.redirect('/')
+}
+
+export const getSetPasswordPage = async (req, res) => {
+    if(!req.user){
+        return res.redirect('/auth/login')
+    }
+    return res.render('auth/set-password', {
+        errors : req.flash('errors')
+    })
 }

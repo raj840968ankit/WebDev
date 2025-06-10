@@ -33,5 +33,11 @@ router.route('/google').get(authController.getGoogleLoginPage)
 
 router.route('/google/callback').get(authController.getGoogleLoginCallback)
 
+router.route('/github').get(authController.getGithubLoginPage)
+
+router.route('/github/callback').get(authController.getGithubLoginCallback)
+
+router.route('/set-password').get(authController.getSetPasswordPage)
+
 export const authRouter = router
 

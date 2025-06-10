@@ -1,0 +1,31 @@
+//......................................Github OAuth..................................................
+
+//Step 1 - add github icon on login.ejs page
+
+//step 2 - login in github with your github account
+//       - click on profile icon -> click on 'settings' -> click on 'developer settings' in left side bar in bottom
+//       - click on 'OAuth app' in left side bar -> click on 'new oauth app'
+//       - give application name as 'shrinkify', homepage url as 'http://localhost:3001', Authorization callback URL as 'http://localhost:3001/github/callback'
+//       - click on register application
+//       - now we can see there that we get a client id, but we have to generate client secret
+//       - click on generate new client secret and client secret will be generated
+//       - copy 'client id' and 'client secret' from there as paste in '.env' file
+
+//step 3 - give link '/github' for github icon on login page
+//       - create a route '/github' with get method (auth.route.js)
+//       - do the same thing as done in google OAuth in this route
+//       - create a file github.js oauth folder inside lib folder(lib -> oauth -> github.js) 
+//       - check usage in github.js
+//       - after defining github.js, in '/github' route get method redirect to github provided url
+
+//Step 4 - create a route '/github/callback' with get method (auth.route.js)
+//       - take code and state from req.query
+//       - get cookies from req.cookies
+//       - validate github provided code to get token
+//       - decode token and get user details
+//       - after that follow three condition mentioned in '/github/callback' with get method
+//       - authenticate user with hybrid approach and redirect to login
+//       - At last go to usersTable schema and remove property of password 'notNull' -
+//           because if any user directly enters through OAuth then github will not provide password -
+//           so in users table we have to keep that value null
+//       - add a condition in manual login "/auth/login", if a user try to login with password but previously logged in with OAuth
