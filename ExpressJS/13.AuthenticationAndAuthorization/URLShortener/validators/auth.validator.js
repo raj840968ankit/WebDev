@@ -59,7 +59,25 @@ export const verifyPasswordSchema = z.object({
         .string() 
         .min(5, { message: "Confirm Password must be at least 6 characters long." })
         .max(100, { message: "Confirm Password must be no more than 100 characters." }), 
+        
 }).refine((data) => data.newPassword === data.confirmPassword, {
     message : "Password don't match",
     path : ['ConfirmPassword']  //if error occur then it will be associated with confirm password field
 }) //?refine method is used here to check both password during zod validation itself
+
+
+export const verifyResetPasswordSchema = z.object({
+    newPassword: z 
+    .string() 
+    .min(5, { message: "New Password must be at least 6 characters long." }) 
+    .max(100, { message: "New Password must be no more than 100 characters." }), 
+
+    confirmPassword: z 
+        .string() 
+        .min(5, { message: "Confirm Password must be at least 6 characters long." })
+        .max(100, { message: "Confirm Password must be no more than 100 characters." }), 
+
+}).refine((data) => data.newPassword === data.confirmPassword, {
+    message : "Password don't match",
+    path : ['ConfirmPassword']  //if error occur then it will be associated with confirm password field
+})

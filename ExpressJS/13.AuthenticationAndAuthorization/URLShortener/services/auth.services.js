@@ -1,6 +1,6 @@
 import { db } from "../config/db-client.js";
 import { passwordResetTokensTable, sessionsTable, shortenerTable, usersTable, verifyEmailTokensTable } from "../drizzle/schema.js";
-import { and, eq, gte, lt, sql } from "drizzle-orm";
+import { and, eq, gte, lt, lte, sql } from "drizzle-orm";
 import bcrypt from 'bcrypt'
 import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
@@ -353,7 +353,26 @@ export const createResetPasswordLink = async ({userId, req}) => {
     //?5.create the link with token value
 
     const resetLink = `${req.protocol}://${req.get('host')}/reset-password/${randomToken}`;
-    console.log('link : ',resetLink);
-    
+
     return resetLink;
+}
+
+export const getResetPasswordToken = async (token) => {
+    //?to check token similarity in database we need to hash the token first
+    const tokenHash = crypto.createHash('sha256').update(token).digest('hex')
+
+    const [data] = await db
+        .select()
+        .from(passwordResetTokensTable)
+        .where(and(
+            eq(passwordResetTokensTable.tokenHash, tokenHash), 
+            gte(passwordResetTokensTable.expiresAt, sql`CURRENT_TIMESTAMP`)
+        ))
+
+    return data
+}
+
+export const clearResetPasswordToken = async (userId) => {
+    //?3.delete all the previous data from passwordResetTokenTable for a specific user
+    return await db.delete(passwordResetTokensTable).where(eq(passwordResetTokensTable.userId, userId))
 }

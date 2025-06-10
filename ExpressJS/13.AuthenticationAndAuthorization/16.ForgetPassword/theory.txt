@@ -1,7 +1,7 @@
 //....................Forget password implementation............................
-//  - create '/reset-password' route with get method and forget-password.ejs file for rendering after clicking on forgot-password link in login page
+//  - create '/forget-password' route with get method and forget-password.ejs file for rendering after clicking on forgot-password link in login page
 //  - create a password_reset_token schema in schema.js
-//  - create '/reset-password' route with post method for checking entered email in forgot password page
+//  - create '/forget-password' route with post method for checking entered email in forgot password page
 
 //  - Create reset password link
 //        - generate random password reset token and convert to hash token
@@ -15,5 +15,27 @@
 //        - 1. we need to read the data
 //        - 2. we need to replace the placeholder (ejs.render)
 //        - 3. finally we need to convert the into html
+
+//  - send mail using smtp nodemailer
+
+
+//  - Note :- if we have a link to verify like "http://localhost:3000/verify-token/:anySlugValue" then....
+//        - always create a route with get method ('/verify-token/:token')
+//        - take token value using req.params and match with value stored in database and then redirect anywhere
+
+//  - verification of sent link on email          
+//       -create a route '/reset-password/:token' with get method
+//       -check in database that token exist and render reset-password.ejs on same route
+
+//  - now last step for reset password
+//       - create a route first of '/reset-password/:token' with post method
+//       - Extract password reset token from request parameters. 
+//       - Validate token authenticity, expiration, and match with a previously issued token. 
+//       - If valid, get new password from request body and validate using a schema (e.g., Zod) for complexity. 
+//       - Identify user ID linked to the token. 
+//       - Invalidate all existing reset tokens for that user ID. 
+//       - Hash the new password with a secure algorithm 
+//       - Update the user's password in the database with the hashed version. 
+//       - Redirect to login page or return a success response.
 
 

@@ -1,8 +1,9 @@
+import { log } from "console";
 import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
 import { getHtmlFromMjmlTemplate } from "../lib/get-html-from-mjml-template.js";
-import { sendEmail } from "../lib/nodemailer.lib.js";
-import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession, findUserById, getAllShortLinks, generateRandomToken, insertVerifyEmailToken, createVerifyEmailLink, findVerificationEmailToken, verifyUserEmailAndUpdate, clearVerifyEmailTokens, sendVerificationEmailLink, updateUserByName, saveNewPassword, findUserByEmail, createResetPasswordLink } from "../services/auth.services.js";
-import { emailSchema, loginUserSchema, nameSchema, registerUserSchema, verifyEmailSchema, verifyPasswordSchema } from "../validators/auth.validator.js";
+import { sendEmail, sendResetPasswordEmail } from "../lib/nodemailer.lib.js";
+import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession, findUserById, getAllShortLinks, generateRandomToken, insertVerifyEmailToken, createVerifyEmailLink, findVerificationEmailToken, verifyUserEmailAndUpdate, clearVerifyEmailTokens, sendVerificationEmailLink, updateUserByName, saveNewPassword, findUserByEmail, createResetPasswordLink, getResetPasswordToken, clearResetPasswordToken } from "../services/auth.services.js";
+import { emailSchema, loginUserSchema, nameSchema, registerUserSchema, verifyEmailSchema, verifyPasswordSchema, verifyResetPasswordSchema } from "../validators/auth.validator.js";
 
 export const getRegisterPage = (req, res) => {
     try {
@@ -313,7 +314,6 @@ export const verifyEmailToken = async (req, res) => {
     
     
     const token = await findVerificationEmailToken(data)
-    console.log('Verify Email Token : ',token);
 
     if(!token) {
         return res.send('verification link invalid or expired')
@@ -415,25 +415,90 @@ export const postForgetPassword = async (req, res) => {
     //?first validate entered email
     const email = req.body.email;
     const {data, error} = emailSchema.safeParse(email);
-    console.log('data : ',data);
     
     if(error){
         const errorMessages = error.errors.map((err) => err.message)
         req.flash('errors', errorMessages[0])
-        return res.redirect('/reset-password')
+        return res.redirect('/forget-password')
     }
 
-    const user = findUserByEmail(data)
-    const resetPasswordLink = null;
+    const user = await findUserByEmail(data)
+    
+    
+    let resetPasswordLink = null;
     if(user){
         resetPasswordLink = await createResetPasswordLink({userId : user.id, req})
     }
 
-    //converting mjml template to html 
-    const html = getHtmlFromMjmlTemplate("reset-password-email", {
+    //?converting mjml template to html 
+    const html = await getHtmlFromMjmlTemplate("reset-password-email", {
         name : user.name,
         link : resetPasswordLink
     })
+
+    //?send mail using smtp nodemailer
+    //! creating a function for sending data to 'node mailer' or 'resend' lib files
+    await sendResetPasswordEmail({
+        //?sending verification mail to user
+        to : user.email,
+        subject : 'Reset your password',
+        html 
+    }).catch(console.error)
+
+    //?if email is sent successfully then
+    req.flash("formSubmitted", true)
+
+    return res.redirect('/forget-password')
+}
+
+export const resetPasswordTokenPage = async (req, res) => {
+    const {token} = req.params
+
+    //checking in database that token exist or not
+    const resetPasswordToken = await getResetPasswordToken(token)
+
+    if(!resetPasswordToken){
+        return res.render('auth/wrong-reset-password-token')
+    }
+
+    return res.render('auth/reset-password', {
+        formSubmitted : req.flash('formSubmitted')[0],
+        errors : req.flash('errors'),
+        token
+    })
+}
+
+export const postResetPasswordToken = async (req, res) => {
+    //?Extract password reset token from request parameters.
+    const {token} = req.params
+
+    //?Validate token authenticity, expiration, and match with a previously issued token.
+    const resetPasswordToken = await getResetPasswordToken(token)
+
+    if(!resetPasswordToken){
+        req.flash('error', 'Password token is not matching')
+        return res.render('auth/wrong-reset-password-token')
+    }
+
+    //?If valid, get new password from request body and validate using a schema (e.g., Zod) for complexity.
+    const {data, error} = verifyResetPasswordSchema.safeParse(req.body)
+
+    if(error){
+        const errorMessages = error.errors.map((err) => err.message)
+        req.flash('errors', errorMessages[0])
+        return res.redirect(`/reset-password/${token}`)
+    }
+
+    const {newPassword} = data
+
+    //?Identify user ID linked to the token.
+    const user = await findUserById(resetPasswordToken.userId)
+
+    //?Invalidate all existing reset tokens for that user ID.
+    await clearResetPasswordToken(user.id)
+
+    //?Hash the new password with a secure algorithm
+    await saveNewPassword({userId : user.id, newPassword})
 
     return res.redirect('/auth/login')
 }

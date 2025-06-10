@@ -1,0 +1,22 @@
+//...........................Google OAuth..................................................
+
+//Step 1 - add google icon on login.ejs page
+
+//step 2 - go to website 'console.cloud.google.com'
+//       - go to 'my first project' section in navbar and click on 'new project'(give project name and click on create)
+//       - we will receive a notification of our project in notification bell icon (select that project)
+//       - click on 'API and services' option in quick access section (overview section)
+//       - then click on 'OAuth consent screen' in left sidebar and then click on 'get started'
+//       - give 'app name' and 'email id' and click on next (rajankit823511@gmail.com)
+//       - in audience select 'external' and click on next
+//       - in contact info give 'email' and click on next
+//       - in finish mark a 'tick' and continue and then click on create (overview section completed)
+
+//       - now go to 'clients' in left side bar
+//       - click on 'create client' above option (client id is a unique identifier issued by google when you register your app on google cloud console)
+//       - (theory - client id tells google that i am a legit app and i want to request access of user info(like name, email) with user permission)
+//       - give 'application type' as 'web application', 'name' as 'project name'
+//       - give in 'authorize javascript origin' as 'http://localhost:3001'
+//       - give in 'authorize redirect uri' as 'http://localhost:3001/google/callback' ('/google/callback' will be route - where callback will send user info from google)
+//       - click on create (then download OAuth client information bt clicking on download json) -- stored in NodeJS hosting folder
+//       - 
