@@ -1,5 +1,5 @@
 import { db } from "../config/db-client.js";
-import { passwordResetTokensTable, sessionsTable, shortenerTable, usersTable, verifyEmailTokensTable } from "../drizzle/schema.js";
+import { oauthAccountsTable, passwordResetTokensTable, sessionsTable, shortenerTable, usersTable, verifyEmailTokensTable } from "../drizzle/schema.js";
 import { and, eq, gte, lt, lte, sql } from "drizzle-orm";
 import bcrypt from 'bcrypt'
 import argon2 from 'argon2'
@@ -249,7 +249,7 @@ export const findVerificationEmailToken = async ({token, email}) => {
             return null;
         }
 
-        console.log(tokenData);
+        // console.log(tokenData);
         
 
         return {
@@ -375,4 +375,62 @@ export const getResetPasswordToken = async (token) => {
 export const clearResetPasswordToken = async (userId) => {
     //?3.delete all the previous data from passwordResetTokenTable for a specific user
     return await db.delete(passwordResetTokensTable).where(eq(passwordResetTokensTable.userId, userId))
+}
+
+export const getUserWithOauthId = async ({provider, email}) => {
+    const [user] = await db
+        .select({
+            id : usersTable.id,
+            name : usersTable.name,
+            email : usersTable.email,
+            isEmailValid : usersTable.isEmailValid,
+            providerAccountId : oauthAccountsTable.providerAccountId,
+            provider : oauthAccountsTable.provider
+        })
+        .from(usersTable)
+        .leftJoin(oauthAccountsTable,
+            and(
+                eq(oauthAccountsTable.userId, usersTable.id),
+                eq(oauthAccountsTable.provider, provider)
+            ))
+        .where(eq(usersTable.email, email))
+    
+    return user;
+}
+
+export async function linkUserWithOauth({userId, provider, providerAccountId}){
+    return await db.insert(oauthAccountsTable).values({userId, provider, providerAccountId});
+}
+
+export async function createUserWithOauth({name, email, provider, providerAccountId}){
+    const user = await db.transaction(async (trx) => { 
+        const [user] = await trx 
+            .insert(usersTable) 
+            .values({ 
+                email, 
+                name, 
+                // password: 
+                isEmailValid: true, //we know that google's email are valid 
+            }) 
+            .$returningId(); 
+
+        await trx
+            .insert(oauthAccountsTable)
+            .values({ 
+                provider, 
+                providerAccountId, 
+                userId: user.id,
+            })
+        
+        return {
+            id : user.id,
+            name,
+            email,
+            isEmailValid : true,
+            provider,
+            providerAccountId
+        }
+    })
+
+    return user;
 }

@@ -29,6 +29,20 @@
       "when": 1749447781369,
       "tag": "0003_freezing_sandman",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1749526296029,
+      "tag": "0004_lush_hannibal_king",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1749529255244,
+      "tag": "0005_brave_smiling_tiger",
+      "breakpoints": true
     }
   ]
 }

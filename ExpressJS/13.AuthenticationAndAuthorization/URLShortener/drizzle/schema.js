@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm';
-import { boolean, int, mysqlTable, varchar, timestamp, text } from 'drizzle-orm/mysql-core';
+import { boolean, int, mysqlTable, varchar, timestamp, text, mysqlEnum } from 'drizzle-orm/mysql-core';
 
 //!............................Schemas.........................................
 
@@ -28,7 +28,7 @@ export const usersTable = mysqlTable("users", {
   email: varchar({ length: 255 }).notNull().unique(),
   //!adding 'isEmailValid' for email verification icon in profile.ejs file
   isEmailValid : boolean('is_email_valid').default(false).notNull(),
-  password: varchar({ length: 255}).notNull(), 
+  password: varchar({ length: 255}), 
   createdAt: timestamp("created_at").defaultNow().notNull(), 
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(), 
 });
@@ -51,6 +51,15 @@ export const passwordResetTokensTable = mysqlTable("password_reset_tokens", {
   userId: int("user_id").notNull().references(() => usersTable.id, {onDelete: "cascade" }).unique(), 
   tokenHash: text("token_hash").notNull(), 
   expiresAt: timestamp("expires_at").default(sql`(CURRENT_TIMESTAMP + INTERVAL 1 HOUR)`).notNull(), 
+  createdAt: timestamp("created_at").defaultNow().notNull(), 
+});
+
+//!oauthAccountsTable 
+export const oauthAccountsTable = mysqlTable("oauth_accounts", { 
+  id: int("id").autoincrement().primaryKey(), 
+  userId: int("user_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }), 
+  provider: mysqlEnum("provider", ["google", "github"]).notNull(), 
+  providerAccountId: varchar("provider_account_id", { length: 255 }).notNull().unique(), 
   createdAt: timestamp("created_at").defaultNow().notNull(), 
 });
 

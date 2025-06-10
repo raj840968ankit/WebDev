@@ -8,6 +8,8 @@ const postShortener = async (req, res) => {
         if(!req.user){
             return res.redirect('/auth/login');
         }
+        //console.log("post shortener data : ",req.user);
+        
         const {data, error} = shortenerSchema.safeParse(req.body);
         //console.log("Data : ",data);
         //console.log("Error : ",error);
@@ -46,7 +48,7 @@ const postShortener = async (req, res) => {
 
         // await saveLinks({finalShortCode, url }) 
         if(link){
-            req.flash("errors", "URL already exists, Please choose another")
+            req.flash("errors", "Shortcode already exists, Please choose another")
             return res.redirect('/');
         }
 

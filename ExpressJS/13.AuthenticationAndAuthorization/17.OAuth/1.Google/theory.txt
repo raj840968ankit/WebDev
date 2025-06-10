@@ -18,5 +18,30 @@
 //       - give 'application type' as 'web application', 'name' as 'project name'
 //       - give in 'authorize javascript origin' as 'http://localhost:3001'
 //       - give in 'authorize redirect uri' as 'http://localhost:3001/google/callback' ('/google/callback' will be route - where callback will send user info from google)
-//       - click on create (then download OAuth client information bt clicking on download json) -- stored in NodeJS hosting folder
-//       - 
+//       - click on create (then download OAuth client information by clicking on download json) -- stored in NodeJS hosting folder
+//       - add variable GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET with corresponding value from OAuth client information
+
+//step 3 - create schema 'OAuthAccountsTable' (drizzle -> schema.js)
+
+//Step 4 - give link '/google' for google icon on login page
+//       - first install arctic in our project via 'npm i arctic'
+//       - create a route '/google' with get method (auth.route.js)
+//       - go to 'arctic v3 documentation website'
+//       - click on 'OAuth 2.0 with PKCE' in left sidebar and read documentation
+//       - implement in '/google' with get method upto send cookie
+
+//Step 5 - create a file google.js oauth folder inside lib folder(lib -> oauth -> google.js) 
+//       - check usage in google.js
+//       - after defining google.js, in '/google' route get method redirect to google provided url
+
+//Step 6 - create a route '/google/callback' with get method (auth.route.js)
+//       - take code and state from req.query
+//       - get cookies from req.cookies
+//       - validate google provided code and token code for similarity and after that get token
+//       - decode token and get user details
+//       - after that follow three condition mentioned in '/google/callback' with get method
+//       - authenticate user with hybrid approach and redirect to login
+//       - At last go to usersTable schema and remove property of password 'notNull' -
+//           because if any user directly enters through OAuth then google will not provide password -
+//           so in users table we have to keep that value null
+//       - add a condition in manual login "/auth/login", if a user try to login with password but previously logged in with OAuth

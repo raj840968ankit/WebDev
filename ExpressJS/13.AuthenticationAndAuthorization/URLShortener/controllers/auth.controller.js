@@ -1,9 +1,11 @@
 import { log } from "console";
-import { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
+import {decodeIdToken, generateCodeVerifier, generateState} from 'arctic'
+import { ACCESS_TOKEN_EXPIRY, OAUTH_EXCHANGE_EXPIRY, REFRESH_TOKEN_EXPIRY } from "../config/constant.js";
 import { getHtmlFromMjmlTemplate } from "../lib/get-html-from-mjml-template.js";
 import { sendEmail, sendResetPasswordEmail } from "../lib/nodemailer.lib.js";
-import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession, findUserById, getAllShortLinks, generateRandomToken, insertVerifyEmailToken, createVerifyEmailLink, findVerificationEmailToken, verifyUserEmailAndUpdate, clearVerifyEmailTokens, sendVerificationEmailLink, updateUserByName, saveNewPassword, findUserByEmail, createResetPasswordLink, getResetPasswordToken, clearResetPasswordToken } from "../services/auth.services.js";
+import { getUserByEmail, createUser, hashPassword, comparePassword, generateToken, createSession, createAccessToken, createRefreshToken, clearUserSession, findUserById, getAllShortLinks, generateRandomToken, insertVerifyEmailToken, createVerifyEmailLink, findVerificationEmailToken, verifyUserEmailAndUpdate, clearVerifyEmailTokens, sendVerificationEmailLink, updateUserByName, saveNewPassword, findUserByEmail, createResetPasswordLink, getResetPasswordToken, clearResetPasswordToken, getUserWithOauthId, linkUserWithOauth, createUserWithOauth } from "../services/auth.services.js";
 import { emailSchema, loginUserSchema, nameSchema, registerUserSchema, verifyEmailSchema, verifyPasswordSchema, verifyResetPasswordSchema } from "../validators/auth.validator.js";
+import { google } from "../lib/oauth/google.js";
 
 export const getRegisterPage = (req, res) => {
     try {
@@ -53,6 +55,11 @@ export const postLogin = async (req, res) => {
         //!using flash-connect to store in session using 'errors' datatype
         req.flash("errors", "Invalid Email or Password!!");
         return res.redirect('/auth/login')
+    }
+
+    //!condition applied for the user who registered with OAuth only
+    if(!user.password){
+        req.flash('errors', "You have created account with social login. Please login with your social account.")
     }
 
     //!comparing userExist.password(hashed One) with password
@@ -214,7 +221,8 @@ export const getLogoutUser = async (req, res) => {
 
     res.clearCookie('access_token')
     res.clearCookie('refresh_token')
-
+    res.clearCookie('google_oauth_state')
+    res.clearCookie('google_code_verifier')
     return res.redirect('/auth/login')
 }
 
@@ -501,4 +509,133 @@ export const postResetPasswordToken = async (req, res) => {
     await saveNewPassword({userId : user.id, newPassword})
 
     return res.redirect('/auth/login')
+}
+
+export const getGoogleLoginPage = async (req, res) => {
+    if(req.user){
+        return res.redirect('/');
+    }
+
+    //?first import from 'arctic' to use these functions
+    const state = generateState()
+
+    const codeVerifier = generateCodeVerifier()
+
+    const url = google.createAuthorizationURL(state, codeVerifier, [ 
+        "openid", // this is called scopes, here we are giving openid, and profile 
+        "profile", // openid gives tokens if needed, and profile gives user information 
+        // we are telling google about the information that we require from user. 
+        "email", 
+    ]);
+
+    const cookieConfig = { 
+        httpOnly: true, 
+        secure: true, 
+        maxAge: OAUTH_EXCHANGE_EXPIRY, 
+        sameSite: "lax", // this is such that when google redirects to our webs cookies are maintained 
+    }; 
+
+    res.cookie("google_oauth_state", state, cookieConfig); 
+    res.cookie("google_code_verifier", codeVerifier, cookieConfig);
+    
+    res.redirect(url.toString())
+}
+
+export const getGoogleLoginCallback = async (req, res) => {
+    // google redirects with code, and state in query params 
+    // we will use code to find out the user 
+    const { code, state } = req.query; 
+
+    //console.log(code, state); 
+
+    //getting cookies information
+    const { google_oauth_state : storedState, google_code_verifier : codeVerifier } = req.cookies;
+
+    //if any criteria will meet to fail then give error message on login page
+    if (!code || !state || !storedState|| !codeVerifier || state !== storedState ) {
+        req.flash("errors", "Couldn't login with Google because of invalid login attempt. Please try again!"); 
+        return res.redirect("/auth/login"); 
+    }
+
+    let tokens; 
+    try { 
+        // arctic will verify the code given by google with code verifier internally 
+        tokens = await google.validateAuthorizationCode(code, codeVerifier); 
+    } catch { 
+        req.flash( "errors", "Couldn't login with Google because of invalid login attempt. Please try again!"); 
+        return res.redirect("/auth/login"); 
+    } 
+
+    // console.log("token google: ", tokens);
+
+    const claims = decodeIdToken(tokens.idToken())
+
+    const {sub : googleUserId, name, email} = claims
+
+    //!Once we get the user details there are few things that we should do 
+    //Condition 1: User already exists with google's oauth linked 
+    //Condition 2: User already exists with the same email but google's oauth isn't Linked 
+    //Condition 3: User doesn't exist.
+
+    //?if user is already linked (means present in DB in both tables) then we will get the user 
+    let user = await getUserWithOauthId({ 
+        provider: "google", 
+        email, 
+    });
+
+    //?if user exists manually after registration and user is not linked with OAuth
+    if (user && !user.providerAccountId) { 
+        await linkUserWithOauth({ 
+            userId: user.id, 
+            provider: "google", 
+            providerAccountId: googleUserId, 
+        });
+    }
+
+    //? if user doesn't exist 
+    if (!user) { 
+        user = await createUserWithOauth({ 
+            name, 
+            email, 
+            provider: "google", 
+            providerAccountId: googleUserId,
+        })
+    }
+
+    //!now we will insert authenticate user code here(from login or signup)
+    //?we need to create a session first
+    const session =  await createSession(user.id, {
+        ip : req.clientIp,
+        userAgent : req.headers['user-agent']
+    })
+    
+    //?now we need to create accessToken
+    const accessToken = createAccessToken({
+        id : user.id,
+        name : name,
+        email : email,
+        isEmailValid : true,
+        sessionId : session.id,
+    })
+
+    //?now we need to create refreshToken
+    const refreshToken = createRefreshToken(session.id);
+
+    //?send cookie with extra information
+    const baseConfig = { httpOnly : true, secure : true} //httpOnly means no one can access with JS DOM, and secure means runs on https 
+
+    //?After generating tokens we will send the cookie to client's browser with token value
+    res.cookie('access_token', accessToken, {
+        ...baseConfig,   //...baseConfig (destructuring) means 'httpOnly : true, secure : true'
+        maxAge : ACCESS_TOKEN_EXPIRY
+    })
+
+    res.cookie('refresh_token', refreshToken, {
+        ...baseConfig,   //...baseConfig (destructuring) means 'httpOnly : true, secure : true'
+        maxAge : REFRESH_TOKEN_EXPIRY
+    })
+
+
+    return res.redirect('/')
+
 }
