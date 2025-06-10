@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import { saveLinks, loadLinks, getLinksByShortcode, findShortLinkById, updateShortLinkById, deleteShortCodeById } from '../models/data.model.js';
 import z from 'zod';
-import { shortenerSchema } from '../validators/shortener.validator.js';
+import { shortenerSchema, shortenerSearchParamsSchema } from '../validators/shortener.validator.js';
 
 const postShortener = async (req, res) => {
     try {
@@ -76,10 +76,23 @@ const getShortenerPage = async (req, res) => {
     if(!req.user){
         return res.redirect('/auth/login');
     }
+
+
     // const links = await loadLinks();
 
     //!after making relation between table
-    const links = await loadLinks(req.user.id);
+    // const links = await loadLinks(req.user.id); //?commented just before paging start
+
+    //!paging starts here and taking page no from search parameter in url
+    const searchParams = shortenerSearchParamsSchema.safeParse(req.query)
+
+    const {links, totalCount } = await loadLinks({
+        userId : req.user.id,
+        limit : 5,
+        offset : (searchParams - 1) * 5
+    })
+
+    const totalPages = Math.ceil(totalCount / 5);
 
     //!getting cookie detail (complex)
     // let isLoggedIn = req.headers.cookie;
@@ -92,7 +105,14 @@ const getShortenerPage = async (req, res) => {
     // return res.render('index', { links, req, isLoggedIn });  // passing req so you can use req.headers.host in ejs
 
     //! we are trying to send user details after verifying JWT token and using middleware in app.js
-    return res.render('index', { links, req, errors : req.flash('errors'), success : req.flash('success')});
+    return res.render('index', { 
+        links,
+        currentPage : searchParams.page,
+        totalPages,
+        host : req.host, 
+        errors : req.flash('errors'), 
+        success : req.flash('success')
+    });
   } catch (error) {
     console.error("Error in getShortenerPage:", error);
     return res.status(500).send("Internal server error");

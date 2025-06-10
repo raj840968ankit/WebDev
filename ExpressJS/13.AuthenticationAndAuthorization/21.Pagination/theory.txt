@@ -5,3 +5,9 @@
 //  -currentPage
 //  -limit
 //  -offset - if limit = 5 and we are at the second page then offset will be (6-10)
+
+//..............Implementation starts...............................
+//define a schema 'shortenerSearchParamsSchema' in (validators -> shortener.validator.js)
+//check usage in 'getShortenerPage' -> loadLinks (after finding totalCount of links - we will get totalPages according to limit)
+//pass the current page info(searchParams) and (totalPages) into index.ejs
+//In index.ejs we will create (prev button, current page, next button) initially

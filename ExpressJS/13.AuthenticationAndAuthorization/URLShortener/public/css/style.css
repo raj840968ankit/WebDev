@@ -438,8 +438,7 @@ form button{
   padding: 0;
 }
 
-.custom-nav-item {
-}
+
 
 .custom-nav-link {
   text-decoration: none;
@@ -1050,9 +1049,6 @@ body {
   box-sizing: border-box;
 }
 
-:root {
-  /* …your color & spacing variables… */
-}
 
 /*————————————————————————————————————————————
   2. BODY
@@ -2668,9 +2664,7 @@ body {
   gap: 15px; /* Space between social icons */
 }
 
-.socials li {
-  /* No specific styling needed for list items, as flexbox handles layout */
-}
+
 
 .socials a {
   display: flex; /* Make anchors flex to center icons */
@@ -2748,4 +2742,41 @@ body {
     height: 38px;
     font-size: 1.3em;
   }
+}
+
+/* pagination css */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  gap: 5px;
+}
+
+.page-link {
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  color: #333;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.page-link:hover:not(.current):not(.disabled) {
+  background-color: #f5f5f5;
+  border-color: #ccc;
+}
+
+.page-link.current {
+  background-color: #4a89dc;
+  color: white;
+  border-color: #4a89dc;
+  cursor: default;
+}
+
+.page-link.disabled {
+  color: #aaa;
+  cursor: not-allowed;
 }

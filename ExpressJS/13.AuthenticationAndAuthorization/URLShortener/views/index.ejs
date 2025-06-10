@@ -50,11 +50,11 @@
                 <% links.map(({shortCode, url, id}) => { %>
                     <li class="list-item">
                         <div class="content-area">
-                            <a href="/<%= shortCode %>" target="_blank"><%= req.host %>/<%= shortCode %></a>
+                            <a href="/<%= shortCode %>" target="_blank"><%= host %>/<%= shortCode %></a>
                             <p><%= url %></p>
                         </div>
                         <div class="url-actions">
-                            <!-- <button class="copy-btn" data-url="<%= req.host %>/<%= shortCode %>">
+                            <!-- <button class="copy-btn" data-url="<%= host %>/<%= shortCode %>">
                                 
                                 <i class="zmdi zmdi-copy"></i> 
                             </button> -->
@@ -77,6 +77,30 @@
             </ul>
         </div>
     </div>
+    <!-- we will create (prev button, current page, next button) initially -->
+    <%# Pagination component %> 
+    <% if (totalPages > 1) { %> 
+        <div class="pagination"> 
+
+            <%# Previous page link %> 
+            <% if (currentPage > 1) { %> 
+                <a href="?page=<%= currentPage -1%>" class="page-link">&laquo; Previous</a> 
+            <% } else { %> 
+            <span class="page-link disabled">&laquo; Previous</span> 
+            <% } %> 
+
+            <span>currentPage</span
+            
+            <%# Next page link %> 
+            <% if (currentPage < totalPages) { %> 
+                <a href="?page=<%= currentPage + 1 %>" class="page-link">Next &raquo;</a> 
+            <% } else { %> 
+                <span class="page-link disabled">Next &raquo;</span> 
+            <% } %> 
+
+        </div> 
+    <%} %>
+
     
 </body>
 </html>
