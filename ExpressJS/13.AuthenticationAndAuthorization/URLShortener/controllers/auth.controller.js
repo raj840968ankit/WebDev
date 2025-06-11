@@ -368,7 +368,11 @@ export const postEditProfile = async (req, res) => {
         req.flash('errors', errorMessages)
         return res.redirect('/edit-profile')
     }
-    await updateUserByName({userId : req.user.id, name : data})
+    // await updateUserByName({userId : req.user.id, name : data})
+
+    //?now we will create file url using filename here (multer)
+    const fileUrl = req.file ? `upload/avatar/${req.file.filename}` : undefined;
+    await updateUserByName({userId : req.user.id, name : data, avatarURL : fileUrl})
 
     return res.redirect('/auth/profile')
 }
@@ -574,6 +578,9 @@ export const getGoogleLoginCallback = async (req, res) => {
     const claims = decodeIdToken(tokens.idToken())
 
     //console.log('google claims : ',claims);  //!so we are also getting picture in claims
+
+    //?validate default url of google and neglect
+    
 
     //!we are taking profile as picture here for user
     const {sub : googleUserId, name, email, picture} = claims

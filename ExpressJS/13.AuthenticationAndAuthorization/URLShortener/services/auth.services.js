@@ -316,10 +316,10 @@ export const sendVerificationEmailLink = async ({email, userId, req}) => {
     }).catch(console.error)
 }
 
-export const updateUserByName = async ({userId, name}) => {
+export const updateUserByName = async ({userId, name, avatarURL}) => {
     return await db
         .update(usersTable)
-        .set({name : name})
+        .set({name : name, avatarURL})
         .where(eq(usersTable.id, userId))
 }
 

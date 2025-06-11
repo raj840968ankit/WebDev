@@ -84,12 +84,14 @@ const getShortenerPage = async (req, res) => {
     // const links = await loadLinks(req.user.id); //?commented just before paging start
 
     //!paging starts here and taking page no from search parameter in url
-    const searchParams = shortenerSearchParamsSchema.safeParse(req.query)
+    const searchParams = shortenerSearchParamsSchema.parse(req.query)
 
+    const {page} = searchParams;
+    
     const {links, totalCount } = await loadLinks({
         userId : req.user.id,
         limit : 5,
-        offset : (searchParams - 1) * 5
+        offset : (page - 1) * 5
     })
 
     const totalPages = Math.ceil(totalCount / 5);

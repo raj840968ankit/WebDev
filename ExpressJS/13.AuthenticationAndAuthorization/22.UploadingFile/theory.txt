@@ -1,0 +1,13 @@
+//........................How to upload a file............................
+//we will use 'multer' package which is a middleware to upload files from form-data in nodeJS
+//***don't forgot to add 'enctype="multipart/form-data" ' in your form
+
+//..........how to use...................
+//install multer via 'npm i multer'
+//check usage is 'auth.routes.js' (we are going to upload profile in edit-profile.ejs)
+//in 'auth.route.js' first step - we have given 'destination' and 'filename'
+//in 'auth.route.js' second step - Filter the image type of files
+//add a route in '/edit-profile' in post method
+//now goto 'authController.postEditProfile' create fileUrl for saved images in 'public/upload/avatar' and save in database
+//now go to 'authController.getEditProfilePage' and pass avatarURL from userTable stored in database
+

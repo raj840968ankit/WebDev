@@ -83,9 +83,9 @@ import {count, desc, eq} from 'drizzle-orm'
 //     return links;
 // }
 
-export const loadLinks = async ({userId, limit=5, offset=0}) => {
+export const loadLinks = async ({userId, limit, offset}) => {
     // const links = await db.select().from(shortenerTable).where(eq(shortenerTable.userId, userId))
-
+  
     //?fetching data with limit 5 and in descending order
     const links = await db
         .select()
@@ -93,7 +93,7 @@ export const loadLinks = async ({userId, limit=5, offset=0}) => {
         .where(eq(shortenerTable.userId, userId))
         .orderBy(desc(shortenerTable.createdAt))
         .limit(limit)
-        .offset(offset)
+        .offset(offset)  //if offset is (0 or 5) then skip (0 or 5) and text next upto set limit(here 5) simultaneously
 
     //?taking totalCount of links
     const [{totalCount}] = await db 

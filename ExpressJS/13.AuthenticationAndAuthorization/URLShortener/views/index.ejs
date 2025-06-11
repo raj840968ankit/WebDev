@@ -50,8 +50,9 @@
                 <% links.map(({shortCode, url, id}) => { %>
                     <li class="list-item">
                         <div class="content-area">
+                            <% let finalUrl = url.length > 80 ? url.slice(0, 80) : url %>
                             <a href="/<%= shortCode %>" target="_blank"><%= host %>/<%= shortCode %></a>
-                            <p><%= url %></p>
+                            <p><%= finalUrl %></p>
                         </div>
                         <div class="url-actions">
                             <!-- <button class="copy-btn" data-url="<%= host %>/<%= shortCode %>">
@@ -84,12 +85,41 @@
 
             <%# Previous page link %> 
             <% if (currentPage > 1) { %> 
-                <a href="?page=<%= currentPage -1%>" class="page-link">&laquo; Previous</a> 
+                <a href="?page=<%= currentPage -1%>" class="page-link">&laquo; Prev</a> 
             <% } else { %> 
-            <span class="page-link disabled">&laquo; Previous</span> 
+            <span class="page-link disabled">&laquo; Prev</span> 
             <% } %> 
+            
+            
+            
+            <!-- Calculating 3 pages around current page -->
+            <% let startPage = Math.max(1, currentPage - 1) %> 
+            <% let endPage = Math.min(totalPages, currentPage + 1) %>
+            
 
-            <span>currentPage</span
+            <!-- Always show start page -->
+            <% if(startPage > 1){ %>
+                <a href="?page=1" class="page-link">1</a>
+                <% if(startPage > 2){ %>
+                    <span class="ellipses">...</span>
+                <% } %>
+            <% } %>
+
+            <% for(let i = startPage; i <= endPage; i++){ %>
+                <% if(i === currentPage){ %>
+                    <span class="page-link current-page"><%= i %></span>
+                <% } else { %>
+                    <a href="?page=<%= i %>" class="page-link"><%= i %></a>
+                <% } %>
+            <% } %>
+
+            <!-- Always show end page -->
+            <% if(endPage < totalPages){ %>
+                <% if(endPage <= totalPages - 2){ %>
+                    <span class="ellipses">...</span>
+                <% } %>
+                <a href="?page=<%= totalPages %>" class="page-link"><%= totalPages %></a>
+            <% } %>
             
             <%# Next page link %> 
             <% if (currentPage < totalPages) { %> 

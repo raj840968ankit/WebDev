@@ -39,19 +39,19 @@
 
             <div class="shortener-form4">
               <h1 class="form-title4">Edit Your Profile</h1>
-              <form action="/edit-profile" method="post" class="url-form4" id="url-form">
+              <form action="/edit-profile" method="post" class="url-form4" id="url-form" enctype="multipart/form-data">
                 <div class="avatar-upload4">
                   <div class="avatar-preview4">
                     <% if(avatarURL) { %>
-                      <img src="<%= avatarURL %>" alt="img">
+                      <img src="<%= avatarURL %>">
                     <% } %>
-                  </div>
+                  </div>  
 
                   <div class="avatar-edit4">
                     <label for="avatar" class="avatar-upload-btn4">
                       <i class="fa fa-camera"></i> Change Photo
                     </label>
-                    <!-- <input type="file" id="avatar" name="avatar" accept="image/*" class="avatar-input4"/> -->
+                    <input type="file" id="avatar" name="avatar" accept="image/*" class="avatar-input4"/>
                     
                   </div>
                 </div>

@@ -12,7 +12,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "db:seed" : "node --env-file=.env drizzle/seed.js"
+    "db:seed": "node --env-file=.env drizzle/seed.js"
   },
   "dependencies": {
     "@prisma/client": "^6.8.2",
@@ -32,6 +32,7 @@
     "jsonwebtoken": "^9.0.2",
     "material-design-iconic-font": "^2.2.0",
     "mjml": "^4.15.3",
+    "multer": "^2.0.1",
     "mysql2": "^3.14.1",
     "nodemailer": "^7.0.3",
     "request-ip": "^3.3.0",
