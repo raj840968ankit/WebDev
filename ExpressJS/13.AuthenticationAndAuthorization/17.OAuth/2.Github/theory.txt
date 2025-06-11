@@ -28,4 +28,4 @@
 //       - At last go to usersTable schema and remove property of password 'notNull' -
 //           because if any user directly enters through OAuth then github will not provide password -
 //           so in users table we have to keep that value null
-//       - add a condition in manual login "/auth/login", if a user try to login with password but previously logged in with OAuth
+//       - add a condition in manual login "/alogin", if a user try to login with password but previously logged in with OAuth

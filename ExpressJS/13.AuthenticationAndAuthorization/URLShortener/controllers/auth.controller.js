@@ -43,7 +43,7 @@ export const postLogin = async (req, res) => {
     if(error){
         const errors = error.errors[0].message;
         req.flash("errors", errors);
-        return res.redirect('/auth/login')
+        return res.redirect('/login')
     }
     const {email, password} = data;
 
@@ -53,13 +53,13 @@ export const postLogin = async (req, res) => {
     if(!user){
         //!using flash-connect to store in session using 'errors' datatype
         req.flash("errors", "Invalid Email or Password!!");
-        return res.redirect('/auth/login')
+        return res.redirect('/login')
     }
 
     //!condition applied for the user who registered with OAuth only
     if(!user.password){
         req.flash('errors', "You have created account with social login. Please login with your social account.")
-        return res.redirect('/auth/login')
+        return res.redirect('/login')
     }
 
     //!comparing userExist.password(hashed One) with password
@@ -67,13 +67,13 @@ export const postLogin = async (req, res) => {
 
     //if user exist then check for password
     // if(userExist.password !== hashedPassword){
-    //     return res.redirect('/auth/login')
+    //     return res.redirect('/login')
     // }
 
     
     if(!isValidPassword){
         req.flash("errors", "Invalid Email or Password!!");
-        return res.redirect('/auth/login')
+        return res.redirect('/login')
     }
 
 
@@ -108,6 +108,7 @@ export const postLogin = async (req, res) => {
         name : user.name,
         email : user.email,
         isEmailValid : user.isEmailValid,
+        avatarURL : user.avatarURL,
         sessionId : session.id,
     })
 
@@ -140,7 +141,7 @@ export const postRegister = async (req, res) => {
     if(error){
         const errors = error.errors[0].message;
         req.flash("errors", errors);
-        return res.redirect('/auth/register')
+        return res.redirect('/register')
     }
  
     const {name, email, password} = data
@@ -153,7 +154,7 @@ export const postRegister = async (req, res) => {
         //!using flash-connect to store in session using 'errors' datatype
         req.flash("errors", "User already exists!");
         
-        return res.redirect('/auth/register')
+        return res.redirect('/register')
     }
 
     //!hashing of password first then add it to database
@@ -162,7 +163,7 @@ export const postRegister = async (req, res) => {
     const [user] = await createUser({name, email, password : hashedPassword});
     //console.log(user);  //here we are getting id only
 
-    // return res.redirect('/auth/login')
+    // return res.redirect('/login')
 
     //!copy and pasting session and token creation, cookie sending from postLogin for skipping manual login.........
     //!Using Hybrid Authentication..............
@@ -178,6 +179,7 @@ export const postRegister = async (req, res) => {
         name : name,
         email : email,
         isEmailValid : false,
+        avatarURL : user.avatarURL,
         sessionId : session.id,
     })
 
@@ -223,20 +225,21 @@ export const getLogoutUser = async (req, res) => {
     res.clearCookie('refresh_token')
     res.clearCookie('google_oauth_state')
     res.clearCookie('google_code_verifier')
-    return res.redirect('/auth/login')
+    res.clearCookie('github_oauth_state')
+    return res.redirect('/login')
 }
 
 
 export const getUserProfilePage = async (req, res) => {
     try {
         if (!req.user){
-            return res.redirect('/auth/login')
+            return res.redirect('/login')
         }
 
         const user = await findUserById(req.user.id)
 
         if(!user){
-            return res.redirect('/auth/login')
+            return res.redirect('/login')
         }
 
         const userShortLinks = await getAllShortLinks(user.id)
@@ -259,7 +262,7 @@ export const getUserProfilePage = async (req, res) => {
 
 export const getVerifyEmailPage = async (req, res) => {
     if(!req.user){
-        res.redirect('/auth/register')
+        res.redirect('/register')
     }
 
     const user = await findUserById(req.user.id)
@@ -273,7 +276,7 @@ export const getVerifyEmailPage = async (req, res) => {
 
 export const resendVerificationLink = async (req,res) => {
     if(!req.user){
-        res.redirect('/auth/register')
+        res.redirect('/register')
     }
 
     const user = await findUserById(req.user.id)
@@ -333,12 +336,12 @@ export const verifyEmailToken = async (req, res) => {
 
     await clearVerifyEmailTokens(token.userId).catch(console.error)
 
-    return res.redirect('/auth/profile')
+    return res.redirect('/profile')
 }
 
 export const getEditProfilePage = async (req, res) => {
     if(!req.user){
-        return res.redirect('/auth/login')
+        return res.redirect('/login')
     }
 
     const user = await findUserById(req.user.id)
@@ -355,7 +358,7 @@ export const getEditProfilePage = async (req, res) => {
 
 export const postEditProfile = async (req, res) => {
     if(!req.user){
-        return res.redirect('/auth/login')
+        return res.redirect('/login')
     }
 
     const {name} = req.body  //req.body returns object and nameSchema cannot parse object here 
@@ -374,12 +377,12 @@ export const postEditProfile = async (req, res) => {
     const fileUrl = req.file ? `upload/avatar/${req.file.filename}` : undefined;
     await updateUserByName({userId : req.user.id, name : data, avatarURL : fileUrl})
 
-    return res.redirect('/auth/profile')
+    return res.redirect('/profile')
 }
 
 export const getChangePasswordPage = async (req, res) => {
     if(!req.user){
-        return res.redirect('/auth/login')
+        return res.redirect('/login')
     }
 
     return res.render('auth/change-password', { errors : req.flash('errors')})
@@ -387,7 +390,7 @@ export const getChangePasswordPage = async (req, res) => {
 
 export const postChangePassword = async (req, res) => {
     if(!req.user){
-        return res.redirect('/auth/login')
+        return res.redirect('/login')
     }
 
     const {data, error} = verifyPasswordSchema.safeParse(req.body)
@@ -415,7 +418,7 @@ export const postChangePassword = async (req, res) => {
     }
 
     await saveNewPassword({userId : user.id, newPassword})
-    res.redirect('/auth/profile')
+    res.redirect('/profile')
 }
 
 export const getForgetPasswordPage = (req, res) => {
@@ -515,7 +518,7 @@ export const postResetPasswordToken = async (req, res) => {
     //?Hash the new password with a secure algorithm
     await saveNewPassword({userId : user.id, newPassword})
 
-    return res.redirect('/auth/login')
+    return res.redirect('/login')
 }
 
 export const getGoogleLoginPage = async (req, res) => {
@@ -561,7 +564,7 @@ export const getGoogleLoginCallback = async (req, res) => {
     //if any criteria will meet to fail then give error message on login page
     if (!code || !state || !storedState|| !codeVerifier || state !== storedState ) {
         req.flash("errors", "Couldn't login with Google because of invalid login attempt. Please try again!"); 
-        return res.redirect("/auth/login"); 
+        return res.redirect("/login"); 
     }
 
     let tokens; 
@@ -570,7 +573,7 @@ export const getGoogleLoginCallback = async (req, res) => {
         tokens = await google.validateAuthorizationCode(code, codeVerifier); 
     } catch { 
         req.flash( "errors", "Couldn't login with Google because of invalid login attempt. Please try again!"); 
-        return res.redirect("/auth/login"); 
+        return res.redirect("/login"); 
     } 
 
     // console.log("token google: ", tokens);
@@ -630,6 +633,7 @@ export const getGoogleLoginCallback = async (req, res) => {
         name : name,
         email : email,
         isEmailValid : true,
+        avatarURL : user.avatarURL,
         sessionId : session.id,
     })
 
@@ -683,7 +687,7 @@ export const getGithubLoginCallback = async (req, res) => {
 
     function handleFailedLogin() { 
         req.flash("errors", "Couldn't login with GitHub because of invalid login attempt. Please try again!"); 
-        return res.redirect("/auth/login"); 
+        return res.redirect("/login"); 
     }
 
     //if any criteria will meet to fail then give error message on login page
@@ -780,6 +784,7 @@ export const getGithubLoginCallback = async (req, res) => {
         name : name,
         email : email,
         isEmailValid : true,
+        avatarURL : user.avatarURL,
         sessionId : session.id,
     })
 
@@ -806,7 +811,7 @@ export const getGithubLoginCallback = async (req, res) => {
 
 export const getSetPasswordPage = async (req, res) => {
     if(!req.user){
-        return res.redirect('/auth/login')
+        return res.redirect('/login')
     }
     return res.render('auth/set-password', {
         errors : req.flash('errors')
@@ -833,5 +838,5 @@ export const postSetPassword = async (req, res) => {
 
     await saveNewPassword({userId : user.id, newPassword})
     
-    return res.redirect('/auth/profile')
+    return res.redirect('/profile')
 }

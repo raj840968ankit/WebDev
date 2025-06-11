@@ -879,6 +879,9 @@ body {
 .avatar-placeholder{
   height: 80px;
   width: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .profile-img{
   height: 100%;
@@ -2816,4 +2819,11 @@ body {
     .page-link {
         padding: 0.3rem 0.6rem;
     }
+}
+
+.user-profile-character{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }

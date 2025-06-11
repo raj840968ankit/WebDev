@@ -51,8 +51,8 @@ export const createSession = async (userId, {ip, userAgent}) => {
     return session;
 }
 
-export const createAccessToken = ({id, name, email, isEmailValid, sessionId}) => {
-    return jwt.sign({id, name, email, isEmailValid, sessionId}, process.env.JWT_SECRET, {
+export const createAccessToken = ({id, name, email, isEmailValid, sessionId, avatarURL}) => {
+    return jwt.sign({id, name, email, isEmailValid, sessionId, avatarURL}, process.env.JWT_SECRET, {
         expiresIn : ACCESS_TOKEN_EXPIRY / MILLISECONDS_PER_SECOND   //imported from config/constant/js
     })
 }
@@ -98,6 +98,7 @@ export const refreshTokens = async (refreshToken) => {
             name : user.name,
             email : user.email,
             isEmailValid : user.isEmailValid,
+            avatarURL : user.avatarURL,
             sessionId : currentSession.id
         }
 

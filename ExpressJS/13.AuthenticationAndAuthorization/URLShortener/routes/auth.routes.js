@@ -5,17 +5,17 @@ import path from 'path'
 
 const router = Router()
 
-router.route('/auth/register').get(authController.getRegisterPage).post(authController.postRegister)
+router.route('/register').get(authController.getRegisterPage).post(authController.postRegister)
 
-router.route('/auth/login').get(authController.getLoginPage).post(authController.postLogin)
+router.route('/login').get(authController.getLoginPage).post(authController.postLogin)
 
 //created a dashboard using json-web-token
 router.route('/me').get(authController.getMe)
 
 //clearing cookie here after logout
-router.route('/auth/logout').get(authController.getLogoutUser)
+router.route('/logout').get(authController.getLogoutUser)
 
-router.route('/auth/profile').get(authController.getUserProfilePage)
+router.route('/profile').get(authController.getUserProfilePage)
 
 router.route('/verify-email').get(authController.getVerifyEmailPage)
 

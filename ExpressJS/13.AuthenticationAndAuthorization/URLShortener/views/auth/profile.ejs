@@ -41,9 +41,9 @@
           <div class="profile-avatar">
             <div class="avatar-placeholder">
               <% if(user.avatarURL) { %>
-                <img class='profile-img' src="<%= user.avatarURL %>">
+                <img class='profile-img' src='<%= user.avatarURL %>' alt=".">
               <% } else { %>
-                <span><%= user.name.charAt(0).toUpperCase() %></span>
+                <span class="user-profile-character"><%= user.name.charAt(0).toUpperCase() %></span>
               <% } %>
             </div>
           </div>
@@ -103,7 +103,7 @@
           </a>
         <% } %>
 
-        <a href="/auth/logout" class="btn">
+        <a href="/logout" class="btn">
           <i class="zmdi zmdi-power"></i> Logout
         </a>
       </div>

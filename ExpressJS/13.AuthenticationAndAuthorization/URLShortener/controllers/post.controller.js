@@ -6,7 +6,7 @@ import { shortenerSchema, shortenerSearchParamsSchema } from '../validators/shor
 const postShortener = async (req, res) => {
     try {
         if(!req.user){
-            return res.redirect('/auth/login');
+            return res.redirect('/login');
         }
         //console.log("post shortener data : ",req.user);
         
@@ -74,7 +74,7 @@ const getReport = (req,res) => {
 const getShortenerPage = async (req, res) => {
   try {
     if(!req.user){
-        return res.redirect('/auth/login');
+        return res.redirect('/login');
     }
 
 
@@ -168,7 +168,7 @@ const getShortenerEditPage = async (req, res) => {
 
 const postShortenerEdit = async (req, res) => {
     if(!req.user){
-            return res.redirect('/auth/login');
+            return res.redirect('/login');
     }
     try{
         const {data, error} = shortenerSchema.safeParse(req.body);
@@ -203,7 +203,7 @@ const postShortenerEdit = async (req, res) => {
 
 const postShortenerDelete = async (req, res) => {
     if(!req.user){
-        return res.redirect('/auth/login');
+        return res.redirect('/login');
     }
     try {
         const { data: id, error} = z.coerce.number().int().safeParse(req.params.id); 
