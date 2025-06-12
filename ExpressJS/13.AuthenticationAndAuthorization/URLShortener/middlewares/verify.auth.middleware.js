@@ -52,7 +52,10 @@ export const verifyAuthentication = async (req, res, next) => {
     if(refreshToken){
         try {
             const {newAccessToken, newRefreshToken, user} = await refreshTokens(refreshToken)
+            
+            
             req.user = user;
+            
             //now we have successfully refreshed tokens and created newAccessToken and newRefreshToken
 
             //now we will send cookie as response

@@ -102,6 +102,7 @@ export const refreshTokens = async (refreshToken) => {
             sessionId : currentSession.id
         }
 
+        
         const newAccessToken = createAccessToken(userInfo)
         const newRefreshToken = createRefreshToken(currentSession.id)
 
