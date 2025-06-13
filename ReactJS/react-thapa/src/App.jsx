@@ -1,7 +1,9 @@
 import React, { Fragment } from "react";
 import { NetflixSeries } from "./components/NetflixSeries.jsx";
 // import './components/netflix.css'   //!for dedicated css file
-import styles from './components/netflix.module.css'
+// import styles from './components/netflix.module.css'
+import { Events } from "./components/Events.jsx";
+import { EventProps } from "./components/EventProps.jsx";
 
 //!returning only 1 element (using jsx)
 // export const App = () => {
@@ -86,8 +88,10 @@ import styles from './components/netflix.module.css'
 export const App = () => {
   return (
     <section className="container">
-      <h1 className={styles['series-heading']}>List of Best Netflix Series</h1>
-      <NetflixSeries />
+      {/* <h1 className={styles['series-heading']}>List of Best Netflix Series</h1>
+      <NetflixSeries /> */}
+      {/* <Events/> */}
+      <EventProps/>
     </section>
   )
 }

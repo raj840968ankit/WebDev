@@ -1,0 +1,75 @@
+//react js uses synthetic events to handle event across browser
+
+//react wraps the native browser event in synthetic event
+
+//check usage in react-thapa -> src -> components -> Event.jsx
+
+export const Events = () => {
+    const handleClickEvent = (eventObj) => {
+        console.log(eventObj);      //it will give us a syntheticBaseEvent object but not a simple JS event object
+        console.log(eventObj.target);   //this will give target tag info
+        alert('Hello, I am click event')
+    }
+    const buttonStyle = {
+        height : "30px",
+        width : "70px",
+        backgroundColor : "wheat",
+        color : "black"
+    }
+    return (
+        <>
+            <button onClick={handleClickEvent} style={buttonStyle}>Click me</button>
+
+            <button onClick={(event) => {
+                console.log(event);
+                alert('Hello, I am click event 2')
+            }} style={buttonStyle}>Click me 2</button>
+        </>
+    )
+}
+
+
+//.........................Passing events as props................................
+//check usage in EventProps.jsx
+
+//This is parent component
+export const EventProps = () => {
+    
+
+    const handleClickEvent = (user) => {
+        alert(`Hey! Welcome ${user}`);
+    }
+
+    const handleHover = () => {
+        alert('Hey i am onMouseEnter Event')
+    }
+    const user = "Ankit"
+    return (
+        <>
+            <WelcomeUser click={() => handleClickEvent(user)} hover={handleHover}/>
+        </>
+    )
+}
+
+//this is child component
+const WelcomeUser = (props) => {
+    const buttonStyle = {
+        height : "30px",
+        width : "70px",
+        backgroundColor : "wheat",
+        color : "black"
+    }
+
+    const handleClick = () => {
+        console.log('Welcome User');
+        props.click()
+    }
+
+    return (
+        <>
+            <button style={buttonStyle} onClick={props.click}>Click me</button>
+            <button style={buttonStyle} onMouseEnter={props.hover}>Hover me</button>
+            <button style={buttonStyle} onClick={handleClick}>Hover me</button>
+        </>
+    )
+}
