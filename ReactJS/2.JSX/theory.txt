@@ -1,0 +1,32 @@
+//JSX - javascript xml that allow us to write html element in js and adding to DOM without createElement() and appendChild()
+
+// export const App = () => {
+//   return <h1>Hello Ankit</h1>
+// }
+
+//above code is JSX
+
+//we can also write above thing as
+// export const App = () => {
+//   return React.createElement('h1', null, "Hello Ankit")
+// }
+
+//.........................Thing to remember in jsx......................
+//? Each JSX expression must have one parent element, which means if you try to return multiple elements, React will throw an error. 
+//? Every JSX tag needs to be closed. You can use self-closing tags for elements that don't have children, e.g., <img src="url" />.
+
+//..........check usage in react-thapa -> App.js
+
+//!returning more than 1 element always needs a parent element (using jsx)
+// export const App = () => {
+//   return (
+//     <div>
+//       <div>
+//         <div className="img">
+//           <img src="wallpaper.jpg" alt="img" height="30%" width="30%" />
+//         </div>
+//         <h2>This is my wallpaper</h2>
+//       </div>
+//     </div>
+//   );
+// };

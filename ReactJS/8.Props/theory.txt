@@ -1,0 +1,39 @@
+//React props (properties) facilitate data transfer from parent to child components. 
+//Data flows unidirectionally, ensuring a clear direction of information in React applications. 
+//Props are immutable, meaning child components cannot modify the data received from parents. 
+
+//check usage in react-thapa -> src -> components -> NetflixSeries.jsx
+
+//!here we will use react looping concept and props(Using looping and props)
+export const NetflixSeries = () => {
+  return (
+    <ul>
+        {seriesData.map((currentData) => {
+            return <SeriesCard key={currentData.id} currentData={currentData} />
+        })}
+    </ul>
+  );
+};
+
+export const SeriesCard = (props) => {
+    const {img_url, name, rating, description, genre, watch_url} = props.currentData
+    
+    return (
+        <li>
+            <div>
+                <div>
+                    <img src={img_url} alt="qot.jpg" width="40%" height="40%" />
+                </div>
+
+                <h2>Name: {name}</h2>
+                <h3>Rating: {rating}</h3>
+                <p>Summary: {description}</p>
+                <p>Genre: {genre} </p>
+                
+                <a href={watch_url} blank="">
+                    <button> Button </button>
+                </a>
+            </div>
+        </li>
+    );
+}

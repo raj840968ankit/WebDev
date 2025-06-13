@@ -1,0 +1,31 @@
+//we don't have for loop in JSX instead we use array's map method for looping
+
+//check usage in react-thapa -> src -> components -> NetflixSeries.jsx
+
+//!here we will use react looping concept
+export const NetflixSeries = () => {
+  return (
+    <ul>
+        {seriesData.map((currentData) => {
+            return (
+                <li>
+                    <div>
+                        <div>
+                            <img src={currentData.img_url} alt="qot.jpg" width="40%" height="40%" />
+                        </div>
+
+                        <h2>Name: {currentData.name}</h2>
+                        <h3>Rating: {currentData.rating}</h3>
+                        <p>Summary: {currentData.description}</p>
+                        <p>Genre: {currentData.genre} </p>
+                        
+                        <a href={currentData.watch_url} blank="">
+                            <button> Button </button>
+                        </a>
+                    </div>
+                </li>
+            );
+        })}
+    </ul>
+  );
+};

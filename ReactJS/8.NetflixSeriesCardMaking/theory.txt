@@ -1,0 +1,7 @@
+//first create a json file in api folder (react-thapa -> src -> api -> seriesData.json)
+
+//then create a NetflixSeries JSX file in components folder
+
+//then import json file using 'import seriesData from './filepath' ' in NetflixSeries.jsx file and check usage
+//In react import statement of a json file treated as javascript object
+

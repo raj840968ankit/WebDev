@@ -1,0 +1,32 @@
+//component is a function that returns JSX elements
+//components are the building blocks of react js
+
+//Two ways of making component - 
+//   1. class based
+//   2. functional based (most widely used)
+
+//check usage in react-thapa -> App.jsx
+
+//!we will use Component here (using component)
+export const App = () => {
+  return (
+    <div>
+      <Wallpaper/>         
+      <Wallpaper/>
+      <Wallpaper/>
+      <Wallpaper/>
+      <Wallpaper/>
+    </div>
+  )
+}
+
+const Wallpaper = () => {
+  return (
+    <div>
+      <div className="img">
+        <img src="wallpaper.jpg" alt="img" height="30%" width="30%" />
+      </div>
+      <h2>This is my wallpaper</h2>
+    </div>
+  );
+};

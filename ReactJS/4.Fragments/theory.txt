@@ -1,0 +1,17 @@
+//Fragment is used to return multiple element without wrapping in a div
+
+//import {Fragment} from 'react' and wrap element using (<Fragment> </Fragment>) or (<> </>)
+
+//check usage in react-thapa -> App.jsx
+
+export const App = () => {  //this doesn't need import Fragment
+  return (
+    <>
+      <Wallpaper/>      
+      <Wallpaper/>
+      <Wallpaper/>
+      <Wallpaper/>
+      <Wallpaper/>
+    </>
+  )
+}

@@ -1,0 +1,25 @@
+//? You can embed any JavaScript variable within JSX by enclosing it in curly braces. 
+//The value of the variable will be inserted into the DOM at the respective location. 
+
+//check usage in react-thapa -> App.jsx
+
+//!we will use dynamic value inserting here (Using dynamic values)
+export const App = () => {
+  const name = "Ankit";
+  const age = 21;
+
+  const height = () => {
+    return 5;
+  };
+
+  return (
+    <>
+      <h1>
+        My name is {name} and my age is {age}
+      </h1>
+      <h2>
+        My height is {height()} ft
+      </h2>
+    </>
+  );
+};

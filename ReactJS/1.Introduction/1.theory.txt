@@ -1,0 +1,17 @@
+//...................How to install react...........................
+
+//-first install bun via 'npm i -g bun'(best node package manager than 'npm', less compile time)
+
+//-then create vite via 'bun create vite' and follow instruction to setup react app in terminal (you will see a project named 'react-thapa')
+//- a react app is created successfully ('react-thapa')
+//    we will get folders and files like -
+//         - public : static files
+//         - src : react actual files(App.jsx, main.jsx(entry point of react))
+//         -index.html - entry point of browser
+
+
+
+
+
+
+

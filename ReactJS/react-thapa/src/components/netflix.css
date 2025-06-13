@@ -1,0 +1,48 @@
+.series-heading{
+    margin-bottom: 3.2rem;
+}
+
+.card{
+    box-shadow: rgba(0, 0 , 0, 0.1) 0px 6px 24px 0px;
+    min-height: 400px;
+    border-radius: 20px;
+}
+
+
+
+.card-content{
+  padding: 10px;
+  flex-grow: 1; /* Allows the content area to grow and take up available space */
+  display: flex; /* Keep this for internal content layout if needed */
+  flex-direction: column; /* Keep this for internal content layout if needed */
+  gap: 10px; /* Keep this for internal content layout if needed */
+}
+
+.watch-button {
+    align-self: center;
+}
+
+.image img{
+    height: 221px;
+    width: 100%;
+    border-radius: 20px 20px 0px 0px;
+}
+
+.super-hit{
+    background-color: green;
+}
+
+.average{
+    background-color: yellow;
+}
+
+.rating{
+    padding: 0.3rem 1.8rem;
+    color: #000;
+    margin-left: 1.2rem;
+    border-radius: 100rem;
+    -webkit-border-radius: 100rem;
+    -moz-border-radius: 100rem;
+    -ms-border-radius: 100rem;
+    -o-border-radius: 100rem;
+}

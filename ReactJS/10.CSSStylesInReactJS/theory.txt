@@ -1,0 +1,61 @@
+//we will add css for NetFlixSeries
+
+//check usage in react-thapa -> src -> index.css linked wih NetFlixSeries component(global css)
+//             <ul className='grid grid-three--cols'>
+
+//check usage in react-thapa -> src -> components -> netflix.css linked wih App component(dedicated css by importing in App.jsx)
+// import './components/netflix.css'
+
+//..........................Inline css(SeriesCard.jsx)................
+//we can write inline css in jsx as <h1 style={{marginTop : '10px', }}> //always give style in terms of object and camelcase
+
+
+//..........................Conditional styling in css...........................
+//if we have to style anything then we have to first wrap it into a span (SeriesCard.jsx -> rating tag)
+//   <h3>Rating: <span className={rating > 8.5 ? 'super-hit' : 'average'}> {rating}</span></h3>
+//   here 'super-hit' and 'average' is defined in netflix.css
+export const SeriesCard = (props) => {
+    const {img_url, name, rating, description, genre, watch_url, cast} = props.currentData
+    const btn_style = {
+        backgroundColor : "blue",
+        color : "white",
+        padding : "10px 15px",
+        fontSize : "1.6rem",
+        border : "none",
+        borderRadius : '10px',
+        marginTop: "auto"
+    }
+
+    const ratingColor = rating > 8.5 ? 'super-hit' : 'average'
+    return (
+        <li className="card">
+            <div>
+                <div className="image">
+                    <img src={img_url} alt="qot.jpg" width="40%" height="40%" />
+                </div>
+                <div className="card-content">
+                    <h2>Name: {name}</h2>
+                    <h3>Rating:  
+                        <span className={`rating ${ratingColor}`}>
+                            {rating}
+                        </span>
+                    </h3>
+                    <p>Summary: {description}</p>
+                    <p>Genre: {genre.join(', ')} </p>
+                    <p>Cast: {cast.join(', ')}</p>
+                    <a className='watch-button' href={watch_url} target="_blank">
+                        <button style={btn_style}> Button </button>
+                    </a>
+                </div>
+            </div>
+        </li>
+    );
+}
+
+
+//...................css modules.................................
+//create always a css files with '.module.css' extension
+//before giving class to any tag first import the css file  
+// import './netflix.module.css'
+//     e.g. import styles from './netflix.module.css'   //for using classname written in that file
+//          <h1 className={styles.card}></h1>
