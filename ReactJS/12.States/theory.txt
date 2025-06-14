@@ -1,6 +1,6 @@
 //States refers to an object which holds the information about components and whenever the state changes then react re-render the components
 
-//..............................Using State..............................................
+//..................................................Using State............................................................
 //check usage in react-thapa -> src -> components -> hooks -> State.jsx
 
 //suppose after clicking on a button we are supposed to render change on web page
@@ -15,10 +15,111 @@
 //and after that we will render that value
 
 
-//.........................Important Note about state.................................
+//.........................................Important Note about state......................................................
 // we have DOM tree initially but when the useState function is called then react js creates a new tree
 // after that diff algorithm will work and check which component is changing
 // after that react render that current component and its children component only...not any sibling components
 
 
+//...........................................useState with Objects........................................................
+//check usage in DerivedState.jsx
+
+// without using useState........ (immutable data, re-render will not reflect change)
+const users = [
+    {name : "Alice", age : 25},
+    {name : "Bob", age : 30},
+    {name : "Charlie", age : 35},
+    {name : "Angles", age : 40},
+]
+
+export const DerivedState = () => {
+    return (
+        <div className="main-div">
+            <h1>Users list</h1>
+            <ul>
+                {users.map(({name, age}, index) => {
+                    return (
+                        <li key={index}>
+                            {name} - {age} years old
+                        </li>
+                    )
+                })}
+            </ul>
+        </div>
+    )
+}
+
+//with using useState.............(mutable data, re-render will reflect change)
+import { useState } from "react"
+
+export const DerivedState = () => {
+    const [users] = useState([
+        {name : "Alice", age : 25},
+        {name : "Bob", age : 30},
+        {name : "Charlie", age : 35},
+        {name : "Angles", age : 40},
+    ])
+    return (
+        <div className="main-div">
+            <h1>Users list</h1>
+            <ul>
+                {users.map(({name, age}, index) => {
+                    return (
+                        <li key={index}>
+                            {name} - {age} years old
+                        </li>
+                    )
+                })}
+            </ul>
+        </div>
+    )
+}
+
+
+//..................................................Derived State......................................................
+//Derived state - the variable value which is dependent on state variable or props
+
+import { useState } from "react"
+
+
+export const DerivedState = () => {
+    const [users] = useState([
+        {name : "Alice", age : 25},
+        {name : "Bob", age : 30},
+        {name : "Charlie", age : 35},
+        {name : "Angles", age : 40},
+    ])
+
+    //?Derived State for finding count of users
+    const totalUsers = users.length;
+    //!here total users is dependent on state variable so totalUsers, sumAge our derivedState
+
+    //?Derived State for finding avg age of users
+    const sumAge = users.reduce((acc, user) => {
+        return acc += user.age;
+    }, 0)
+
+    const avgAge = sumAge / totalUsers;
+    
+
+    return (
+        <div className="main-div">
+            <h1>Users list</h1>
+            <ul>
+                {users.map(({name, age}, index) => {
+                    return (
+                        <li key={index}>
+                            {name} - {age} years old
+                        </li>
+                    )
+                })}
+            </ul>
+            <h2>Total Users : {totalUsers}</h2>
+            <h2>Average age of users : {avgAge.toFixed(0)}</h2>
+        </div>
+    )
+}
+
+//....................................Need of Lifting State up...................................................
+//theory is in LiftStateUp.png
 

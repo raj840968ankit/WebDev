@@ -5,6 +5,7 @@ import { NetflixSeries } from "./components/NetflixSeries.jsx";
 import { Events } from "./components/Events.jsx";
 import { EventProps } from "./components/EventProps.jsx";
 import { State } from "./components/hooks/State.jsx";
+import { DerivedState } from "./components/hooks/DerivedState.jsx";
 
 //!returning only 1 element (using jsx)
 // export const App = () => {
@@ -100,5 +101,6 @@ import { State } from "./components/hooks/State.jsx";
 
 //!we are using states here
 export const App = () => {
-  return <State/>
+  // return <State/>
+  return <DerivedState/>
 }
