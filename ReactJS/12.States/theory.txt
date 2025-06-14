@@ -1,0 +1,24 @@
+//States refers to an object which holds the information about components and whenever the state changes then react re-render the components
+
+//..............................Using State..............................................
+//check usage in react-thapa -> src -> components -> hooks -> State.jsx
+
+//suppose after clicking on a button we are supposed to render change on web page
+//but the change in value doesn't reflect on page because react js can't understand and reflect change of normal variable
+//console.log(value);   //change in variable can only be seen in console.
+
+//therefore for mitigation of above issue we will use ...'useState'... hook
+//first import {useState} from 'react'
+//syntax -  "const [variable, function] = useState(initialValueForVariable)"
+
+//whenever we will click the button we will implement the function of useState that take callback to increment the variable value
+//and after that we will render that value
+
+
+//.........................Important Note about state.................................
+// we have DOM tree initially but when the useState function is called then react js creates a new tree
+// after that diff algorithm will work and check which component is changing
+// after that react render that current component and its children component only...not any sibling components
+
+
+

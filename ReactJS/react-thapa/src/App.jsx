@@ -1,9 +1,10 @@
 import React, { Fragment } from "react";
 import { NetflixSeries } from "./components/NetflixSeries.jsx";
-// import './components/netflix.css'   //!for dedicated css file
-// import styles from './components/netflix.module.css'
+// import './components/netflix.css'   //!for dedicated css file (normal css)
+// import styles from './components/netflix.module.css'  //!(css modules)
 import { Events } from "./components/Events.jsx";
 import { EventProps } from "./components/EventProps.jsx";
+import { State } from "./components/hooks/State.jsx";
 
 //!returning only 1 element (using jsx)
 // export const App = () => {
@@ -85,13 +86,19 @@ import { EventProps } from "./components/EventProps.jsx";
 
 //!we are making a card of netflix series here
 //?CSS of className=series-heading is written in netflix.css 
+// export const App = () => {
+//   return (
+//     <section className="container">
+//       <h1 className={styles['series-heading']}>List of Best Netflix Series</h1>
+//       <NetflixSeries />
+//       {/* <Events/> */}
+//       {/* <EventProps/> */}
+//     </section>
+//   )
+// }
+
+
+//!we are using states here
 export const App = () => {
-  return (
-    <section className="container">
-      {/* <h1 className={styles['series-heading']}>List of Best Netflix Series</h1>
-      <NetflixSeries /> */}
-      {/* <Events/> */}
-      <EventProps/>
-    </section>
-  )
+  return <State/>
 }
