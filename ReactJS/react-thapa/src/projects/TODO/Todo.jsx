@@ -1,85 +1,102 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import "./Todo.css"
-import { MdCheck, MdDeleteForever } from "react-icons/md";
+import { TodoForm } from "./TodoForm";
+import { TodoList } from "./TodoList";
+import { TodoDateAndTime } from "./TodoDateAndTime";
+
+const todoKey = "reactTodo";
+
+const getLocalStorageTodoData = () => {  //?this is used when local storage is added for setting task value
+        const rawTodos = localStorage.getItem(todoKey)
+        if(!rawTodos) return []
+
+        try {
+            return JSON.parse(rawTodos);
+        } catch (e) {
+            console.error("Error parsing todos from localStorage:", e);
+            return [];
+        }
+    }
+
 
 export const Todo = () => {
-    //!this useState is for getting user input value
-    const [inputValue, setInputValue] = useState("")
-
     //!this useState is for storing user input (task)
-    const [task, setTask] = useState([])
+    // const [task, setTask] = useState([]) //?this is used before local storage
+    const [task, setTask] = useState(() => getLocalStorageTodoData()) 
 
-    //!this useState is for storing date and time (task)
-    const [dateAndTime, setDateAndTime] = useState([])
+    const checkZeroTask = task.length === 0 ? true : false;
 
-    const handleInputChange = (value) => {
-        setInputValue(value)
-    }
-
-    const handleFormSubmit = (e) => {
-        e.preventDefault()
-
-        if(!inputValue) return;
+    const handleFormSubmit = (inputValue) => {
+        const{id, content, checked} = inputValue
+        if(!content) return;
 
         //?checking whether user inputs the same task
-        if(task.includes(inputValue)) {
-            setInputValue("")
-            return;
-        }
-        //?here we are storing the data in 2nd state
-        setTask((prevTask) => [...prevTask, inputValue])
+        task.map((obj) => {
+            if(obj.content === content) return;
+        })
 
-        setInputValue("")
+        //?here we are storing the data in 2nd state
+        setTask((prevTask) => [...prevTask, {id, content, checked}])
     }
 
-    //!Todo Date and Time
+    //! handling todo item delete
+    const handleTodoDelete = (value) => {
+        //removing specified element from task rray
+        const filteredTask = task.filter((t) => (t.content !== value))
+        setTask(filteredTask)
+    }
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const date = new Date()
-            const formattedDate = date.toLocaleDateString()
-            const formattedTime = date.toLocaleTimeString()
+    //!clearing all the task
+    const handleClearTask = () => {
+        //removing all element from task array
+        setTask([])
+    }
 
-            setDateAndTime(`${formattedDate} - ${formattedTime}`)
-        }, 1000)
+    //!defining handle Checked todo
+    const handleCheckedTodo = (value) => {
+        const updatedTask = task.map((curTask) => {
+            if(curTask.content === value){
+                return {...curTask, checked : !curTask.checked}
+            }
+            else{
+                return curTask;
+            }
+        })
+        setTask(updatedTask)
+    }
 
-        return () => clearInterval(interval) 
-    }, [])
+    //! adding todo data to local storage
+    //! syntax("localStorageName", "data : string")
+    localStorage.setItem(todoKey, JSON.stringify(task))
+
     return (
         <section className="todo-container">
             <header>
                 <h1>Todo List</h1>
-                <h2 className="date-time">{dateAndTime}</h2>
+                <TodoDateAndTime/>
             </header>
-            <section className="form">
-                <form onSubmit={handleFormSubmit}>
-                    <div>
-                        <input type="text" 
-                            className="todo-input" 
-                            autoComplete="off"
-                            value={inputValue}
-                            onChange={(e) => handleInputChange(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <button type='submit' className="todo-button">Add Task</button>
-                    </div>
-                </form>
-            </section>
+            <TodoForm onAddTodo={handleFormSubmit}/>
             <section className="myUnOrdList">
                 <ul>
                     {
-                        task.map((curTask, index) => {
-                            return (
-                                <li key={index} className="todo-item">
-                                    <span>{curTask}</span>
-                                    <button className="check-btn"><MdCheck/></button>
-                                    <button className="delete-btn"><MdDeleteForever/></button>
-                                </li> 
-                            )
+                        task.map((curTask) => {
+                            return <TodoList key={curTask.id} 
+                                task={curTask.content} 
+                                checked={curTask.checked}
+                                onDeleteTodo={handleTodoDelete}
+                                onHandleCheckedTodo={handleCheckedTodo}
+                            />
                         })
                     }
                 </ul>
+            </section>
+            <section>
+                <button className="clear-btn" 
+                    onClick={handleClearTask}
+                    style={{display : checkZeroTask ? "none" : "block"}}
+                >
+                    Clear All
+                </button>
             </section>
         </section>
     )
