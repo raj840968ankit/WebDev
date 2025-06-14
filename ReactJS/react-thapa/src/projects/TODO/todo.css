@@ -69,7 +69,7 @@ form input {
   transition: background-color 200ms ease-in-out;
   width: 100%;
   background-color: #f2f3f4;
-  color: var(--primary-color);
+  color: black;
 }
 
 form input:hover {
