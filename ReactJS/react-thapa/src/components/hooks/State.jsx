@@ -22,7 +22,7 @@ export const State = () => {
     const [count, setCount] = useState(0);
 
     const handleButtonClick = () => {
-        setCount(() => count + 1)
+        setCount(count + 1)
     }
     return (
         <section style={{height : '100vh', width : '100%',display : "flex", flexDirection : "column",justifyContent : "center", alignItems : "center"}}>

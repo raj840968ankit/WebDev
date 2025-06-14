@@ -6,6 +6,8 @@ import { Events } from "./components/Events.jsx";
 import { EventProps } from "./components/EventProps.jsx";
 import { State } from "./components/hooks/State.jsx";
 import { DerivedState } from "./components/hooks/DerivedState.jsx";
+import { LiftStateUp } from "./components/hooks/ListStateUp.jsx";
+import { ToggleSwitch } from "./projects/ToggleSwitch.jsx";
 
 //!returning only 1 element (using jsx)
 // export const App = () => {
@@ -102,5 +104,12 @@ import { DerivedState } from "./components/hooks/DerivedState.jsx";
 //!we are using states here
 export const App = () => {
   // return <State/>
-  return <DerivedState/>
+  // return <DerivedState/>
+  // return <LiftStateUp/>
+  return (
+    <div className="container">
+      <ToggleSwitch/>
+  
+    </div>
+  )
 }

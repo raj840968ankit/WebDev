@@ -1,0 +1,4 @@
+//..................................Best react icons.............................................
+//go to react icons website and check the icons lists and read usage of each icon
+//install via 'npm i react-icons'
+//check usage in ToggleSwitch.jsx
