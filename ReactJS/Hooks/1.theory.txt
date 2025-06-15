@@ -1,0 +1,5 @@
+//...........................................useState................................................................
+// check usage in react-thapa -> src -> components -> hooks -> useState
+
+//form submission (!important) - check how useState works with formData -> RegistrationReact.jsx
+

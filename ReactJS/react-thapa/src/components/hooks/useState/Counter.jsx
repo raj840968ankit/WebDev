@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export const State = () => {
+export const Counter = () => {
     const buttonStyle = {
         height : "60px",
         width : "140px",

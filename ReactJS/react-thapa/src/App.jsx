@@ -2,13 +2,16 @@ import React, { Fragment } from "react";
 import { NetflixSeries } from "./components/NetflixSeries.jsx";
 // import './components/netflix.css'   //!for dedicated css file (normal css)
 // import styles from './components/netflix.module.css'  //!(css modules)
-import { Events } from "./components/Events.jsx";
-import { EventProps } from "./components/EventProps.jsx";
-import { State } from "./components/hooks/State.jsx";
-import { DerivedState } from "./components/hooks/DerivedState.jsx";
-import { LiftStateUp } from "./components/hooks/ListStateUp.jsx";
-import { ToggleSwitch } from "./projects/ToggleSwitch/ToggleSwitch.jsx";
-import { Todo } from "./projects/TODO/Todo.jsx";
+// import { Events } from "./components/Events.jsx";
+// import { EventProps } from "./components/EventProps.jsx";
+// import { State } from "./components/hooks/State.jsx";
+// import { DerivedState } from "./components/hooks/DerivedState.jsx";
+// import { LiftStateUp } from "./components/hooks/ListStateUp.jsx";
+// import { ToggleSwitch } from "./projects/ToggleSwitch/ToggleSwitch.jsx";
+// import { Todo } from "./projects/TODO/Todo.jsx";
+import { Registration } from "./components/hooks/useState/Registration.jsx";
+import { RegistrationReact } from "./components/hooks/useState/RegistrationReact.jsx";
+import { LoginForm } from "./components/hooks/useState/LoginForm.jsx";
 
 //!returning only 1 element (using jsx)
 // export const App = () => {
@@ -102,7 +105,7 @@ import { Todo } from "./projects/TODO/Todo.jsx";
 // }
 
 
-//!we are using states here
+//!we are using states here (useState)
 export const App = () => {
   // return <State/>
   // return <DerivedState/>
@@ -112,6 +115,10 @@ export const App = () => {
     //   <ToggleSwitch/>
   
     // </div>
-    <Todo/>
+    // <Todo/>
+    
+    // <RegistrationReact/>
+    
+    <LoginForm/>
   )
 }
