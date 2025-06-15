@@ -31,9 +31,16 @@ export const Todo = () => {
         if(!content) return;
 
         //?checking whether user inputs the same task
+        let exist = false;
         task.map((obj) => {
-            if(obj.content === content) return;
+            if(obj.content === content) {
+                exist = true;
+                return ;
+            }    
         })
+        if(exist) {
+            return;
+        }
 
         //?here we are storing the data in 2nd state
         setTask((prevTask) => [...prevTask, {id, content, checked}])

@@ -1,0 +1,3 @@
+//.......................................Why keys are important..........................................................
+//we use keys always with an array (react uses map method for array traversal)
+//keys make the items in array unique
