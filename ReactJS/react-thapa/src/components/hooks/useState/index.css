@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500&display=swap");
+/* @import url("https://fonts.googleapis.com/css?family=Montserrat:400,500&display=swap");
 
 * {
   margin: 0;
@@ -43,14 +43,10 @@ body {
   box-sizing: border-box;
 }
 
-/* Add padding to container elements */
+
 .container {
   padding: 20px;
   width: 500px;
-  /* position: absolute; */
-  /* left: 50%;
-  top: 50%; */
-  /* transform: translate(-50%, -50%); */
   border: 1px solid #ccc;
   border-radius: 10px;
   background: white;
@@ -59,7 +55,7 @@ body {
   box-shadow: 2px 1px 21px -9px rgba(0, 0, 0, 0.38);
 }
 
-/* Full-width input fields */
+
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -90,7 +86,7 @@ input[type="phone"]:focus {
   outline: none;
 }
 
-/* Set a style for all buttons */
+
 button {
   background-color: #0eb7f4;
   color: white;
@@ -124,9 +120,9 @@ p {
   font-size: 1.8rem;
 }
 
-/* Change styles for signup button on extra small screens */
+
 @media screen and (max-width: 300px) {
   .signupbtn {
     width: 100%;
   }
-}
+} */

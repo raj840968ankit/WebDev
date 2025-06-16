@@ -1,4 +1,4 @@
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -21,20 +21,20 @@ h4,
 h5,
 h6 {
   font-weight: 900;
-  color: #000 !important;  /*change*/
+  color: #000 !important;  
 }
 
 h1 {
   font-size: 5.4rem;
   font-weight: bold;
-  color: #000 !important;  /*change*/
+  color: #000 !important;  
   text-align: center;
 }
 
 p,
 span {
   font-size: 1.6rem;
-  color: #000;  /*change*/
+  color: #000;  
 }
 
 li {
@@ -89,7 +89,7 @@ input[type="text"] {
 }
 
 /* ///////////////////////////////////////// */
-.effect-container {
+ /* .effect-container {
   width: 65rem;
   padding: 0 6.4rem;
 
@@ -140,10 +140,10 @@ body {
 
 .odometer {
   font-size: calc(2rem + 5vw);
-  color: #000 !important;  /*change*/
+  color: #000 !important;  
 }
 
 .title {
   letter-spacing: 1.5px;
   line-height: 1.25;
-}
+}   */
