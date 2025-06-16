@@ -1,4 +1,4 @@
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -203,7 +203,7 @@ pokemon-info {
   text-align: center;
 }
 
-/* ///////////////////////////////////////// */
+
 .short-container {
   width: 65rem;
 
@@ -219,4 +219,4 @@ pokemon-info {
     padding: 0.6rem 0;
     cursor: pointer;
   }
-}
+} */

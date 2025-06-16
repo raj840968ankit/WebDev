@@ -17,6 +17,7 @@ import { ReactUseEffect } from "./components/hooks/useEffect/index.jsx";
 import { UseEffectChallenge } from "./components/hooks/useEffect/UseEffectChallenge.jsx";
 import { CleanUp } from "./components/hooks/useEffect/CleanUp.jsx";
 import { HowNotToFetchApi } from "./components/hooks/useEffect/HowNotToFetchApi.jsx";
+import { UseRef } from "./components/hooks/useRef/index.jsx";
 
 //!returning only 1 element (using jsx)
 // export const App = () => {
@@ -130,11 +131,18 @@ import { HowNotToFetchApi } from "./components/hooks/useEffect/HowNotToFetchApi.
 // }
 
 //!we are using hook here (useEffect)
+// export const App = () => {
+//   return (
+//     // <ReactUseEffect/>
+//     // <UseEffectChallenge/>
+//     // <CleanUp/>
+//     <HowNotToFetchApi/>
+//   )
+// }
+
+//!we are using hook here (useRef)
 export const App = () => {
   return (
-    // <ReactUseEffect/>
-    // <UseEffectChallenge/>
-    // <CleanUp/>
-    <HowNotToFetchApi/>
+    <UseRef/>
   )
 }
