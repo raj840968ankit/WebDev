@@ -12,6 +12,11 @@ import { NetflixSeries } from "./components/NetflixSeries.jsx";
 import { Registration } from "./components/hooks/useState/Registration.jsx";
 import { RegistrationReact } from "./components/hooks/useState/RegistrationReact.jsx";
 import { LoginForm } from "./components/hooks/useState/LoginForm.jsx";
+import { ContactForm } from "./components/hooks/useState/ContactForm.jsx";
+import { ReactUseEffect } from "./components/hooks/useEffect/index.jsx";
+import { UseEffectChallenge } from "./components/hooks/useEffect/UseEffectChallenge.jsx";
+import { CleanUp } from "./components/hooks/useEffect/CleanUp.jsx";
+import { HowNotToFetchApi } from "./components/hooks/useEffect/HowNotToFetchApi.jsx";
 
 //!returning only 1 element (using jsx)
 // export const App = () => {
@@ -105,20 +110,31 @@ import { LoginForm } from "./components/hooks/useState/LoginForm.jsx";
 // }
 
 
-//!we are using states here (useState)
-export const App = () => {
-  // return <State/>
-  // return <DerivedState/>
-  // return <LiftStateUp/>
-  return (
-    // <div className="container">
-    //   <ToggleSwitch/>
+//!we are using hook here (useState)
+// export const App = () => {
+//   // return <State/>
+//   // return <DerivedState/>
+//   // return <LiftStateUp/>
+//   return (
+//     // <div className="container">
+//     //   <ToggleSwitch/>
   
-    // </div>
-    // <Todo/>
+//     // </div>
+//     // <Todo/>
     
-    // <RegistrationReact/>
+//     // <RegistrationReact/>
     
-    <LoginForm/>
+//     // <LoginForm/>
+//     <ContactForm/>
+//   )
+// }
+
+//!we are using hook here (useEffect)
+export const App = () => {
+  return (
+    // <ReactUseEffect/>
+    // <UseEffectChallenge/>
+    // <CleanUp/>
+    <HowNotToFetchApi/>
   )
 }

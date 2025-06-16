@@ -3,3 +3,12 @@
 
 //form submission (!important) - check how useState works with formData -> RegistrationReact.jsx
 
+//...........................................useEffect...............................................................
+//Fetching or manipulating  the data which is outside the scope is known as side-effect in react
+//useEffect is used to mitigate from the side-effects of react
+//it is used for fetching the data from external resource such as API
+//it is also used to manipulate data which is outside the scope such as global variable 
+
+//check first usage in react-thapa -> src -> components -> hooks -> useEffect -> src-index.jsx
+
+//check for Fetching Api -> HowNotToFetchApi.jsx
