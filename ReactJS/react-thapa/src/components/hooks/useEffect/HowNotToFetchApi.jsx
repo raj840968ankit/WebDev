@@ -100,6 +100,7 @@ export const HowNotToFetchApi = () => {
                             Speed : <span>{pokemon.stats[5].base_stat}</span>
                         </p>
                     </div>
+                    
                 </li>
             </ul>
         </section>

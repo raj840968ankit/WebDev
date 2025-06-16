@@ -1,3 +1,4 @@
+
 * {
   margin: 0;
   padding: 0;
@@ -12,6 +13,7 @@ html {
 body {
   width: 100%;
   background-color: #eff3ff;
+  /* Consider if you want universal body padding, often better applied to a main content wrapper */
 }
 
 h1,
@@ -45,7 +47,9 @@ span {
 
 .container {
   max-width: 152rem;
-  margin: auto;
+  margin: auto; /* Keeps the container centered */
+  padding: 0 3.2rem; /* Add horizontal padding to the container */
+  /* This ensures there's space between the container's content and its edges */
 }
 
 .grid-three-cols {
@@ -97,9 +101,11 @@ input[type="text"] {
 .cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  justify-content: center;
+  justify-content: center; /* This centers the grid items if they don't fill the full width */
   align-items: center;
   gap: 3.2rem;
+  /* No need for padding here if .container padding is sufficient, as the 1fr will distribute space */
+  /* If you still see issues, consider adding padding: 0 0.5rem; to .cards as well, or adjusting grid-template-columns */
 }
 
 .pokemon-card {
@@ -217,5 +223,132 @@ pokemon-info {
   & button {
     padding: 0.6rem 0;
     cursor: pointer;
+  }
+}
+
+/* ... (Your existing CSS before media queries remains the same) ... */
+
+/* ------------------------------------- */
+/* RESPONSIVENESS */
+/* ------------------------------------- */
+
+/* Default: 4 columns for very large screens (implied by .cards grid-template-columns) */
+
+/* For screens smaller than 1400px (adjust based on your content/design needs) */
+@media (max-width: 1400px) {
+  .container {
+    padding: 0 3.2rem;
+  }
+}
+
+/* For screens smaller than 1200px (e.g., larger tablets, small laptops) - Transition to 3 columns */
+@media (max-width: 1200px) {
+  .container {
+    padding: 0 2.4rem; /* Slightly less padding */
+  }
+
+  .cards {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 2.4rem; /* Slightly smaller gap */
+  }
+
+  .pokemon-card {
+    width: auto; /* Allow cards to stretch within their grid column */
+  }
+
+  h1 {
+    font-size: 4.8rem; /* Adjust h1 font size */
+  }
+}
+
+/* For screens smaller than 992px (e.g., tablets) - Transition to 2 columns */
+@media (max-width: 992px) {
+  .container {
+    padding: 0 1.6rem; /* Reduced padding */
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    gap: 2rem; /* Further reduced gap */
+  }
+
+  h1 {
+    font-size: 4rem; /* Further adjust h1 font size */
+  }
+
+  .pokemon-card {
+    width: auto; /* Ensure cards adjust to new grid */
+  }
+
+  .pokemon-search input[type="text"] {
+    width: 28rem; /* Smaller search bar */
+  }
+}
+
+/* For screens smaller than 768px (e.g., smaller tablets, landscape mobile) - Stay at 2 columns or adjust if desired */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1.2rem; /* Even smaller padding */
+  }
+
+  /* No change to cards here, as 2 columns might still be good, or you could go 1 here */
+  /* If you want to go to 1 column earlier, move the 1fr rule here */
+  .cards {
+    gap: 1.6rem;
+  }
+
+  h1 {
+    font-size: 3.6rem; /* Smaller h1 */
+  }
+
+  .pokemon-name {
+    font-size: 2.8rem; /* Smaller pokemon name */
+  }
+
+  .pokemon-card {
+    min-height: 38rem; /* Adjust min-height as needed */
+  }
+}
+
+/* For screens smaller than 576px (e.g., portrait mobile) - Transition to 1 column */
+@media (max-width: 576px) {
+  .container {
+    padding: 0 0.8rem; /* Minimal padding for small screens */
+  }
+
+  .cards {
+    grid-template-columns: 1fr; /* Single column layout for mobile */
+    gap: 1.6rem;
+  }
+
+  .pokemon-card {
+    width: 90%; /* Make card take up most of the width */
+    max-width: 32rem; /* Prevent cards from getting too wide on very small devices */
+    margin: auto; /* Center single card */
+    min-height: 36rem; /* Adjust min-height as needed */
+  }
+
+  h1 {
+    font-size: 3.2rem; /* Smallest h1 font size */
+    padding: 0 0.8rem; /* Add some padding to h1 on very small screens */
+  }
+
+  .pokemon-search input[type="text"] {
+    width: 90%; /* Make search bar almost full width */
+    max-width: 25rem;
+  }
+
+  .pokemon-image {
+    width: 70%; /* Increase image size slightly for single column */
+    height: 12rem; /* Adjust image height */
+  }
+
+  .pokemon-name {
+    font-size: 2.4rem; /* Even smaller pokemon name */
+  }
+
+  p,
+  span {
+    font-size: 1.5rem; /* Slightly smaller base font size */
   }
 }
