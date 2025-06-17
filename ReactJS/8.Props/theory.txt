@@ -37,3 +37,11 @@ export const SeriesCard = (props) => {
         </li>
     );
 }
+
+
+//.................................................Prop drilling...................................................
+//check the definition of prop drilling in 'propDrilling.png'
+//check usage in react-thapa -> src -> components -> PropDrilling.jsx
+
+//for mitigating 'prop drilling problem' we will take use of 'context API'
+//check usage in react-thapa -> src -> components -> hooks -> contextAPI

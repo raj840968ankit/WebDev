@@ -18,6 +18,12 @@ import { UseEffectChallenge } from "./components/hooks/useEffect/UseEffectChalle
 import { CleanUp } from "./components/hooks/useEffect/CleanUp.jsx";
 import { HowNotToFetchApi } from "./components/hooks/useEffect/HowNotToFetchApi.jsx";
 import { UseRef } from "./components/hooks/useRef/index.jsx";
+import { ForwardRefs } from "./components/hooks/useRef/ForwardRefs.jsx";
+import { UseId } from "./components/hooks/useId/index.jsx";
+import { ParentComponent } from "./components/PropDrilling.jsx";
+import { BioProvider } from "./components/hooks/ContextAPI/index.jsx";
+import { Home } from "./components/hooks/ContextAPI/Home.jsx";
+import { About } from "./components/hooks/ContextAPI/About.jsx";
 
 //!returning only 1 element (using jsx)
 // export const App = () => {
@@ -140,9 +146,28 @@ import { UseRef } from "./components/hooks/useRef/index.jsx";
 //   )
 // }
 
-//!we are using hook here (useRef)
+// //!we are using hook here (useRef)
+// export const App = () => {
+//   return (
+//     // <UseRef/>
+//     // <ForwardRefs/>
+//     // <UseId/>
+//   )
+// }
+
+// //!we are using prop drilling
+// export const App = () => {
+//   return (
+//     <ParentComponent/>
+//   )
+// }
+
+//!we are using 'context API' for mitigating 'prop drilling problem'
 export const App = () => {
   return (
-    <UseRef/>
+    <BioProvider>
+      <Home/>
+      <About/>
+    </BioProvider>
   )
 }

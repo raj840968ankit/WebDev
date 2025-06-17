@@ -7,7 +7,13 @@ export const ForwardRefs = () => {
 
   const handelFormSubmit = (e) => {
     e.preventDefault();
-    console.log(username.current.value, password.current.value);
+    const userCredential = {
+      username : username.current.value,
+      password : password.current.value
+    }
+    console.log(userCredential);
+    username.current.value = ""
+    password.current.value = ""
   };
 
   return (

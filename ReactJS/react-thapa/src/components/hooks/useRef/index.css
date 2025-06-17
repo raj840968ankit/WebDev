@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Lato");
+/* @import url("https://fonts.googleapis.com/css?family=Lato");
 * {
   margin: 0;
   padding: 0;
@@ -27,7 +27,7 @@ h6 {
 h1 {
   font-size: 5.4rem;
   font-weight: bold;
-  /* color: #000 !important; */
+
   text-align: center;
 }
 
@@ -87,7 +87,7 @@ input[type="text"] {
   gap: 3.2rem;
 }
 
-/* ///////////////////////////////////////// */
+
 .effect-container {
   width: 65rem;
   padding: 0 6.4rem;
@@ -143,4 +143,4 @@ body {
 .title {
   letter-spacing: 1.5px;
   line-height: 1.25;
-}
+} */

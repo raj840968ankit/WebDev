@@ -1,7 +1,17 @@
 {
     "cSpell.words": [
+        "Ankit",
         "pokemons",
         "signupbtn",
-        "thapa"
-    ]
+        "thapa",
+        "vinod"
+    ],
+    "cSpell.customDictionaries": {
+        "custom-dictionary-workspace": {
+            "name": "custom-dictionary-workspace",
+            "path": "${workspaceFolder:ReactJS}/.cspell/custom-dictionary-workspace.txt",
+            "addWords": true,
+            "scope": "workspace"
+        }
+    }
 }

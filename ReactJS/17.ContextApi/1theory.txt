@@ -1,0 +1,13 @@
+//..................................................ContextAPI........................................................
+//for mitigating 'prop drilling problem' we will take use of 'context API'
+//check working of context API in 'contextAPIWorking.png'
+//context API works as a storage for providing data and must ensure wrapping the components around context provider component in App.jsx
+//Data stored in context will only be accessible if component is a child of Context Provider component(so must include in App.jsx if want some data)
+
+//check usage in react-thapa -> src -> components -> hooks -> contextAPI -> (index.jsx -> App.jsx -> Home.jsx)
+
+
+//..........................................creating custom Hooks.....................................................
+//check rules of creating custom Hooks in 'creatingCustomHooks.png'
+
+
