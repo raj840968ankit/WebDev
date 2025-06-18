@@ -1,42 +1,194 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Basic Reset and Body Styles */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif; /* Using Inter as specified */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* App Container */
+.app-container {
+  min-height: 100vh;
+  background-color: #f3f4f6; /* Equivalent to bg-gray-100 */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+/* Main Content Area */
+.main-content {
+  padding: 1rem; /* Equivalent to p-4 */
+}
+
+@media (min-width: 768px) { /* md breakpoint for padding */
+  .main-content {
+    padding: 2rem; /* Equivalent to md:p-8 */
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+.main-title {
+  font-size: 1.875rem; /* Equivalent to text-3xl */
+  font-weight: 700; /* Equivalent to font-bold */
+  color: #1f2937; /* Equivalent to text-gray-800 */
+  margin-bottom: 1rem; /* Equivalent to mb-4 */
+}
+
+.main-description {
+  color: #4b5563; /* Equivalent to text-gray-600 */
+}
+
+.about-section {
+  margin-top: 2rem; /* Equivalent to mt-8 */
+  padding: 1.5rem; /* Equivalent to p-6 */
+  background-color: #ffffff; /* Equivalent to bg-white */
+  border-radius: 0.5rem; /* Equivalent to rounded-lg */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Equivalent to shadow-md */
+}
+
+.about-title {
+  font-size: 1.5rem; /* Equivalent to text-2xl */
+  font-weight: 600; /* Equivalent to font-semibold */
+  color: #374151; /* Equivalent to text-gray-700 */
+  margin-bottom: 0.75rem; /* Equivalent to mb-3 */
+}
+
+.about-text {
+  color: #4b5563; /* Equivalent to text-gray-600 */
+}
+
+.about-text.mt-2 {
+  margin-top: 0.5rem; /* Explicitly add margin for this class if needed */
+}
+
+/* Navbar Styles */
+.navbar {
+  background-color: #f0f0f0; /* Equivalent to bg-gradient-to-r from-blue-600 to-indigo-700 */
+  padding: 0.5rem; /* Equivalent to p-4 */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Equivalent to shadow-lg */
+  
+}
+
+.navbar-container {
+  max-width: 1280px; /* Equivalent to container mx-auto */
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: space-between; /* Equivalent to justify-between */
+  align-items: center; /* Equivalent to items-center */
+  padding-left: 1rem; /* Equivalent to px-4 */
+  padding-right: 1rem; /* Equivalent to px-4 */
+}
+
+.navbar-title-wrapper {
+  flex-shrink: 0; /* Equivalent to flex-shrink-0 */
+}
+
+.navbar-title {
+  color: black; /* Equivalent to text-white */
+  font-size: 2rem; /* Equivalent to text-3xl */
+  font-weight: 800; /* Equivalent to font-extrabold */
+  letter-spacing: 0.05em; /* Equivalent to tracking-wide */
+  border-radius: 0.25rem; /* Equivalent to rounded-md */
+  padding: 0.25rem; /* Equivalent to p-1 */
+  transform: scale(1); /* Initial transform for transition */
+  transition: transform 0.3s ease-in-out, color 0.3s ease-in-out; /* Equivalent to transform transition duration-300 */
+  display: inline-block; /* Required for transform on anchor */
+}
+
+
+
+/* Mobile Toggler */
+.navbar-toggler {
+  display: block; /* Default to block for mobile */
+}
+
+@media (min-width: 768px) { /* md breakpoint for toggler */
+  .navbar-toggler {
+    display: none; /* Equivalent to md:hidden */
   }
 }
 
-.card {
-  padding: 2em;
+.navbar-toggler-button {
+  color: black; /* Equivalent to text-white */
+  outline: none; /* Equivalent to focus:outline-none */
+  padding: 0.5rem; /* Equivalent to p-2 */
+  border: none; /* Equivalent to rounded-md */
+  transition: background-color 0.3s ease-in-out; /* Equivalent to transition duration-300 */
+  border: 2px solid transparent; /* For focus ring */
 }
 
-.read-the-docs {
-  color: #888;
+.navbar-toggler-button:focus {
+  box-shadow: 0 0 0 2px #ffffff; /* Equivalent to focus:ring-2 focus:ring-white */
+}
+
+
+
+.icon {
+  width: 1.75rem; /* Equivalent to w-7 */
+  height: 1.75rem; /* Equivalent to h-7 */
+}
+
+/* Navigation Links */
+.navbar-links-wrapper {
+  display: none; /* Hidden by default on mobile */
+  flex-grow: 1; /* Equivalent to flex-grow */
+  justify-content: flex-end; /* Equivalent to justify-end */
+}
+
+@media (min-width: 768px) { /* md breakpoint for links wrapper */
+  .navbar-links-wrapper {
+    display: flex; /* Equivalent to md:flex */
+  }
+}
+
+.navbar-links-wrapper.navbar-links-open {
+  display: block; /* Show when open on mobile */
+}
+
+.navbar-links {
+  display: flex; /* Equivalent to flex */
+  flex-direction: column; /* Equivalent to flex-col */
+  list-style: none; /* Remove bullet points */
+  padding: 0;
+  margin: 0;
+  margin-top: 1rem; /* Equivalent to mt-4 */
+  align-items: center; /* Equivalent to items-center */
+}
+
+@media (min-width: 768px) { /* md breakpoint for links */
+  .navbar-links {
+    flex-direction: row; /* Equivalent to md:flex-row */
+    margin-top: 0; /* Equivalent to md:mt-0 */
+    margin-left: 0; /* Reset mobile margin */
+    gap: 2rem; /* Equivalent to md:space-x-8 */
+  }
+}
+
+.navbar-links li {
+  margin-bottom: 0.75rem; /* Equivalent to space-y-3 */
+}
+
+@media (min-width: 768px) { /* Reset margin on desktop */
+  .navbar-links li {
+    margin-bottom: 0;
+  }
+}
+
+.navbar-link-item {
+  color: black; /* Equivalent to text-white */
+  font-size: 1.125rem; /* Equivalent to text-lg */
+  font-weight: 500; /* Equivalent to font-medium */
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out; /* Equivalent to transition duration-300 */
+  padding: 0.5rem; /* Equivalent to p-2 */
+  border-radius: 0.25rem; /* Equivalent to rounded-md */
+  outline: none; /* Equivalent to focus:outline-none */
+  border: 2px solid transparent; /* For focus ring */
+  display: block; /* Ensure full clickable area */
+  text-decoration: none; /* Remove underline */
+}
+
+.navbar-link-item:hover {
+ 
+  text-decoration: underline;
+}
+
+.navbar-link-item:focus {
+  text-decoration: underline;
 }

@@ -1,0 +1,33 @@
+//............................................React Router............................................................
+//using react router we can implement 'single page application'...........
+//creating a new React-Router react project
+//install router via 'npm i react-router-dom'
+
+//check router creating in React-Router -> src -> App.jsx
+
+//after creating routes create a folder 'components' 
+//  - inside components create Header.jsx, Footer.jsx and AppLayout.jsx
+//  - in 'AppLayout' include 'Header' and 'Footer' add add 'Outlet' between them that will show different page content between header and Footer
+//  - To use header and Footer in every page - make change in router App.jsx (add 'children attribute' to 'home' route)
+//  - in 'children attribute' of home route add other routes (check usage in App.jsx)
+
+
+//.....................................For making single page application............................................
+//   - create a navbar and add nav list
+//   - use '<NavLink to=''>nav items </NavLink>' instead of '<a href=''>nav items</a>' for nav items
+//   - check usage in Header.jsx
+
+//....................adding style to current active link (home, about, contact)..........................
+//   - in '<NavLink>' if we click on any nav link, they provide us 'isActive' property
+//   - check usage in Header.jsx in NavLink
+
+    <NavLink to="/" className="navbar-link-item"
+        style={({ isActive }) => {
+            return { color: isActive ? "blue" : "black" }
+        }}
+    >
+        Home
+    </NavLink>
+
+
+
