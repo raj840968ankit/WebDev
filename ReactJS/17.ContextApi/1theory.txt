@@ -10,4 +10,10 @@
 //..........................................creating custom Hooks.....................................................
 //check rules of creating custom Hooks in 'creatingCustomHooks.png'
 
+//check usage in //check usage in react-thapa -> src -> components -> hooks -> contextAPI -> (index.jsx -> Home.jsx)
+
+//............................................use hook................................................................
+// In 'context API' we were using 'useContext(ContextComponentName)' hook but we can use 'use(ContextComponentName)' hook only
+// use() hook is more flexible because we can use it in 'if' and 'loop' conditions also 
+
 

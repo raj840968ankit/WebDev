@@ -1,7 +1,8 @@
 // import { createContext, useContext } from "react";
-import { createContext} from "react";
+import { createContext, useContext} from "react";
 
 // 1 step - create context component
+
 export const BioContext = createContext();
 
 // 2nd step - pass the value to the provider inside curly braces
@@ -16,3 +17,10 @@ export const BioProvider = ({ children }) => {
     </BioContext.Provider>
   );
 };
+
+
+//! Creating custom hooks here and use whereEver you are using BioContext(Home.jsx)
+export const useBioContext = () => {
+    const context = useContext(BioContext)
+    return context
+}
