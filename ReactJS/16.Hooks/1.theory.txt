@@ -50,4 +50,25 @@
 //.................................................Context API..........................................................
 //check the usage of context API in 17.ContextAPI directory
 
+//.................................................useReducer...........................................................
+//This hook is the advanced alternative of useState
+//check first usage in react-thapa -> src -> components -> hooks -> useReducer -> index.jsx
+
+//........................................React Memo(used with component)...........................................................
+//it prevents from unnecessary render of child component due to parent component
+//the child component will only render until props passed in child component changes
+//check usage in react-thapa -> src -> components -> hooks -> Memo -> (ReactMemo.jsx , MemoCount.jsx)
+
+//........................useMemo..........................
+//used with object, value of computed function value
+
+//useMemo hook is used to optimize expensive calculation which give same result by caching (memoization)
+//by using useMemo hook it prevent delay renders of other component due to expensive calculation
+//check usage in react-thapa -> src -> components -> hooks -> Memo -> (UseMemo.jsx)
+
+//Whenever we pass props always use (React Memo + useMemo) combination (ReactMemo.jsx , MemoCount.jsx)
+
+//.....................useCallback.........................
+//used with function that can cause re-render child component(same as useMemo but especially built for functions) 
+
 

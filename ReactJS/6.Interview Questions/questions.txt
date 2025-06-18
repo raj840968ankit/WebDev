@@ -9,7 +9,7 @@ export const Practices = () => {
     ); 
 };
 
-//....here first p will print (0) because javascript doesn't render null, false, undefined, NaN
+//....here first p will print (0) because react doesn't render null, false, undefined, NaN
 //          but due to students.length it will give you (0) so as an exception 0 will be displayed
 //....here second p will print (0)
 

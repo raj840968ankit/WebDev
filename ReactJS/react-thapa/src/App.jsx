@@ -24,6 +24,10 @@ import { ParentComponent } from "./components/PropDrilling.jsx";
 import { BioProvider } from "./components/hooks/ContextAPI/index.jsx";
 import { Home } from "./components/hooks/ContextAPI/Home.jsx";
 import { About } from "./components/hooks/ContextAPI/About.jsx";
+import { ReducerComp } from "./components/hooks/useReducer/index.jsx";
+import { MemoParentComponent } from "./components/hooks/Memo/UseMemo.jsx";
+import { ReactMemo } from "./components/hooks/Memo/ReactMemo.jsx";
+import { UseCallback } from "./components/hooks/Memo/UseCallback.jsx";
 
 //!returning only 1 element (using jsx)
 // export const App = () => {
@@ -163,11 +167,27 @@ import { About } from "./components/hooks/ContextAPI/About.jsx";
 // }
 
 //!we are using 'context API' for mitigating 'prop drilling problem'
+// export const App = () => {
+//   return (
+//     <BioProvider>
+//       <Home/>
+//       <About/>
+//     </BioProvider>
+//   )
+// }
+
+// //!we are using 'useReducer' Hook
+// export const App = () => {
+//   return (
+//     <ReducerComp/>
+//   )
+// }
+
+//!we are using React Memo and useMemo hook
 export const App = () => {
   return (
-    <BioProvider>
-      <Home/>
-      <About/>
-    </BioProvider>
+    // <ReactMemo/>
+    // <MemoParentComponent/>
+    <UseCallback/>
   )
 }
