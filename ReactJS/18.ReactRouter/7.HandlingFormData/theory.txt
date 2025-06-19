@@ -1,0 +1,26 @@
+//.............................................Handling Form Data....................................................
+
+//check usage in Contact.jsx page
+
+// use 'Form' component instead of form tag and add method and action
+   <Form method="POST" action="/contact">
+
+// define a function to get form data after submission(Contact.jsx)
+    export const contactData = async ({ request }) => {    //we get data as 'request' here by-default
+    try {
+        const res = await request.formData();
+        const data = Object.fromEntries(res);
+        console.log(data);
+        return null;
+    } catch (error) {
+        console.log(error.message);
+    }
+    };
+
+
+//go to '/contact' route in App.jsx and add an attribute 'action' with function who is getting form data
+    {
+        path: "/contact",
+        element: <Contact />,
+        action: contactData,
+    },

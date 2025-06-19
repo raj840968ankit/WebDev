@@ -1,0 +1,38 @@
+//...........................................create dynamic route.......................................................
+//give a new route in App.jsx and create a new component for element Attribute
+
+    {
+        path: "/movie/:movieID",        //!Creating dynamic route
+        element: <MovieDetails />,
+    },
+
+//on the card component watch now button, give a NavLink on that button 
+
+    <NavLink to={`/movie/${imdbID}`}>
+        <button className="ticket_buy-btn">Watch Now</button>
+    </NavLink>
+
+//to access route parameter in MovieDetails.jsx use a hook 'useParams()' (only for component)
+
+    const params = useParams()
+    return <h1>Movie id is {params.movieID}</h1>
+
+//to access route parameter in functions directly
+
+    export const getMoviesData = async ({params}) => {
+        const id = params.movieID;
+
+        try {
+            const res = await fetch(
+                `http://www.omdbapi.com/?s=marvel&apikey=${import.meta.env.VITE_API_KEY}&t=${id}`
+            )
+            const data = await res.json()
+            return data;
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+

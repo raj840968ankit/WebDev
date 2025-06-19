@@ -8,11 +8,13 @@ import {
 } from "react-router-dom";
 import { Home } from "./pages/Home.jsx";
 import { Movie } from "./pages/Movie.jsx";
-import { Contact } from "./pages/Contact.jsx";
+import { Contact, contactData } from "./pages/Contact.jsx";
 import { About } from "./pages/About.jsx";
 import { AppLayout } from "./components/layout/AppLayout.jsx";
 import { ErrorPage } from "./pages/ErrorPage.jsx";
-import { getMoviesData } from "./api/GetAPIData.jsx";
+import { getMoviesData } from "./api/GetMovieData.jsx";
+import { MovieDetails } from "./components/UI/MovieDetails.jsx";
+import { getMoviesDetails } from "./api/GetMovieDetails.jsx";
 
 export const App = () => {
   //! old method
@@ -61,11 +63,17 @@ export const App = () => {
         {
           path: "/movie",
           element: <Movie />,
-          loader : getMoviesData,
+          loader : getMoviesData,        //!getting api data using this getMoviesData function 
+        },
+        {
+          path: "/movie/:movieID",        //!Creating dynamic route
+          element: <MovieDetails />,
+          loader : getMoviesDetails,
         },
         {
           path: "/contact",
           element: <Contact />,
+          action: contactData,
         },
         {
           path: "/about",

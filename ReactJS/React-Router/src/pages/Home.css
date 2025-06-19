@@ -1,0 +1,319 @@
+/* Common Section Container */
+.container {
+    max-width: 1200px; /* Max width for content */
+    margin: 0 auto; /* Center the container */
+    padding: 0 1rem; /* Horizontal padding, vertical padding set by section */
+}
+
+/* Grid Layout for Two Columns */
+.grid {
+    display: grid;
+    width: 100%;
+}
+
+.grid-two--cols {
+    grid-template-columns: 1fr; /* Default to single column for mobile */
+    gap: 2rem; /* Space between columns/rows */
+    align-items: center; /* Align items vertically in the grid cells */
+    padding: 3rem 0; /* Vertical padding for the content grid */
+}
+
+/* Hero Section Styling */
+.section-hero {
+    color: #ffffff;
+    padding-top: 2rem; /* Padding at the top of the hero section */
+    position: relative; /* For positioning the SVG wave */
+    overflow: hidden; /* Hide anything outside */
+    min-height: 80vh; /* Minimum height for the hero section */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertically center content */
+    /* Adjust gradient slightly for more depth, as seen in the example image */
+    background: linear-gradient(to bottom right, #1a2a6c, #b21f1f, #fdbb2d); /* More vibrant gradient */
+}
+
+/* Hero Content (Text) */
+.section-hero--content {
+    text-align: center; /* Center content by default */
+    padding: 1rem;
+    position: relative; /* Needed for text positioning relative to background */
+    z-index: 2; /* Ensure text is above background elements */
+}
+
+.hero-subheading {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+    letter-spacing: 0.05em; /* Added for subtle flair */
+    text-transform: uppercase; /* Match example image style */
+    color: #ffd700; /* Gold-like color for subheading */
+}
+
+.hero-heading {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    text-shadow: 3px 3px 7px rgba(0,0,0,0.4); /* More prominent shadow */
+    color: #fff; /* Ensure text is white for contrast */
+}
+
+.hero-para {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 600px; /* Limit paragraph width for readability */
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.95;
+    color: #e0e0e0; /* Slightly off-white for body text */
+}
+
+/* Hero Button Container */
+.hero-btn-container {
+    text-align: center; /* Center the button */
+    margin-top: 1.5rem;
+}
+
+/* Button Styling (from previous components, repeated for completeness) */
+.btn {
+    display: inline-block;
+    padding: 0.9rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 30px; /* Pill shape */
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+    border: none; /* No default border */
+    text-decoration: none; /* No underline for NavLink */
+    background: linear-gradient(to right, #FF416C, #FF4B2B); /* Red-orange gradient */
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(255, 65, 108, 0.4);
+}
+
+.btn:hover {
+    background: linear-gradient(to right, #FF4B2B, #FF416C); /* Inverted gradient on hover */
+    transform: translateY(-2px); /* Slight lift */
+    box-shadow: 0 12px 25px rgba(255, 65, 108, 0.5);
+}
+
+/* Hero Image Section */
+.section-hero-image {
+    display: flex;
+    justify-content: center; /* Center horizontally by default */
+    align-items: center; /* Center vertically by default */
+    padding: 1rem;
+    position: relative; /* Context for absolute positioning of its children */
+    z-index: 1; /* Ensure image is behind text but above SVG */
+    /* Removed width and height here, letting image control size within flex */
+}
+
+.hero_image {
+    max-width: 100%; /* Image scales down to fit container */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Remove extra space below image */
+    border-radius: 15px; /* Rounded corners for the image */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Stronger shadow for image */
+    
+    /* Adjusting image size and position to match the example image */
+    /* Initial state for mobile/smaller screens - relative to its container */
+    position: relative; /* Changed from absolute to relative for more stable flow */
+    transform: rotate(15deg) scale(0.9); /* Apply rotation and scale */
+    margin-left: 20%; /* Push it partly out of view on the right by default */
+    max-width: 350px; /* Control max size on smaller screens */
+    filter: brightness(0.9) contrast(1.1); /* Subtle visual enhancement */
+    transition: transform 0.5s ease-out, margin 0.5s ease-out; /* Smooth transitions */
+}
+
+.section-hero-image:hover .hero_image {
+    transform: rotate(10deg) scale(0.95); /* Subtle movement on hover */
+    margin-left: 15%; /* Adjust margin on hover */
+}
+
+/* Custom Shape Divider (SVG Wave) */
+.custom-shape-divider-bottom-1696038172 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 120px; /* Height of the SVG */
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg); /* Rotate to point upwards for bottom */
+    z-index: 0; /* Ensure SVG is behind content */
+}
+
+.custom-shape-divider-bottom-1696038172 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px); /* To prevent gaps */
+    height: 120px;
+}
+
+.custom-shape-divider-bottom-1696038172 .shape-fill {
+    fill: #f8f9fa; /* Match the background color of the next section/body */
+}
+
+/* Responsive adjustments */
+
+@media (min-width: 992px) { /* Large desktops */
+    .grid-two--cols {
+        grid-template-columns: 1fr 1fr; /* Two columns for desktop */
+        padding: 5rem 0; /* More vertical padding for desktop */
+        height: 100%; /* Ensure grid takes full height of hero */
+    }
+
+    .section-hero {
+        min-height: 100vh; /* Make hero full height on desktop */
+        justify-content: flex-start; /* Align content to top within flex container */
+    }
+
+    .section-hero--content {
+        text-align: left; /* Align text left on desktop */
+        padding: 1rem 0; /* Adjust padding for left-aligned text */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Vertically center content within its column */
+    }
+
+    .hero-heading {
+        font-size: 4.5rem; /* Larger heading on desktop */
+        margin-right: 1rem; /* Prevent heading from touching image on large screens */
+    }
+
+    .hero-para {
+        max-width: none; /* Remove max-width on larger screens */
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .hero-btn-container {
+        text-align: left; /* Align button left on desktop */
+    }
+
+    .section-hero-image {
+        /* On desktop, push the image to the right within its grid column */
+        justify-content: flex-end; /* Push image to the right within flex container */
+        align-items: center; /* Center vertically */
+        padding: 1rem; /* Keep padding */
+    }
+
+    .hero_image {
+        position: relative; /* Keep it relative in flow */
+        transform: rotate(15deg) scale(0.9); /* Keep rotation and scale */
+        margin-left: 30%; /* Push it further right on desktop */
+        max-width: 700px; /* Allow larger image on desktop */
+        width: auto; /* Let content dictate width up to max-width */
+        height: auto;
+        filter: brightness(1) contrast(1.1); /* Standard filter */
+    }
+
+    .section-hero-image:hover .hero_image {
+        transform: rotate(10deg) scale(0.95); /* Adjust hover for desktop */
+        margin-left: 25%; /* Adjust margin on hover */
+    }
+}
+
+@media (max-width: 768px) { /* Tablets and smaller desktops */
+    .section-hero {
+        padding-top: 1rem;
+        min-height: auto; /* Allow height to adjust based on content */
+    }
+
+    .grid-two--cols {
+        gap: 1.5rem; /* Slightly smaller gap */
+        padding: 2rem 0;
+    }
+
+    .hero-subheading {
+        font-size: 1.1rem;
+    }
+
+    .hero-heading {
+        font-size: 2.5rem; /* Adjust heading size */
+        margin-bottom: 1rem;
+    }
+
+    .hero-para {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+    }
+
+    .section-hero-image {
+        padding: 0.5rem;
+        /* Center image within its column */
+        justify-content: center;
+    }
+
+    .hero_image {
+        transform: rotate(10deg) scale(0.85); /* Adjust scale for tablets */
+        max-width: 450px;
+        margin-left: 0; /* Reset margin on smaller screens */
+    }
+
+    .section-hero-image:hover .hero_image {
+        transform: rotate(5deg) scale(0.9);
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 576px) { /* Small mobile devices */
+    .section-hero {
+        padding-top: 0.5rem;
+    }
+
+    .grid-two--cols {
+        gap: 1rem;
+        padding: 1.5rem 0;
+    }
+
+    .section-hero--content {
+        padding: 0.5rem;
+    }
+
+    .hero-subheading {
+        font-size: 1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .hero-heading {
+        font-size: 2rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .hero-para {
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+
+    .btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .custom-shape-divider-bottom-1696038172 {
+        height: 80px; /* Smaller wave height on mobile */
+    }
+    .custom-shape-divider-bottom-1696038172 svg {
+        height: 80px;
+    }
+
+    .hero_image {
+        transform: rotate(5deg) scale(0.7); /* Further adjust scale for mobile */
+        max-width: 350px;
+        margin-left: 0; /* Ensure margin is reset */
+    }
+
+    .section-hero-image:hover .hero_image {
+        transform: rotate(2deg) scale(0.75);
+        margin-left: 0;
+    }
+}

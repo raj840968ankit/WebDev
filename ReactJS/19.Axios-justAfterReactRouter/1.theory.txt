@@ -1,0 +1,7 @@
+//.............................................Axios.....................................................................
+// 'Axios' is alternative of 'fetch' for fetching API and better than fetch also
+// read about axios in '2.axios.png'
+
+//.....................................Usage of axios.................................................................
+//create a new react project React-Axios
+//after creating project install axios via 'npm i axios'

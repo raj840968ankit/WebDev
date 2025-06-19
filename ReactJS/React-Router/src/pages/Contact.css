@@ -1,0 +1,247 @@
+/* Common Section Container */
+.container {
+    max-width: 1200px; /* Max width for content */
+    margin: 0 auto; /* Center the container */
+    padding: 2rem 1rem; /* Padding on top/bottom and sides */
+}
+
+/* Common Section Headings */
+.section-common--heading {
+    text-align: center;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #007bff; /* Primary blue color for heading */
+    margin-bottom: 1rem;
+    text-transform: capitalize;
+}
+
+.section-common--subheading {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #6c757d;
+    margin-bottom: 3rem;
+    line-height: 1.6;
+    max-width: 700px; /* Limit subheading width for better readability */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Contact Section Layout */
+.section-contact {
+    background-color: #ffffff;
+    border-radius: 15px; /* Rounded corners for the contact section */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    padding: 2rem;
+    display: flex; /* Use flex to align content for smaller screens if grid isn't used */
+    flex-direction: column; /* Default to column for mobile first */
+    align-items: center; /* Center items in column layout */
+}
+
+/* Grid Layout for Two Columns (Form and Image) */
+.grid {
+    display: grid;
+    width: 100%; /* Ensure grid takes full width of its parent */
+}
+
+.grid-two--cols {
+    grid-template-columns: 1fr; /* Default to single column for mobile */
+    gap: 2rem; /* Space between columns/rows */
+    align-items: center; /* Align items vertically in the grid cells */
+}
+
+/* Contact Content (Form) */
+.contact-content {
+    padding: 1rem;
+    width: 100%; /* Take full width of its grid cell */
+}
+
+/* Inner Grid for Form Fields (username, email) */
+.contact-content .grid-two-cols {
+    grid-template-columns: 1fr; /* Default to single column within form for mobile */
+    gap: 1.5rem; /* Space between form fields */
+    margin-bottom: 1.5rem; /* Equivalent to mb-3 */
+}
+
+/* Form Group Styling (label + input/textarea) */
+.contact-content label {
+    display: block; /* Make label appear above input */
+    font-size: 0.95rem;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.contact-content input[type="text"],
+.contact-content input[type="email"],
+.contact-content textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #495057;
+    background-color: #fdfdfe;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+.contact-content input[type="text"]:focus,
+.contact-content input[type="email"]:focus,
+.contact-content textarea:focus {
+    border-color: #007bff; /* Highlight on focus */
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.contact-content textarea {
+    resize: vertical; /* Allow vertical resizing */
+    min-height: 100px; /* Minimum height for textarea */
+    margin-bottom: 1.5rem; /* Equivalent to mb-3 for the textarea group */
+}
+
+/* Form Button */
+.btn {
+    display: inline-block;
+    padding: 0.9rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 30px; /* Pill shape */
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+    border: none; /* No default border */
+    text-decoration: none; /* No underline for links if btn used on anchors */
+}
+
+.contact-btn {
+    background-color: #007bff; /* Primary blue */
+    color: #ffffff;
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+    margin-top: 1.5rem; /* Equivalent to mt-3 */
+}
+
+.contact-btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight lift */
+    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
+}
+
+/* Contact Image */
+.contact-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    width: 100%; /* Take full width of its grid cell */
+}
+
+.contact-image figure {
+    margin: 0; /* Remove default figure margin */
+    padding: 0;
+    width: 100%;
+    max-width: 500px; /* Limit image container width */
+}
+
+.contact_image {
+    max-width: 100%; /* Image scales down to fit container */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Remove extra space below image */
+    border-radius: 10px; /* Slightly rounded corners for the image */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Soft shadow on image */
+}
+
+/* Responsive adjustments */
+@media (min-width: 992px) { /* Large desktops */
+    .grid-two--cols {
+        grid-template-columns: 1fr 1fr; /* Two columns for desktop (form and image) */
+    }
+
+    .contact-content .grid-two-cols {
+        grid-template-columns: 1fr 1fr; /* Two columns for name and email within form */
+    }
+
+    .section-contact {
+        padding: 3rem; /* More padding on larger screens */
+    }
+}
+
+@media (max-width: 768px) { /* Tablets and smaller desktops */
+    .section-common--heading {
+        font-size: 2.2rem;
+    }
+
+    .section-common--subheading {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .section-contact {
+        padding: 1.5rem;
+    }
+
+    .contact-content .grid-two-cols {
+        gap: 1rem; /* Slightly smaller gap in form */
+    }
+
+    .contact-content input[type="text"],
+    .contact-content input[type="email"],
+    .contact-content textarea {
+        padding: 0.7rem 0.9rem;
+        font-size: 0.95rem;
+    }
+
+    .contact-btn {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+        width: 100%; /* Make button full width on smaller screens */
+        max-width: 300px; /* Optional: limit max width even if full width */
+        margin-left: auto;
+        margin-right: auto;
+        display: block; /* Ensure it respects max-width and margin auto */
+    }
+
+    .contact-image figure {
+        max-width: 400px; /* Smaller image on tablets */
+    }
+}
+
+@media (max-width: 576px) { /* Small mobile devices */
+    .section-common--heading {
+        font-size: 1.8rem;
+    }
+
+    .section-common--subheading {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-contact {
+        padding: 1rem;
+        border-radius: 10px;
+    }
+
+    .contact-content {
+        padding: 0.5rem;
+    }
+
+    .contact-content label {
+        font-size: 0.9rem;
+    }
+
+    .contact-content input,
+    .contact-content textarea {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .contact-btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .contact-image figure {
+        max-width: 300px; /* Even smaller image on mobile */
+    }
+}

@@ -11,3 +11,9 @@
 // How to do these things
 //    - go to AppLayout and use 'useNavigation'
 //    - create a Loading.jsx Page to show loading state
+
+const navigation = useNavigation()
+
+if(navigation.state === "loading"){
+    return <Loading/>
+}
