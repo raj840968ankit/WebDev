@@ -3,6 +3,7 @@
 //creating a new React-Router react project
 //install router via 'npm i react-router-dom'
 
+//first creates pages you want (home, about, contact, etc...) in 'pages' directory
 //check router creating in React-Router -> src -> App.jsx
 
 //after creating routes create a folder 'components' 

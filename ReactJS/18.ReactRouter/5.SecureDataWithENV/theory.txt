@@ -1,0 +1,4 @@
+//...................................Using Environment variable( .env file)....................................................
+//when using vite + react, always give variable name 'VITE_VARIABLE_NAME=value'
+//value should not contain any inverted comma ('', "")
+//use variable using import.meta.env.VITE_VARIABLE_NAME

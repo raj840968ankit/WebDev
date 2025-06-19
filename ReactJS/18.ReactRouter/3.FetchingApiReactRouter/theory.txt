@@ -1,0 +1,12 @@
+//............................................Fetching API in react router.....................................................
+// create a folder 'api' in React-Router -> src
+// inside 'api' folder create a file 'GetAPIData'
+// steps for fetching API without useEffect
+//    - use async await to fetch API with API link (api -> GetAPIData.jsx)
+//    - go to 'movie page' route in App.jsx and add an attribute loader with value api fetch function
+                {
+                    path: "/movie",
+                    element: <Movie />,
+                    loader : getMoviesData,
+                },
+//    - go to Movie.jsx page and use hook 'useLoaderData' to get Movies API data

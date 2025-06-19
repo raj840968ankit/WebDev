@@ -1,0 +1,174 @@
+/* Movie List Grid */
+.movie-list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 1.5rem; /* Space between cards */
+    list-style: none; /* Remove list item bullets */
+    padding: 0;
+    margin: 2rem auto; /* Center the grid */
+    max-width: 1200px; /* Max width for the grid container */
+}
+
+/* Card Container */
+.hero-container {
+    background-color: #fff;
+    border-radius: 12px; /* Rounded corners for the card */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    overflow: hidden; /* Ensures rounded corners apply to children */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+    display: flex;
+    flex-direction: column; /* Stack poster and info */
+    position: relative; /* For absolute positioning of ticket-container */
+}
+
+.hero-container:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); /* More prominent shadow on hover */
+}
+
+/* Main container for poster and ticket overlay */
+.main-container {
+    position: relative; /* For absolute positioning of ticket-container */
+    width: 100%;
+    /* Maintain aspect ratio using padding-top hack */
+    padding-top: 150%; /* 1.5 aspect ratio (e.g., 300px width / 450px height) */
+    overflow: hidden; /* Hide anything outside */
+}
+
+/* Poster Container */
+.poster-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the container, cropping if necessary */
+    display: block; /* Remove extra space below image */
+    transition: transform 0.3s ease; /* Smooth zoom on hover */
+}
+
+.hero-container:hover .poster {
+    transform: scale(1.05); /* Slight zoom effect on poster on hover */
+}
+
+/* Ticket Container (overlay) */
+.ticket-container {
+    position: absolute;
+    bottom: 0; /* Position at the bottom */
+    left: 0;
+    width: 100%;
+    height: 0; /* Initially hidden */
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent dark overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: height 0.3s ease, opacity 0.3s ease; /* Smooth transition for height and opacity */
+    opacity: 0; /* Initially transparent */
+    pointer-events: none; /* Allows clicks to pass through if not hovered */
+}
+
+.hero-container:hover .ticket-container {
+    height: 100px; /* Expand height on hover */
+    opacity: 1; /* Make visible on hover */
+    pointer-events: all; /* Enable clicks on hover */
+}
+
+.ticket_content {
+    /* Flexbox or block to center content if needed */
+}
+
+.ticket_buy-btn {
+    background: linear-gradient(to right, #4CAF50, #8BC34A); /* Green gradient button */
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px; /* Pill-shaped button */
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ticket_buy-btn:hover {
+    background: linear-gradient(to right, #5cb85c, #9ccc65); /* Slightly lighter green on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.ticket_buy-btn:active {
+    transform: translateY(0); /* Depress on click */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Movie Info (optional, added for better presentation) */
+.movie-info {
+    padding: 1rem;
+    text-align: center;
+}
+
+.movie-title {
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-weight: 700;
+}
+
+.movie-year {
+    font-size: 0.95rem;
+    color: #777;
+    margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .movie-list-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Slightly smaller cards on tablets */
+        gap: 1rem;
+    }
+
+    .hero-container {
+        border-radius: 10px;
+    }
+
+    .ticket-container {
+        height: 80px; /* Adjust overlay height for smaller screens */
+    }
+
+    .ticket_buy-btn {
+        padding: 0.7rem 1.2rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .movie-list-grid {
+        grid-template-columns: 1fr; /* Stack cards vertically on small mobile */
+        gap: 1.2rem;
+        max-width: 300px; /* Max width for single column */
+    }
+
+    .hero-container {
+        border-radius: 8px;
+    }
+
+    .ticket-container {
+        /* On mobile, consider making the button always visible or use a click event to toggle.
+           For this "normal responsive CSS", we'll keep the hover but make the overlay
+           slightly less tall to avoid covering too much of the poster. */
+        height: 70px;
+    }
+}
+
+/* For non-hover devices (e.g., touchscreens), you might want to adjust ticket-container behavior.
+   One common approach is to make it always visible or toggle on click.
+   For simplicity and adherence to "normal responsive CSS" for hover, we keep the hover effect.
+   A more advanced solution would involve JS for touch event handling.
+*/

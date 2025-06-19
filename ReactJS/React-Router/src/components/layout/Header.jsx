@@ -20,7 +20,7 @@ export const Header = () => {
                 {/* Project Title - Ankit */}
                 <div className="navbar-title-wrapper">
                     <NavLink to="#" className="navbar-title">
-                        Ankit
+                        DynamoFLix
                     </NavLink>
                 </div>
 

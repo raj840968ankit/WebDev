@@ -1,0 +1,8 @@
+//.........................................Handling Error Page..........................................................
+// create a 'ErrorPage.jsx' in 'pages' directory and create error page structure (React-Router -> src -> pages -> ErrorPage.jsx)
+// ways of handling error page -
+//    1. add errorElement : <ErrorPage/> attribute in router -> App.jsx
+//    2. use hook 'useRouterError()' (check usage in 'ErrorPage.jsx')
+
+// Suppose we are at error page so We need to give a button 'GO BACK'............
+//    - we have to use 'useNavigate' hook and a clickable button to use this (check usage in 'ErrorPage.jsx')

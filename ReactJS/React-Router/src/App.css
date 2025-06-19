@@ -192,3 +192,177 @@ body {
 .navbar-link-item:focus {
   text-decoration: underline;
 }
+
+/* Error Section Styling */
+.error-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full viewport height */
+    background-color: #f0f2f5; /* A soft background color */
+    padding: 1rem; /* Add some padding around the content */
+    box-sizing: border-box; /* Include padding in element's total width/height */
+}
+
+/* Container for text and image */
+#error-text {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 1rem; /* Rounded corners for the card */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    text-align: center; /* Center align all content inside */
+    max-width: 90%; /* Max width for content */
+    width: 600px; /* Desired max width */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally within the flex container */
+}
+
+/* Image Container */
+.error-image-container {
+    margin: 0 0 1.5rem 0; /* Remove default margin, add bottom margin */
+    padding: 0;
+    width: 100%;
+    max-width: 400px; /* Limit image size on larger screens */
+}
+
+/* Error Image Styling */
+.error-image {
+    max-width: 100%; /* Image will scale down to fit container */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Removes extra space below image */
+    margin: 0 auto; /* Center the image horizontally */
+    border-radius: 0.75rem; /* Slightly rounded corners for the image */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Subtle shadow on image */
+}
+
+/* Text Content Container */
+.text-content {
+    margin-top: 1rem; /* Spacing between image and text */
+}
+
+/* Paragraph A Styling */
+.message-a {
+    font-size: 1.5rem; /* Larger font for main message */
+    color: #333;
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+    font-weight: 600; /* Slightly bolder */
+}
+
+/* Paragraph B Styling */
+.message-b {
+    font-size: 1.1rem; /* Smaller font for secondary message */
+    color: #666;
+    margin-top: 0;
+    font-weight: 400;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    #error-text {
+        padding: 1.5rem;
+        max-width: 95%; /* Allow more width on tablets */
+    }
+
+    .error-image-container {
+        max-width: 300px; /* Smaller image on tablets */
+    }
+
+    .message-a {
+        font-size: 1.3rem; /* Adjust font size for tablets */
+    }
+
+    .message-b {
+        font-size: 1rem; /* Adjust font size for tablets */
+    }
+}
+
+@media (max-width: 480px) {
+    .error-section {
+        padding: 0.5rem; /* Less padding on very small screens */
+    }
+
+    #error-text {
+        padding: 1rem;
+        border-radius: 0.75rem; /* Slightly less rounded */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Lighter shadow */
+    }
+
+    .error-image-container {
+        max-width: 250px; /* Smaller image on mobile */
+        margin-bottom: 1rem; /* Reduce margin */
+    }
+
+    .message-a {
+        font-size: 1.1rem; /* Further adjust font size for mobile */
+        margin-bottom: 0.6rem;
+    }
+
+    .message-b {
+        font-size: 0.9rem; /* Further adjust font size for mobile */
+    }
+}
+
+/* Styling for generic error page */
+.generic-error-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    padding: 1rem;
+    text-align: center;
+}
+
+.generic-error-title {
+    font-size: 2rem;
+    color: #cc0000;
+    margin-bottom: 1rem;
+}
+
+.generic-error-details {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+/* loading section  */
+
+.loader-section {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  --r1: 154%;
+  --r2: 68.5%;
+  width: 60px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+      var(--r1) var(--r2) at top,
+      #0000 79.5%,
+      #269af2 80%
+    ),
+    radial-gradient(var(--r1) var(--r2) at bottom, #269af2 79.5%, #0000 80%),
+    radial-gradient(var(--r1) var(--r2) at top, #0000 79.5%, #269af2 80%), #ccc;
+  background-size: 50.5% 220%;
+  background-position: -100% 0%, 0% 0%, 100% 0%;
+  background-repeat: no-repeat;
+  animation: l9 2s infinite linear;
+}
+@keyframes l9 {
+  33% {
+    background-position: 0% 33%, 100% 33%, 200% 33%;
+  }
+  66% {
+    background-position: -100% 66%, 0% 66%, 100% 66%;
+  }
+  100% {
+    background-position: 0% 100%, 100% 100%, 200% 100%;
+  }
+}

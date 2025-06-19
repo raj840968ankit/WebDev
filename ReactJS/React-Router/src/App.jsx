@@ -11,6 +11,8 @@ import { Movie } from "./pages/Movie.jsx";
 import { Contact } from "./pages/Contact.jsx";
 import { About } from "./pages/About.jsx";
 import { AppLayout } from "./components/layout/AppLayout.jsx";
+import { ErrorPage } from "./pages/ErrorPage.jsx";
+import { getMoviesData } from "./api/GetAPIData.jsx";
 
 export const App = () => {
   //! old method
@@ -50,6 +52,7 @@ export const App = () => {
     {
       path: "/",
       element: <AppLayout />,
+      errorElement : <ErrorPage/>,    //!Here i have handled error routes
       children: [
         {
           path: "/",
@@ -58,6 +61,7 @@ export const App = () => {
         {
           path: "/movie",
           element: <Movie />,
+          loader : getMoviesData,
         },
         {
           path: "/contact",

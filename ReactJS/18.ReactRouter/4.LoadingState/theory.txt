@@ -1,0 +1,13 @@
+//..........................................Loading State...........................................................
+//show loading state until i get the data on my page
+
+// use 'useNavigation' hook in our 'AppLayout.jsx'
+// we will use 'state' property of useNavigation hook
+// state can be :-
+//     - idle (means everything loaded)
+//     - submitting (for form submission delay)
+//     - loading (loading data to page)
+
+// How to do these things
+//    - go to AppLayout and use 'useNavigation'
+//    - create a Loading.jsx Page to show loading state
