@@ -1,5 +1,7 @@
+apikey
 axios
 Axios
 imdb
+jsonplaceholder
 vite
 VITE

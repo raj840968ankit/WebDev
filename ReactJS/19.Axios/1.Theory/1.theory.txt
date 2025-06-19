@@ -5,3 +5,59 @@
 //.....................................Usage of axios.................................................................
 //create a new react project React-Axios
 //after creating project install axios via 'npm i axios'
+
+//check usage in (React-Axios -> src -> components -> Movie.jsx)
+//   1st Approach......................................
+    
+    import { useEffect } from "react"
+    // eslint-disable-next-line no-unused-vars
+    import axios from 'axios'
+    import { useState } from "react"
+    import { getMovie } from "../services/GetServices"
+
+    export const Movie = () => {
+        const [data, setData] = useState([])
+        const [loading, setLoading] = useState(true)
+
+
+        const getMoviesData = async () => {
+            try {
+                //! Normal axios get method
+                // const res = await axios.get('http://www.omdbapi.com/?s=marvel&apikey=1adba144&type=movie')
+
+                //! created a dedicated GetServices.jsx in services folder
+                const res = await getMovie()
+                
+                console.log(res);
+                setData(res.data.Search)
+                setLoading(false)
+            } catch (error) {
+                console.error("Error Message : ",error.message);
+                console.error("Error Status : ",error.response.message);
+                console.error("Error Data : ",error.response.data);
+            }
+        }
+        useEffect(() => {
+            getMoviesData()
+        }, [])
+
+        if(!loading){
+            console.log(data);
+            
+        }
+        return <h1>Hello Axios</h1>
+    }
+
+// 2nd Approach......................................
+// create a folder services -> GetServices.jsx
+
+    import axios from 'axios'
+
+    const api = axios.create({
+        baseURL : 'http://www.omdbapi.com/'
+    })
+
+    //!creating a get req function
+    export const getMovie = async () => {
+        return api.get('?s=marvel&apikey=1adba144&type=movie')
+    }
