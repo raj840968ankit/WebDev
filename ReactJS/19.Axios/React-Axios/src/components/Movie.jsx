@@ -40,6 +40,7 @@ export const Movie = () => {
     }
     useEffect(() => {
         deleteApiData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 
