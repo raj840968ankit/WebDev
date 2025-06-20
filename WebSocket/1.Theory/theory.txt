@@ -26,5 +26,82 @@
 // create app.js in server 
 // create a express server -> create a http server -> import Server from socket.io and make an instance of io circuit -> create io circuit
 
+    import express from 'express'
+    import { Server } from 'socket.io'
+    import { createServer } from 'http'
+    import cors from 'cors'
+
+    const PORT = 3000
+
+    const app = express()
+
+    const server = createServer(app)   //! created server of http
+
+    const io = new Server(server, {    //! created io instance and connecting to frontend io
+        cors: {
+            origin: 'http://localhost:5173',    //frontend URL
+            methods: ['GET', 'POST', 'PUT', 'DELETE'],
+            credentials: true
+        }
+    })
+
+    //!.... VVI (for normal frontend and backend connection)
+    app.use(cors({
+        origin: 'http://localhost:5173',    //frontend URL
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        credentials: true
+    }));
+
+    app.get('/', (req, res) => {
+        res.send(`<h1>hello world</h1>`)
+    })
+
+    //!creating io circuit here
+    io.on('connection', (socket) => {
+        console.log('user connected');
+        console.log("id :",socket.id);
+        
+    })
+
+
+
+    server.listen(PORT, () => {
+        console.log(`Server is listening at http://localhost:${PORT}`);
+    })
+
 //...............client.................
 // remove react initial setup( css and App.jsx content)
+// create a io socket in frontend using import io and backend url
+
+// go to backend and connect frontend socket using io circuit
+
+// ....frontend.........
+    import {io} from 'socket.io-client'
+    export const App = () => {
+
+    const socket = io('http://localhost:3000');   //!creating socket connection with backend
+
+    return (
+        <>
+        <h1>Hello React</h1>
+        </>
+    )
+    }
+
+// ....connection in backend....
+    const io = new Server(server, {    //! created io instance and connecting to frontend io
+        cors: {
+            origin: 'http://localhost:5173',    //frontend URL
+            methods: ['GET', 'POST', 'PUT', 'DELETE'],
+            credentials: true
+        }
+    })
+
+
+//Go to App.jsx and listen to event connect in useEffect
+    //! listen after establishing connection
+    useEffect(() => {
+        socket.on('connect', () => {
+        console.log('connected', socket.id);
+        })
+    }, [])
