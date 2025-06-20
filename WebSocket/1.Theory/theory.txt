@@ -1,0 +1,17 @@
+//...............................................Web Socket.................................................................
+//Some important points -
+//   - socket                  -> a particular client
+//   - io                      -> all the clients in an io circuit
+//   - emit                    -> trigger an event
+//   - on                      -> listen to an event
+//   - socket.emit()           -> trigger event to a client
+//   - io.emit()               -> trigger event to all the client in entire io circuit
+//   - socket.broadcast.emit() -> trigger event to all the clients except current client
+//   - socket.to().emit()      -> send message to particular room
+//   - socket.join()           -> join a group of particular sockets in a room
+
+//..........................................Learning Socket..............................................................
+// create two directory 'client' and 'server' in '2.LearningSocket' 
+
+//  server -> 'npm init -y', 'npm i express socket.io', 'npm i cors' (for connection of backend and frontend)
+//  client -> 'npm create vite@latest'(project name -> . ('.' for same directory) -> react -> javascript + swc) 
