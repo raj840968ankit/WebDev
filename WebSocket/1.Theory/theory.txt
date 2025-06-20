@@ -13,6 +13,18 @@
 //..........................................Learning Socket..............................................................
 // create two directory 'client' and 'server' in '2.LearningSocket' 
 
+//..............................Setup for web socket.................................
+
 //  server -> 'npm init -y', 'npm i express socket.io', 'npm i cors' (for connection of backend and frontend)
 //  client -> 'npm create vite@latest'(project name -> . ('.' for same directory) -> react -> javascript + swc) 
 //                  - go to 'material ui website' and check installation and install via 'npm install @mui/material @emotion/react @emotion/styled'
+//                  - 'npm i socket.io-client'
+
+
+//.............................Start the journey....................................
+// ...............server................
+// create app.js in server 
+// create a express server -> create a http server -> import Server from socket.io and make an instance of io circuit -> create io circuit
+
+//...............client.................
+// remove react initial setup( css and App.jsx content)
