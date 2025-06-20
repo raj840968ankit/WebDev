@@ -1,0 +1,2 @@
+// Create a components directory 
+// Create a Navbar.jsx and HeroSection.jsx in components
