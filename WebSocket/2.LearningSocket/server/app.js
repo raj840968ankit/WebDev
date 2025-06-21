@@ -31,6 +31,11 @@ app.get('/', (req, res) => {
 })
 
 
+//! middleware for socket if user is authenticated then only user can use socket
+// io.use((socket, next) => {
+//     if(socket.user) next();
+// })
+
 
 //!creating io circuit here so that multiple client can connect
 io.on('connection', (socket) => {
@@ -49,9 +54,21 @@ io.on('connection', (socket) => {
         console.log(`User disconnected : ${socket.id}`);
     })
 
-    //! listening message from client through UI
-    socket.on('message', (message) => {
-        console.log(message);
+    //! listening message from client through input field
+    // socket.on('message', (message) => {
+    //     console.log(message);
+    //     io.emit('client-receive-message', message);   //!sending received message to all client
+    // })
+
+    socket.on('message-room', ({message, room}) => {
+        console.log({message,room});
+        socket.to(room).emit('message-room-client', message)
+    })
+    
+    //!joining a room
+    socket.on('join-room', (roomName) => {
+        socket.join(roomName)
+        console.log(`user joined room ${roomName}`);
     })
 })
 
