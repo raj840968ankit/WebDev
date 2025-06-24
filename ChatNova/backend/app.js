@@ -1,8 +1,9 @@
 import express from 'express'
 import 'dotenv/config'
-import { chatNovaRouter } from './routes/chatnova.routes.js'
+import { userRoutes } from './routes/user.routes.js'
 import morgan from 'morgan'
 import { connect } from './config/db.js'
+import cookieParser from 'cookie-parser'
 
 await connect()
 
@@ -15,6 +16,9 @@ app.use(express.json())
 
 app.use(express.urlencoded({extended : true}))  //parses post request body
 
-app.use(chatNovaRouter)
+app.use(cookieParser())  //parses cookies from the request
+
+
+app.use('/users', userRoutes)  //user routes
 
 export {app};  //exported to use socket.io in server.js

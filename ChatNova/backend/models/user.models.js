@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import argon2 from 'argon2'
 import { env } from "../config/env.js";
+import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema({
     email : {
@@ -24,8 +25,12 @@ userSchema.methods.isValidPassword = async function(password) {
     return await argon2.verify(this.password, password)
 }
 
-userSchema.methods.generateJWT = () => {
-    return jwt.sign({email : this.email}, env.JWT_SECRET)
+userSchema.methods.generateJWT = function() {
+    return jwt.sign(
+        { _id: this._id, email: this.email },
+        env.JWT_SECRET,
+        { expiresIn: '7d' }
+    );
 }
 
 const User = mongoose.model('user', userSchema)
