@@ -5,7 +5,7 @@ import morgan from 'morgan'
 import { connect } from './config/db.js'
 import cookieParser from 'cookie-parser'
 
-await connect()
+await connect();
 
 const app = express()
 
@@ -20,5 +20,9 @@ app.use(cookieParser())  //parses cookies from the request
 
 
 app.use('/users', userRoutes)  //user routes
+
+app.get('/' , (req, res) => {
+   return res.send('hello')
+})
 
 export {app};  //exported to use socket.io in server.js
