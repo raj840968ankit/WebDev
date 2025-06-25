@@ -1,31 +1,41 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../config/axios.js";
+import { UserContext } from "../context/user.context.jsx"; // Import the UserContext
+
 export const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const { setUser } = useContext(UserContext); // Access setUser from context
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        axios.post("/users/login", { email, password })
-            .then((response) => {
-                console.log(response.data);
-                navigate("/"); // Redirect to home page on successful login
-            })
-            .catch((error) => {
-                // Handle login error
-                console.error("Login failed:", error);
-            });
+        try {
+            const response = await axios.post( "/users/login",{ email, password, });
+            console.log("✅ Login Success:", response.data);
+
+            setUser(response.data.user); // Set user in context
+
+            localStorage.setItem("token", response.data.token); // Store token in localStorage
+
+            navigate("/"); // Redirect to home page on successful login
+        } catch (error) {
+            console.error("❌ Login failed:", error);
+        }
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
             <div className="w-full max-w-md bg-gray-800 rounded-2xl shadow-2xl p-10 border border-gray-700">
-                <h2 className="text-4xl font-bold text-white mb-8 text-center">Sign In</h2>
+                <h2 className="text-4xl font-bold text-white mb-8 text-center">
+                    Sign In
+                </h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block text-gray-300 mb-2" htmlFor="email">Email</label>
+                        <label className="block text-gray-300 mb-2" htmlFor="email">
+                            Email
+                        </label>
                         <input
                             id="email"
                             type="email"
@@ -37,7 +47,9 @@ export const Login = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-300 mb-2" htmlFor="password">Password</label>
+                        <label className="block text-gray-300 mb-2" htmlFor="password">
+                            Password
+                        </label>
                         <input
                             id="password"
                             type="password"

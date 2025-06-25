@@ -1,23 +1,33 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../config/axios";
+import { useContext } from "react";
+import { UserContext } from "../context/user.context";
 
 export const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const { setUser } = useContext(UserContext); // Access setUser from context
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        axios.post("/users/register", { email, password })
-            .then((response) => {
-                console.log(response.data);
-                navigate("/"); // Redirect to home page on successful registration
-            })
-            .catch((error) => {
-                // Handle registration error
-                console.error("Registration failed:", error);
+        try {
+            const response = await axios.post('/users/register', {
+                email,
+                password,
             });
+            console.log('✅ Registration Success:', response.data);
+
+            setUser(response.data.user); // Set user in context  
+
+            localStorage.setItem('token', response.data.token); // Store token in localStorage   
+            
+            navigate('/'); // Redirect to home page on successful registration
+        } catch (error) {
+            console.error('❌ Registration failed:', error);
+        }
     };
 
     return (

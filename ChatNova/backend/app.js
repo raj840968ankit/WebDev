@@ -4,10 +4,14 @@ import { userRoutes } from './routes/user.routes.js'
 import morgan from 'morgan'
 import { connect } from './config/db.js'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import { projectRouter } from './routes/project.routes.js'
 
 await connect();
 
 const app = express()
+
+app.use(cors())
 
 app.use(morgan('dev'))  //!logs every http request
 
@@ -20,6 +24,8 @@ app.use(cookieParser())  //parses cookies from the request
 
 
 app.use('/users', userRoutes)  //user routes
+
+app.use('/projects', projectRouter)  //project routes
 
 app.get('/' , (req, res) => {
    return res.send('hello')

@@ -14,6 +14,10 @@ export const createUserController = async (req, res) => {
         const user = await createUser(req.body)
 
         const token = user.generateJWT()  //generate JWT token for the user
+
+        delete user._doc.password;  //remove password from user object before sending it to the client
+        delete user._doc.__v;  //remove __v field from user object before sending it to the client
+        
         res.status(201).send({user, token})
 
     } catch (error) {
@@ -42,6 +46,10 @@ export const loginUserController = async (req, res) => {
         }
 
         const token = user.generateJWT()  //generate JWT token for the user
+
+        delete user._doc.password;  //remove password from user object before sending it to the client
+        delete user._doc.__v;  //remove __v field from user object before sending it to the client
+
         res.status(200).json({user, token})
 
     } catch (error) {
