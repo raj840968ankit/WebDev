@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import projectModel from '../models/project.model.js';
 
 
@@ -11,4 +12,67 @@ export const createProjectService = async ({name, userId}) => {
     } catch (error) {
         throw new Error(error.message);
     }
+}
+
+export const getAllProjectByUserId = async (userId) => {
+    if(!userId) {
+        throw new Error('User ID is required');
+    }
+    try {
+        const projects = await projectModel.find({ users: userId });
+        return projects;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+export const addUsersToProject = async ({projectId, users, userId}) => {
+    // Validate required parameters
+    if(!projectId) {
+        throw new Error('Project ID is required');
+    }
+
+    if(!mongoose.Types.ObjectId.isValid(projectId)) {
+        throw new Error('Invalid Project ID');
+    }
+
+    if(!users){
+        throw new Error('Users are required');
+    }
+
+    // Ensure users is an array of valid ObjectIds
+    if(!Array.isArray(users) || users.some(userId => !mongoose.Types.ObjectId.isValid(userId))) {
+        throw new Error('invalid userId in users array');
+    }
+
+    if(!userId) {
+        throw new Error('User ID is required');
+    }
+
+    if(!mongoose.Types.ObjectId.isValid(userId)) {
+        throw new Error('Invalid User ID');
+    }
+
+    // Check if the requesting user is part of the project
+    const project = await projectModel.findOne({
+        __id: projectId,
+        users: userId
+    });
+
+    if(!project) {
+        throw new Error('Project not found or user is not part of the project');
+    }
+
+    // Add new users to the project using $addToSet to avoid duplicates
+    const updatedProject = await projectModel.findOneAndUpdate(
+        { _id: projectId },
+        { $addToSet: { users: { $each: users } } },
+        { new: true }
+    );
+
+    if(!updatedProject) {
+        throw new Error('Failed to add users to project');
+    }
+
+    return updatedProject;
 }
