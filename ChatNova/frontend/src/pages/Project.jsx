@@ -41,7 +41,7 @@ export const Project = () => {
                     </header>
 
                     <div className="users flex flex-col gap-2">
-                        <div className="user flex gap-2 items-center cursor-pointer">
+                        <div className="user flex gap-2 items-center cursor-pointer hover">
                             <div className="aspect-square rounded-full w-fit h-fit flex items-center justify-center p-5 text-white bg-slate-600">
                                 <i class="ri-user-3-fill absolute"></i>
                             </div>
