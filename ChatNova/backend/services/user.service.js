@@ -13,4 +13,8 @@ export const createUser = async ({email, password}) => {
     return user;
 }
 
+export const getAllUsers = async ({userId}) => {
+    const users = await User.find({_id : { $ne: userId }});  // Exclude the requesting user;
+    return users;
+}
 

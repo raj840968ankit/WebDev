@@ -55,7 +55,7 @@ export const addUsersToProject = async ({projectId, users, userId}) => {
 
     // Check if the requesting user is part of the project
     const project = await projectModel.findOne({
-        __id: projectId,
+        _id: projectId,
         users: userId
     });
 
@@ -66,7 +66,7 @@ export const addUsersToProject = async ({projectId, users, userId}) => {
     // Add new users to the project using $addToSet to avoid duplicates
     const updatedProject = await projectModel.findOneAndUpdate(
         { _id: projectId },
-        { $addToSet: { users: { $each: users } } },
+        { $addToSet: { users: { $each: users.map(id => new mongoose.Types.ObjectId(id)) } } }, 
         { new: true }
     );
 
@@ -75,4 +75,24 @@ export const addUsersToProject = async ({projectId, users, userId}) => {
     }
 
     return updatedProject;
+}
+
+export const getProjectById = async (projectId) => {
+    if(!projectId) {
+        throw new Error('Project ID is required');
+    }
+
+    if(!mongoose.Types.ObjectId.isValid(projectId)) {
+        throw new Error('Invalid Project ID');
+    }
+
+    try {
+        const project = await projectModel.findOne({ _id: projectId }).populate('users');
+        if(!project) {
+            throw new Error('Project not found');
+        }
+        return project;
+    } catch (error) {
+        throw new Error(error.message);
+    }
 }

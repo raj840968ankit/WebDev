@@ -19,4 +19,6 @@ router.put('/add-user',
     projectController.addUserToProjectController
 ); //! add user to project
 
+router.get('/get-project/:projectId',authUser, projectController.getProjectByIdController); //! get project by id
+
 export const projectRouter = router;

@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator";
 import { User } from '../models/user.models.js';
-import { createProjectService, getAllProjectByUserId } from "../services/project.service.js";
+import { addUsersToProject, createProjectService, getAllProjectByUserId, getProjectById } from "../services/project.service.js";
 
 export const createProjectController = async (req, res) => {
     try {
@@ -60,6 +60,23 @@ export const addUserToProjectController = async (req, res) => {
         return res.status(200).json(updatedProject);
     } catch (error) {
         console.error("Error adding users to project:", error);
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+export const getProjectByIdController = async (req, res) => {
+    try {
+        const { projectId } = req.params;
+
+        const project = await getProjectById(projectId);
+
+        if (!project) {
+            return res.status(404).json({ error: "Project not found" });
+        }
+
+        return res.status(200).json(project);
+    } catch (error) {
+        console.error("Error fetching project by ID:", error);
         return res.status(500).json({ error: error.message });
     }
 }

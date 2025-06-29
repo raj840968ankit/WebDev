@@ -19,5 +19,7 @@ router.get('/profile', authUser, userController.getUserProfileController)  //get
 
 router.get('/logout', authUser, userController.logoutUserController)  //logout user
 
+router.get('/all', authUser, userController.getAllUsersController)  //get all users
+
 export const userRoutes = router
 
