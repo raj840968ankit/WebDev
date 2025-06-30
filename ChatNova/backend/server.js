@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import {env} from './config/env.js'
 import mongoose from 'mongoose'
 import projectModel from './models/project.model.js'
+import { generateResult } from './services/gemini.service.js'
 
 const PORT = process.env.PORT || 3001
 
@@ -56,8 +57,22 @@ io.on('connection', (socket) => {
 
     socket.join(socket.roomId);  // Join the user to the project room
 
-    socket.on('project-message', ({message, sender}) => {
+    socket.on('project-message', async ({message, sender}) => {
         console.log({message, sender});
+
+        const aiIsPresentInMessage = message.includes('@ai')
+
+        if(aiIsPresentInMessage){
+            const prompt = message.replace('@ai', '')
+
+            const aiResult = await generateResult(prompt)  //!use package 'markdown-to-jsx' to convert markdown file to jsx given by AI in client
+
+            socket.broadcast.to(socket.roomId).emit('server-message', {message, sender});
+
+            io.to(socket.roomId).emit('server-ai-message', {aiResult, sender : 'AI'})
+
+            return;
+        }
         
         socket.broadcast.to(socket.roomId).emit('server-message', {message, sender});  // Broadcast the message to all users in the project room
     });

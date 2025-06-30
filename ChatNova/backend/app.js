@@ -6,6 +6,7 @@ import { connect } from './config/db.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { projectRouter } from './routes/project.routes.js'
+import { geminiRouter } from './routes/gemini.routes.js'
 
 await connect();
 
@@ -26,6 +27,8 @@ app.use(cookieParser())  //parses cookies from the request
 app.use('/users', userRoutes)  //user routes
 
 app.use('/projects', projectRouter)  //project routes
+
+app.use('/ai', geminiRouter)
 
 app.get('/' , (req, res) => {
    return res.send('hello')

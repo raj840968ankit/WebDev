@@ -4,6 +4,23 @@ import axios from '../config/axios.js'
 import { initializeSocket, receiveMessage, sendMessage } from "../config/socket.js";
 import { useContext } from "react";
 import { UserContext } from "../context/user.context.jsx";
+import Markdown from 'markdown-to-jsx'
+
+function SyntaxHighlightedCode(props) {
+    const ref = useRef(null);
+
+    useEffect(() => {
+        if (ref.current && props.className?.includes("lang-") && window.hljs) {
+            window.hljs.highlightElement(ref.current);
+
+            // hljs won't reprocess the element unless this attribute is removed
+            ref.current.removeAttribute("data-highlighted");
+        }
+    }, [props.className, props.children]);
+
+    return <code {...props} ref={ref} />;
+}
+
 
 export const Project = () => {
     const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
@@ -11,12 +28,12 @@ export const Project = () => {
     const [selectedUserIds, setSelectedUserIds] = useState([]);
     const [users, setUsers] = useState([]);
     const [usersWithProjects, setUsersWithProjects] = useState([]); // State to hold users with projects
-    const [message, setMessage] = useState(""); // State to hold messages
-    const { user } = useContext(UserContext);  //! using user context to get user data
-    const messageBox = useRef()
+    const [message, setMessage] = useState("");
+    const [messages, setMessages] = useState([]); // <-- Array for all messages
+    const { user } = useContext(UserContext);
+    const messageBox = useRef();
 
-    const location = useLocation();  //! using useLocation to get data passed from navigate in home page
-
+    const location = useLocation();
 
     useEffect(() => {
         // Fetch users from the backend
@@ -31,10 +48,14 @@ export const Project = () => {
 
         fetchUsers();
 
-        initializeSocket(location.state.project._id)  //! creating socket connection when component mounts
+        initializeSocket(location.state.project._id);
 
-        receiveMessage('server-message', ({message, sender}) => {
-            appendIncomingMessage({message, sender})
+        receiveMessage('server-message', ({ message, sender }) => {
+            appendIncomingMessage({ message, sender: sender.email });
+        });
+
+        receiveMessage('server-ai-message', ({ aiResult, sender }) => {
+            appendAIMessage({ message: aiResult, sender });
         });
     }, []);
 
@@ -51,14 +72,18 @@ export const Project = () => {
         fetchUsersWithProjects();
     }, [location.state.project._id]);
 
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     function send() {
+        if (!message.trim()) return;
         sendMessage('project-message', {
             message,
-            sender: user,  //! using user context to get user id
+            sender: user,
         });
-        appendOutgoingMessage({message, user})
-        setMessage("");  // Clear the message input after sending
+        appendOutgoingMessage({ message, user });
+        setMessage("");
     }
 
     // Handler for selecting/deselecting a user from modal
@@ -75,9 +100,8 @@ export const Project = () => {
         if (selectedUserIds.length === 0) return;
 
         const addCollaborators = async () => {
-            try {            
-                // eslint-disable-next-line no-unused-vars
-                const response = await axios.put('projects/add-user', {
+            try {
+                await axios.put('projects/add-user', {
                     projectId: location.state.project._id,
                     users: selectedUserIds
                 });
@@ -100,46 +124,40 @@ export const Project = () => {
         }
     }
 
-    // Modified appendIncomingMessage to scroll after appending
-    function appendIncomingMessage({message, sender}) {
-        if (!messageBox.current) return;
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message', 'max-w-56', 'flex', 'flex-col', 'p-2', 'bg-slate-50', 'w-fit', 'rounded-md');
-        
-        const small = document.createElement('small');
-        small.classList.add('text-xs', 'opacity-65');
-        small.textContent = sender.email || 'Unknown';
-        
-        const p = document.createElement('p');
-        p.classList.add('text-sm');
-        p.textContent = message;
-        
-        messageDiv.appendChild(small);
-        messageDiv.appendChild(p);
-        messageBox.current.appendChild(messageDiv);
-
-        scrollToBottom();
+    // Append incoming user message
+    function appendIncomingMessage({ message, sender }) {
+        setMessages((prev) => [
+            ...prev,
+            {
+                type: "incoming",
+                sender: sender || "Unknown",
+                message,
+            },
+        ]);
     }
 
-    // Modified appendOutgoingMessage to scroll after appending
-    function appendOutgoingMessage({message, user}) {
-        if (!messageBox.current) return;
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('ml-auto', 'message', 'max-w-56', 'flex', 'flex-col', 'p-2', 'bg-slate-50', 'w-fit', 'rounded-md');
+    // Append outgoing user message
+    function appendOutgoingMessage({ message, user }) {
+        setMessages((prev) => [
+            ...prev,
+            {
+                type: "outgoing",
+                sender: user.email || "You",
+                message,
+            },
+        ]);
+    }
 
-        const small = document.createElement('small');
-        small.classList.add('text-xs', 'opacity-65');
-        small.textContent = user.email || 'You';
-
-        const p = document.createElement('p');
-        p.classList.add('text-sm');
-        p.textContent = message;
-
-        messageDiv.appendChild(small);
-        messageDiv.appendChild(p);
-        messageBox.current.appendChild(messageDiv);
-
-        scrollToBottom();
+    // Append AI message (rendered as markdown)
+    function appendAIMessage({ message, sender }) {
+        setMessages((prev) => [
+            ...prev,
+            {
+                type: "ai",
+                sender: sender || "AI",
+                message,
+            },
+        ]);
     }
 
     return (
@@ -168,7 +186,58 @@ export const Project = () => {
                             scrollbarWidth: "none"
                         }}
                     >
-                        {/* Messages will be appended here */}
+                        {/* Render messages from state */}
+                        {messages.map((msg, idx) => {
+                            if (msg.type === "incoming") {
+                                return (
+                                    <div key={idx} className="message max-w-56 flex flex-col p-2 bg-slate-50 w-fit rounded-md">
+                                        <small className="text-xs opacity-65">{msg.sender}</small>
+                                        <p className="text-sm">{msg.message}</p>
+                                    </div>
+                                );
+                            }
+                            if (msg.type === "outgoing") {
+                                return (
+                                    <div key={idx} className="ml-auto message max-w-56 flex flex-col p-2 bg-slate-50 w-fit rounded-md">
+                                        <small className="text-xs opacity-65">{msg.sender}</small>
+                                        <p className="text-sm">{msg.message}</p>
+                                    </div>
+                                );
+                            }
+                            if (msg.type === "ai") {
+                                return (
+                                    <div
+                                        key={idx}
+                                        className="message max-w-80 flex flex-col p-2 w-fit rounded-md border border-blue-200"
+                                        style={{ backgroundColor: "#020617" }} // slate-950
+                                    >
+                                        <small className="text-xs opacity-65 text-white">{msg.sender}</small>
+                                        <div
+                                            className="text-sm markdown-body"
+                                            style={{
+                                                maxWidth: "20rem",
+                                                overflowX: "auto",
+                                                overflowY: "visible",
+                                                color: "white"
+                                            }}
+                                        >
+                                            <Markdown
+                                                options={{
+                                                    overrides: {
+                                                        code: {
+                                                            component: SyntaxHighlightedCode
+                                                        }
+                                                    }
+                                                }}
+                                            >
+                                                {msg.message}
+                                            </Markdown>
+                                        </div>
+                                    </div>
+                                );
+                            }
+                            return null;
+                        })}
                     </div>
 
                     <div className="inputField w-full flex border-t-1 bg-slate-200">
