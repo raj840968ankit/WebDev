@@ -133,7 +133,7 @@ export const Project = () => {
     }
 
     return (
-        <main className="h-screen w-screen flex">
+        <main className="h-screen w-screen flex overflow-hidden">
             <section className="flex flex-col left h-full min-w-96 bg-slate-300 relative">
                 <header className="flex justify-between items-center p-2 px-4 w-full bg-slate-100">
                     <button className="flex gap-2" onClick={() => setIsModalOpen(true)}>
@@ -149,9 +149,16 @@ export const Project = () => {
                     </button>
                 </header>
 
-                <div className="message-area flex-grow flex flex-col">
-                    <div ref={messageBox} className="message-box p-1 flex-grow flex flex-col gap-1 overflow-auto mah-h-full">
-        
+                <div className="message-area flex-grow flex flex-col min-h-0">
+                    <div
+                        ref={messageBox}
+                        className="message-box p-1 flex-grow flex flex-col gap-1 overflow-y-auto scrollbar-hide min-h-0"
+                        style={{
+                            msOverflowStyle: "none",
+                            scrollbarWidth: "none"
+                        }}
+                    >
+                        {/* Messages will be appended here */}
                     </div>
 
                     <div className="inputField w-full flex border-t-1 bg-slate-200">
@@ -185,7 +192,7 @@ export const Project = () => {
 
                     <div className="users flex flex-col gap-2">
                         {
-                            usersWithProjects && usersWithProjects.map(({email}) => (
+                            usersWithProjects && usersWithProjects.map(({ email }) => (
                                 <div key={email} className="user flex items-center gap-2 p-2 px-3 bg-slate-100 rounded-md">
                                     <div className="w-10 h-10 rounded-full bg-slate-400 flex items-center justify-center text-white font-bold">
                                         {email[0]}
@@ -241,6 +248,11 @@ export const Project = () => {
                     </div>
                 )}
             </section>
+            <style>{`
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+            `}</style>
         </main>
     );
 };
