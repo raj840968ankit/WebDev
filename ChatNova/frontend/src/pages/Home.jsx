@@ -1,48 +1,51 @@
-import { useContext } from 'react';
-import { UserContext } from '../context/user.context.jsx'; // Import the UserContext
-import { useState } from 'react';
-import axios from '../config/axios.js'; // Import axios instance
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { useContext } from "react";
+import { UserContext } from "../context/user.context.jsx"; // Import the UserContext
+import { useState } from "react";
+import axios from "../config/axios.js"; // Import axios instance
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 
 export const Home = () => {
+  // eslint-disable-next-line no-unused-vars
   const { user } = useContext(UserContext); // Access user from context
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [projectName, setProjectName] = useState('');
+  const [projectName, setProjectName] = useState("");
   const [projects, setProjects] = useState([]); // State to hold projects
 
   const navigate = useNavigate();
 
-  const createProjectHandler = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await axios.post('/projects/create', {
-        name: projectName,
-      });
-      console.log(response.data); // Log the created project data
-      setProjectName(''); // Clear the input field
-      setIsModalOpen(false); // Close the modal
-      // Optionally, you can refresh the project list or update the UI to show the new project
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get('/projects/all');
-        setProjects(response.data); // Set the projects state with the fetched data
+        const response = await axios.get("/projects/all");
+        setProjects(response.data);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchProjects(); // Fetch projects when the component mounts
-  }, [])
+    fetchProjects();
+  }, []);
+
+  // After creating a project, fetch projects again to update the list
+  const createProjectHandler = async (event) => {
+    event.preventDefault();
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axios.post("/projects/create", {
+        name: projectName,
+      });
+      setProjectName("");
+      setIsModalOpen(false);
+      
+      await axios.get("/projects/all").then((res) => setProjects(res.data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-        <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 font-inter">
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 font-inter">
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-extrabold text-gray-800 mb-8 text-center drop-shadow-sm">
           Your Projects
@@ -82,7 +85,9 @@ export const Home = () => {
                          transform hover:-translate-y-1 cursor-pointer flex flex-col justify-between"
               onClick={() => navigate(`/project`, { state: { project } })}
             >
-              <h3 className="text-xl font-bold text-gray-800 mb-3 truncate">{project.name}</h3>
+              <h3 className="text-xl font-bold text-gray-800 mb-3 truncate">
+                {project.name}
+              </h3>
               <div className="flex items-center justify-center bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-sm font-medium self-end">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -108,9 +113,14 @@ export const Home = () => {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50 animate-fade-in">
           <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md transform scale-95 animate-scale-in">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Create New Project</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+              Create New Project
+            </h2>
             <form onSubmit={createProjectHandler}>
-              <label htmlFor="project" className="block mb-2 text-md font-medium text-gray-700">
+              <label
+                htmlFor="project"
+                className="block mb-2 text-md font-medium text-gray-700"
+              >
                 Project Name
               </label>
               <input
@@ -167,4 +177,4 @@ export const Home = () => {
       `}</style>
     </main>
   );
-}
+};
