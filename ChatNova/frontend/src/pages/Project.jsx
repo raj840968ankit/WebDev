@@ -93,10 +93,15 @@ export const Project = () => {
         setIsModalOpen(false);
     };
 
-    // Appends an incoming message to the message box (for demonstration, not used in rendering)
-    function appendIncomingMessage({message, sender}) {
+    // Scroll to the bottom of the message box when a new message is added
+    function scrollToBottom() {
+        if (messageBox.current) {
+            messageBox.current.scrollTop = messageBox.current.scrollHeight;
+        }
+    }
 
-        
+    // Modified appendIncomingMessage to scroll after appending
+    function appendIncomingMessage({message, sender}) {
         if (!messageBox.current) return;
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message', 'max-w-56', 'flex', 'flex-col', 'p-2', 'bg-slate-50', 'w-fit', 'rounded-md');
@@ -112,8 +117,11 @@ export const Project = () => {
         messageDiv.appendChild(small);
         messageDiv.appendChild(p);
         messageBox.current.appendChild(messageDiv);
+
+        scrollToBottom();
     }
 
+    // Modified appendOutgoingMessage to scroll after appending
     function appendOutgoingMessage({message, user}) {
         if (!messageBox.current) return;
         const messageDiv = document.createElement('div');
@@ -130,6 +138,8 @@ export const Project = () => {
         messageDiv.appendChild(small);
         messageDiv.appendChild(p);
         messageBox.current.appendChild(messageDiv);
+
+        scrollToBottom();
     }
 
     return (
