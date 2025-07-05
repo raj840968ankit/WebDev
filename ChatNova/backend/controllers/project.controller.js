@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator";
 import { User } from '../models/user.models.js';
-import { addUsersToProject, createProjectService, getAllProjectByUserId, getProjectById } from "../services/project.service.js";
+import { addUsersToProject, createProjectService, getAllProjectByUserId, getProjectById, updateFileTreeService } from "../services/project.service.js";
 
 export const createProjectController = async (req, res) => {
     try {
@@ -79,4 +79,31 @@ export const getProjectByIdController = async (req, res) => {
         console.error("Error fetching project by ID:", error);
         return res.status(500).json({ error: error.message });
     }
+}
+
+export const updateFileTree = async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+
+        const { projectId, fileTree } = req.body;
+
+        const project = await updateFileTreeService({
+            projectId,
+            fileTree
+        })
+
+        return res.status(200).json({
+            project
+        })
+
+    } catch (err) {
+        console.log(err)
+        res.status(400).json({ error: err.message })
+    }
+
 }

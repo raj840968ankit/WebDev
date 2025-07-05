@@ -21,4 +21,11 @@ router.put('/add-user',
 
 router.get('/get-project/:projectId',authUser, projectController.getProjectByIdController); //! get project by id
 
+router.put('/update-file-tree',
+    authUser,
+    body('projectId').isString().withMessage('Project ID is required'),
+    body('fileTree').isObject().withMessage('File tree is required'),
+    projectController.updateFileTree
+)
+
 export const projectRouter = router;

@@ -73,7 +73,6 @@ export const Project = () => {
         });
 
         receiveMessage("server-ai-message", ({ aiResult, sender }) => {
-            console.log(aiResult);
 
             const message = JSON.parse(aiResult);
             // console.log(message.fileTree);
@@ -95,6 +94,7 @@ export const Project = () => {
                     `/projects/get-project/${location.state.project._id}`
                 );
                 setUsersWithProjects(response.data.users);
+                setFileTree(response.data.fileTree)
             } catch (error) {
                 console.error("Error fetching users with projects:", error);
             }
@@ -190,6 +190,17 @@ export const Project = () => {
                 message,
             },
         ]);
+    }
+
+    function saveFileTree(ft) {
+        axios.put('/projects/update-file-tree', {
+            projectId: location.state.project._id,
+            fileTree: ft
+        }).then(res => {
+            console.log(res.data)
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     return (
@@ -455,7 +466,7 @@ export const Project = () => {
                                     })
 
                                 }}
-                                className='p-2 px-4 bg-slate-300 text-white'
+                                className='p-2 px-4 bg-slate-600 text-white'
                             >
                                 run
                             </button>
@@ -480,6 +491,7 @@ export const Project = () => {
                                                 }
                                             }
                                             setFileTree(ft)
+                                            saveFileTree(ft)
                                         }}
                                         dangerouslySetInnerHTML={{
                                             __html: hljs.highlight(
