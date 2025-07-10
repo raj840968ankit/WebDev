@@ -79,11 +79,15 @@ export const Project = () => {
             const receivedFileTree = message.fileTree || {};
             webContainer?.mount(receivedFileTree)
 
-            webContainer?.mount(message.fileTree)
+            //webContainer?.mount(message.fileTree)
 
-            if (receivedFileTree) {
-                setFileTree(receivedFileTree);
-            }
+            // Merge with existing fileTree
+            setFileTree(prev => {
+                const merged = { ...prev, ...receivedFileTree };
+                // Optionally save merged fileTree to DB here
+                saveFileTree(merged);
+                return merged;
+            });
             appendAIMessage({ message, sender });
         });
     }, [location.state]);
@@ -117,6 +121,21 @@ export const Project = () => {
         appendOutgoingMessage({ message, user });
         setMessage("");
     }
+
+    useEffect(() => {
+        receiveMessage("file-update", ({ fileName, contents, sender }) => {
+            // Optionally, ignore if the sender is the current user
+            if (sender === user.email) return;
+            setFileTree(prev => ({
+                ...prev,
+                [fileName]: {
+                    file: {
+                        contents
+                    }
+                }
+            }));
+        });
+    }, [user.email]);
 
     // Handler for selecting/deselecting a user from modal
     const handleSelectUser = (userId) => {
@@ -494,6 +513,14 @@ export const Project = () => {
                                             }
                                             setFileTree(ft)
                                             saveFileTree(ft)
+
+                                            // Emit file update to other collaborators
+                                            sendMessage("file-update", {
+                                                fileName: currentFile,
+                                                contents: updatedContent,
+                                                projectId: location.state.project._id,
+                                                sender: user.email,
+                                            });
                                         }}
                                         dangerouslySetInnerHTML={{
                                             __html: hljs.highlight(
