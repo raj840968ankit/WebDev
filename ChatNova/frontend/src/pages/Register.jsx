@@ -26,6 +26,9 @@ export const Register = () => {
             
             navigate('/'); // Redirect to home page on successful registration
         } catch (error) {
+            if(error.response.data.errors){
+                alert(error.response.data.errors)
+            }
             console.error('❌ Registration failed:', error);
         }
     };

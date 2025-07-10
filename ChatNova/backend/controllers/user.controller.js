@@ -11,6 +11,14 @@ export const createUserController = async (req, res) => {
     }
 
     try {
+        const {email, password} = req.body;
+
+        const userExists = await User.findOne({email})
+
+        if(userExists){
+            return res.status(400).json({errors : "User already exists"})
+        }
+
         const user = await createUser(req.body)
 
         const token = user.generateJWT()  //generate JWT token for the user

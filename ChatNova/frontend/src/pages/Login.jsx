@@ -21,6 +21,9 @@ export const Login = () => {
 
             navigate("/"); // Redirect to home page on successful login
         } catch (error) {
+            if(error.response.data.errors){
+                alert(error.response.data.errors)
+            }
             console.error("❌ Login failed:", error);
         }
     };

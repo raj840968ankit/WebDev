@@ -53,6 +53,9 @@ io.use(async (socket, next) => {
 
 io.on('connection', (socket) => {
     
+    console.log('user connected : ', socket.id);
+    
+
     socket.roomId = socket.project._id.toString();
 
     socket.join(socket.roomId);  // Join the user to the project room

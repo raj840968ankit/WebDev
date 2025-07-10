@@ -6,7 +6,7 @@ import { env } from "../config/env.js";
 const genAI = new GoogleGenerativeAI(env.GOOGLE_AI_KEY);
 
 const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash", // or "gemini-1.5-pro"
+    model: "gemini-2.5-flash", // or "gemini-1.5-pro"
     generationConfig: {
         responseMimeType: "application/json",
     },
@@ -17,7 +17,7 @@ export const generateResult = async (prompt) => {
     try {
         const result = await model.generateContent(prompt);
         const response = await result.response;
-        const text = await response.text();
+        const text = response.text();
 
         return text;
     } catch (err) {

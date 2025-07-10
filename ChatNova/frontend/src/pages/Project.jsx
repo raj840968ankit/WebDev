@@ -75,16 +75,18 @@ export const Project = () => {
         receiveMessage("server-ai-message", ({ aiResult, sender }) => {
 
             const message = JSON.parse(aiResult);
-            // console.log(message.fileTree);
+            // Ensure message.fileTree is an object before mounting and setting state
+            const receivedFileTree = message.fileTree || {};
+            webContainer?.mount(receivedFileTree)
 
             webContainer?.mount(message.fileTree)
 
-            if (message.fileTree) {
-                setFileTree(message.fileTree);
+            if (receivedFileTree) {
+                setFileTree(receivedFileTree);
             }
             appendAIMessage({ message, sender });
         });
-    }, []);
+    }, [location.state]);
 
     // Fetch users with projects (collaborators) on mount and when project changes
     useEffect(() => {
@@ -396,7 +398,7 @@ export const Project = () => {
             <section className="right bg-slate-50 flex-grow h-full flex">
                 <div className="explorer h-full max-w-64 min-w-52 bg-slate-200">
                     <div className="fileTree w-full">
-                        {Object.keys(fileTree).map((file, index) => {
+                        {Object.keys(fileTree || {}).map((file, index) => {
                             return (
                                 <div
                                     onClick={() => {
@@ -473,7 +475,7 @@ export const Project = () => {
                         </div>
                     </div>
                     <div className="bottom flex flex-grow h-0">
-                        {fileTree[currentFile] && (
+                        {currentFile && fileTree[currentFile] && fileTree[currentFile].file && (
                             <div className="code-editor-area h-full overflow-auto flex-grow bg-slate-50">
                                 <pre className="hljs h-full m-0">
                                     <code

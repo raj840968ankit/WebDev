@@ -9,6 +9,13 @@ export const createProjectController = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.status(400).json({errors: errors.array(),});
         }
+
+        // Ensure req.user and req.user.email exist before attempting to find the user
+        if (!req.user || !req.user.email) {
+            console.error("Error: req.user or req.user.email is missing in createProjectController.");
+            return res.status(401).json({ error: "Authentication failed: User information missing." });
+        }
+
         const { name } = req.body;
         const loggedInUser = await User.findOne({ email: req.user.email });
 
