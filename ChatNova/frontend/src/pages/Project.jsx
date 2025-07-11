@@ -12,43 +12,48 @@ import Markdown from "markdown-to-jsx";
 import hljs from "highlight.js";
 import { getWebContainer } from "../config/webContainer.js";
 
-
+// Component to handle syntax highlighting for code blocks in Markdown
 function SyntaxHighlightedCode(props) {
     const ref = useRef(null);
 
     useEffect(() => {
+        // Check if the ref exists, if the class includes 'lang-' (indicating a language),
+        // and if hljs is available globally.
         if (ref.current && props.className?.includes("lang-") && window.hljs) {
+            // Highlight the code element
             window.hljs.highlightElement(ref.current);
 
-            // hljs won't reprocess the element unless this attribute is removed
+            // Remove the data-highlighted attribute to allow re-highlighting if content changes
             ref.current.removeAttribute("data-highlighted");
         }
-    }, [props.className, props.children]);
+    }, [props.className, props.children]); // Re-run if class or children (code content) changes
 
     return <code {...props} ref={ref} />;
 }
 
 export const Project = () => {
-    const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedUserIds, setSelectedUserIds] = useState([]);
-    const [users, setUsers] = useState([]);
-    const [usersWithProjects, setUsersWithProjects] = useState([]); // State to hold users with projects
-    const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState([]); // <-- Array for all messages
-    const { user } = useContext(UserContext);
-    const messageBox = useRef();
-    const [fileTree, setFileTree] = useState({});
-    const [currentFile, setCurrentFile] = useState(null);
-    const [openFiles, setOpenFiles] = useState([]);
-    const [webContainer, setWebContainer] = useState(null)
-    const [iframeUrl, setIframeUrl] = useState(null)
-    const [runProcess, setRunProcess] = useState(null)
+    // State variables for UI and application logic
+    const [isSidePanelOpen, setIsSidePanelOpen] = useState(false); // Controls visibility of the collaborators side panel
+    const [isModalOpen, setIsModalOpen] = useState(false); // Controls visibility of the add collaborators modal
+    const [selectedUserIds, setSelectedUserIds] = useState([]); // Stores IDs of users selected in the modal
+    const [users, setUsers] = useState([]); // All registered users
+    const [usersWithProjects, setUsersWithProjects] = useState([]); // Users currently collaborating on this project
+    const [message, setMessage] = useState(""); // Current message being typed in the chat input
+    const [messages, setMessages] = useState([]); // Array to store all chat messages
+    const { user } = useContext(UserContext); // Current authenticated user from context
+    const messageBox = useRef(); // Ref for the chat message container to enable auto-scrolling
+    const [fileTree, setFileTree] = useState({}); // Represents the project's file structure
+    const [currentFile, setCurrentFile] = useState(null); // The currently active file in the editor
+    const [openFiles, setOpenFiles] = useState([]); // List of files currently open as tabs in the editor
+    const [webContainer, setWebContainer] = useState(null); // WebContainer instance for running the project
+    const [iframeUrl, setIframeUrl] = useState(null); // URL for the live preview iframe
+    const [runProcess, setRunProcess] = useState(null); // Reference to the running WebContainer process
 
-    const location = useLocation();
+    const location = useLocation(); // Hook to access route state (project ID)
 
+    // Effect hook for initial setup: fetching users, initializing socket, and WebContainer
     useEffect(() => {
-        // Fetch users from the backend
+        // Function to fetch all users from the backend
         const fetchUsers = async () => {
             try {
                 const response = await axios.get("/users/all");
@@ -58,39 +63,42 @@ export const Project = () => {
             }
         };
 
-        fetchUsers();
+        fetchUsers(); // Call fetch users on component mount
 
+        // Initialize WebSocket connection for the current project
         initializeSocket(location.state.project._id);
 
-        if (!webContainer) {
-            getWebContainer().then(container => setWebContainer(container))
-            console.log("container started");
-
-        }
-
+        // Listen for incoming chat messages from the server
         receiveMessage("server-message", ({ message, sender }) => {
+            // Only append if the sender is NOT the current user
+            if (sender.email === user.email) return;
             appendIncomingMessage({ message, sender: sender.email });
         });
 
+        // Listen for AI-generated messages, which might include file tree updates
         receiveMessage("server-ai-message", ({ aiResult, sender }) => {
-
             const message = JSON.parse(aiResult);
-            // Ensure message.fileTree is an object before mounting and setting state
             const receivedFileTree = message.fileTree || {};
-            webContainer?.mount(receivedFileTree)
 
-            //webContainer?.mount(message.fileTree)
+            // Ensure message.fileTree is an object before mounting and setting state
+            webContainer?.mount(receivedFileTree);
 
             // Merge with existing fileTree
-            setFileTree(prev => {
+            setFileTree((prev) => {
                 const merged = { ...prev, ...receivedFileTree };
-                // Optionally save merged fileTree to DB here
                 saveFileTree(merged);
                 return merged;
             });
             appendAIMessage({ message, sender });
         });
-    }, [location.state]);
+    }, []);
+
+    useEffect(() => {
+        if (!webContainer) {
+            getWebContainer().then((container) => setWebContainer(container));
+            console.log("WebContainer started");
+        }
+    }, [webContainer]);
 
     // Fetch users with projects (collaborators) on mount and when project changes
     useEffect(() => {
@@ -100,7 +108,7 @@ export const Project = () => {
                     `/projects/get-project/${location.state.project._id}`
                 );
                 setUsersWithProjects(response.data.users);
-                setFileTree(response.data.fileTree)
+                setFileTree(response.data.fileTree);
             } catch (error) {
                 console.error("Error fetching users with projects:", error);
             }
@@ -117,6 +125,7 @@ export const Project = () => {
         sendMessage("project-message", {
             message,
             sender: user,
+            projectId: location.state.project._id,
         });
         appendOutgoingMessage({ message, user });
         setMessage("");
@@ -126,16 +135,32 @@ export const Project = () => {
         receiveMessage("file-update", ({ fileName, contents, sender }) => {
             // Optionally, ignore if the sender is the current user
             if (sender === user.email) return;
-            setFileTree(prev => ({
+            setFileTree((prev) => ({
                 ...prev,
                 [fileName]: {
                     file: {
-                        contents
-                    }
-                }
+                        contents,
+                    },
+                },
             }));
         });
     }, [user.email]);
+
+    useEffect(() => {
+        receiveMessage("file-delete", ({ fileName, sender }) => {
+            // Optionally, ignore if the sender is the current user
+            if (sender === user.email) return;
+            setFileTree((prev) => {
+                const updated = { ...prev };
+                delete updated[fileName];
+                return updated;
+            });
+            setOpenFiles((prev) => prev.filter((f) => f !== fileName));
+            if (currentFile === fileName) {
+                setCurrentFile(null);
+            }
+        });
+    }, [user.email, currentFile]);
 
     // Handler for selecting/deselecting a user from modal
     const handleSelectUser = (userId) => {
@@ -214,41 +239,92 @@ export const Project = () => {
     }
 
     function saveFileTree(ft) {
-        axios.put('/projects/update-file-tree', {
-            projectId: location.state.project._id,
-            fileTree: ft
-        }).then(res => {
-            console.log(res.data)
-        }).catch(err => {
-            console.log(err)
-        })
+        axios
+            .put("/projects/update-file-tree", {
+                projectId: location.state.project._id,
+                fileTree: ft,
+            })
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
+    const handleRunProject = async () => {
+        if (!webContainer) {
+            console.error("WebContainer not initialized.");
+            return;
+        }
+
+        try {
+            await webContainer.mount(fileTree);
+
+            const installProcess = await webContainer.spawn("npm", ["install"]);
+            installProcess.output.pipeTo(
+                new WritableStream({
+                    write(chunk) {
+                        console.log(chunk);
+                    },
+                })
+            );
+            await installProcess.exit; // Wait for install to complete
+
+            if (runProcess) {
+                runProcess.kill();
+            }
+
+            let tempRunProcess = await webContainer.spawn("npm", ["start"]);
+            tempRunProcess.output.pipeTo(
+                new WritableStream({
+                    write(chunk) {
+                        console.log(chunk);
+                    },
+                })
+            );
+            setRunProcess(tempRunProcess);
+
+            webContainer.on("server-ready", (port, url) => {
+                console.log(port, url);
+                setIframeUrl(url);
+            });
+        } catch (error) {
+            console.error("Error running project:", error);
+        }
+    };
+
     return (
-        <main className="h-screen w-screen flex overflow-hidden">
-            <section className="left flex flex-col h-full min-w-96 bg-slate-300 relative">
-                <header className="flex justify-between items-center p-2 px-4 w-full bg-slate-100">
-                    <button className="flex gap-2" onClick={() => setIsModalOpen(true)}>
-                        <i className="ri-user-add-fill mr-1"></i>
-                        <p>Add Collaborators</p>
+        <main className="flex flex-col lg:flex-row w-screen overflow-hidden font-inter min-h-screen lg:h-screen">
+            {/* Left Section: Chat and Collaborators Panel */}
+            {/* On mobile, this section takes full width and full height of the screen. */}
+            {/* On large screens, it maintains its fixed width. */}
+            <section className="left flex flex-col w-full h-[calc(100vh-2rem)] lg:h-full lg:w-[400px] bg-slate-100 relative shadow-lg rounded-lg m-2 lg:m-4 overflow-hidden">
+                {/* Header for Chat/Collaborators */}
+                <header className="flex justify-between items-center p-3 px-4 w-full bg-slate-200 rounded-t-lg shadow-sm flex-shrink-0">
+                    <button
+                        className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-md"
+                        onClick={() => setIsModalOpen(true)}
+                        aria-label="Add Collaborators"
+                    >
+                        <i className="ri-user-add-fill text-lg"></i>
+                        <span className="hidden sm:inline">Add Collaborators</span>
                     </button>
 
                     <button
-                        className="p-2"
+                        className="p-2 text-gray-700 hover:text-blue-600 transition-colors duration-200"
                         onClick={() => setIsSidePanelOpen(!isSidePanelOpen)}
+                        aria-label="Toggle Collaborators Panel"
                     >
-                        <i className="ri-group-fill"></i>
+                        <i className="ri-group-fill text-2xl"></i>
                     </button>
                 </header>
 
-                <div className="message-area flex-grow flex flex-col min-h-0">
+                {/* Message Area */}
+                <div className="message-area flex-grow flex flex-col min-h-0 p-2 overflow-hidden">
                     <div
                         ref={messageBox}
-                        className="message-box p-1 flex-grow flex flex-col gap-1 overflow-y-auto scrollbar-hide min-h-0"
-                        style={{
-                            msOverflowStyle: "none",
-                            scrollbarWidth: "none",
-                        }}
+                        className="message-box flex-grow flex flex-col gap-2 overflow-y-auto scrollbar-hide p-2 rounded-md bg-white shadow-inner"
                     >
                         {/* Render messages from state */}
                         {messages.map((msg, idx) => {
@@ -256,10 +332,12 @@ export const Project = () => {
                                 return (
                                     <div
                                         key={idx}
-                                        className="message max-w-56 flex flex-col p-2 bg-slate-50 w-fit rounded-md"
+                                        className="message max-w-[70%] flex flex-col p-3 bg-gray-200 rounded-lg shadow-sm self-start"
                                     >
-                                        <small className="text-xs opacity-65">{msg.sender}</small>
-                                        <p className="text-sm">{msg.message}</p>
+                                        <small className="text-xs text-gray-600 mb-1 font-medium">
+                                            {msg.sender}
+                                        </small>
+                                        <p className="text-sm text-gray-800">{msg.message}</p>
                                     </div>
                                 );
                             }
@@ -267,9 +345,11 @@ export const Project = () => {
                                 return (
                                     <div
                                         key={idx}
-                                        className="ml-auto message max-w-56 flex flex-col p-2 bg-slate-50 w-fit rounded-md"
+                                        className="ml-auto message max-w-[70%] flex flex-col p-3 bg-blue-500 text-white rounded-lg shadow-sm self-end"
                                     >
-                                        <small className="text-xs opacity-65">{msg.sender}</small>
+                                        <small className="text-xs opacity-80 mb-1 font-medium">
+                                            {msg.sender}
+                                        </small>
                                         <p className="text-sm">{msg.message}</p>
                                     </div>
                                 );
@@ -278,20 +358,14 @@ export const Project = () => {
                                 return (
                                     <div
                                         key={idx}
-                                        className="message max-w-80 flex flex-col p-2 w-fit rounded-md border border-blue-200"
-                                        style={{ backgroundColor: "#020617" }} // slate-950
+                                        className="message max-w-[90%] flex flex-col p-3 bg-slate-900 text-white rounded-lg shadow-md self-start border border-blue-700"
                                     >
-                                        <small className="text-xs opacity-65 text-white">
+                                        <small className="text-xs opacity-75 mb-1 font-medium">
                                             {msg.sender}
                                         </small>
                                         <div
                                             className="text-sm markdown-body"
-                                            style={{
-                                                maxWidth: "20rem",
-                                                overflowX: "auto",
-                                                overflowY: "visible",
-                                                color: "white",
-                                            }}
+                                            style={{ color: "white" }}
                                         >
                                             <Markdown
                                                 options={{
@@ -312,91 +386,123 @@ export const Project = () => {
                         })}
                     </div>
 
-                    <div className="inputField w-full flex border-t-1 bg-slate-200">
+                    {/* Chat Input Field */}
+                    <div className="inputField w-full flex border-t border-gray-300 bg-white p-2 rounded-b-lg shadow-inner flex-shrink-0">
                         <input
-                            className="p-2 px-4 border-none outline-none flex-grow"
+                            className="p-3 border border-gray-300 rounded-l-lg outline-none flex-grow focus:ring-2 focus:ring-blue-400 transition-all duration-200"
                             type="text"
-                            placeholder="Enter message"
+                            placeholder="Type your message here..."
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             onKeyDown={(e) => e.key === "Enter" && send()}
+                            aria-label="Message input"
                         />
-                        <button className="px-5 bg-slate-950 text-white" onClick={send}>
-                            <i className="ri-send-plane-fill"></i>
+                        <button
+                            className="px-6 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 transition-colors duration-200 shadow-md flex items-center justify-center"
+                            onClick={send}
+                            aria-label="Send message"
+                        >
+                            <i className="ri-send-plane-fill text-xl"></i>
                         </button>
                     </div>
                 </div>
 
+                {/* Collaborators Side Panel */}
                 <div
-                    className={`sidePanel w-full h-full bg-slate-50 flex flex-col gap-2 absolute transition-all ${isSidePanelOpen ? "-translate-x-0" : "-translate-x-full"
+                    className={`sidePanel w-full sm:w-80 h-full bg-slate-50 flex flex-col gap-2 absolute transition-transform duration-300 ease-in-out z-40 rounded-lg shadow-xl ${isSidePanelOpen ? "translate-x-0" : "-translate-x-full"
                         } top-0 left-0`}
                 >
-                    <header className="flex justify-between items-center p-2 px-3 bg-slate-200">
-                        <h1 className="font-semibold text-lg">Collaborators</h1>
-
-                        <button onClick={() => setIsSidePanelOpen(false)} className="p-2">
-                            <i className="ri-close-fill font-semibold"></i>
+                    <header className="flex justify-between items-center p-3 px-4 bg-slate-200 rounded-t-lg shadow-sm flex-shrink-0">
+                        <h1 className="font-semibold text-xl text-gray-800">
+                            Collaborators
+                        </h1>
+                        <button
+                            onClick={() => setIsSidePanelOpen(false)}
+                            className="p-2 text-gray-700 hover:text-red-600 transition-colors duration-200"
+                            aria-label="Close collaborators panel"
+                        >
+                            <i className="ri-close-fill font-semibold text-2xl"></i>
                         </button>
                     </header>
 
-                    <div className="users flex flex-col gap-2">
-                        {usersWithProjects &&
-                            usersWithProjects.map(({ email }) => (
+                    <div className="users flex flex-col gap-2 p-3 overflow-y-auto flex-grow">
+                        {usersWithProjects && usersWithProjects.length > 0 ? (
+                            usersWithProjects.map(({ email, _id }) => (
                                 <div
-                                    key={email}
-                                    className="user flex items-center gap-2 p-2 px-3 bg-slate-100 rounded-md"
+                                    key={_id}
+                                    className="user flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm border border-gray-200"
                                 >
-                                    <div className="w-10 h-10 rounded-full bg-slate-400 flex items-center justify-center text-white font-bold">
-                                        {email[0]}
+                                    <div className="w-10 h-10 rounded-full bg-blue-400 flex items-center justify-center text-white font-bold text-lg">
+                                        {email[0].toUpperCase()}
                                     </div>
                                     <div className="flex-grow">
-                                        <p className="text-sm font-semibold">{email}</p>
+                                        <p className="text-sm font-semibold text-gray-800">
+                                            {email}
+                                        </p>
                                     </div>
                                 </div>
-                            ))}
+                            ))
+                        ) : (
+                            <p className="text-center text-gray-500 mt-4">
+                                No collaborators yet.
+                            </p>
+                        )}
                     </div>
                 </div>
 
-                {/* Modal */}
+                {/* Modal for Adding Collaborators */}
                 {isModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                        <div className="bg-white rounded-xl shadow-lg w-11/12 max-w-md mx-auto p-6 relative">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+                        <div className="bg-white rounded-xl shadow-2xl w-full max-w-md mx-auto p-6 relative flex flex-col max-h-[90vh]">
                             <button
-                                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                                className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 transition-colors duration-200"
                                 onClick={() => setIsModalOpen(false)}
+                                aria-label="Close modal"
                             >
                                 <i className="ri-close-line text-2xl"></i>
                             </button>
-                            <h2 className="text-xl font-bold mb-4 text-center">
+                            <h2 className="text-2xl font-bold mb-5 text-center text-gray-800">
                                 Select Users
                             </h2>
-                            <ul className="divide-y divide-gray-200 mb-16 max-h-60 overflow-y-auto">
-                                {users.map((user) => (
-                                    <li
-                                        key={user._id}
-                                        className={`flex items-center gap-3 p-3 cursor-pointer rounded transition 
-                                        ${selectedUserIds.includes(user._id)
-                                                ? "bg-blue-100"
-                                                : "hover:bg-blue-100"
-                                            }`}
-                                        onClick={() => handleSelectUser(user._id)}
-                                    >
-                                        <div className="w-10 h-10 rounded-full bg-slate-400 flex items-center justify-center text-white font-bold">
-                                            {user.email[0]}
-                                        </div>
-                                        <div>
-                                            <div className="font-semibold">{user.email}</div>
-                                        </div>
-                                        {selectedUserIds.includes(user._id) && (
-                                            <span className="ml-auto text-blue-600 font-bold text-lg">
-                                                &#10003;
-                                            </span>
-                                        )}
-                                    </li>
-                                ))}
+                            <ul className="divide-y divide-gray-200 flex-grow overflow-y-auto mb-6">
+                                {users.length > 0 ? (
+                                    users.map((user) => (
+                                        <li
+                                            key={user._id}
+                                            className={`flex items-center gap-3 p-3 cursor-pointer rounded-lg transition-all duration-200
+                                            ${selectedUserIds.includes(user._id)
+                                                    ? "bg-blue-100 ring-2 ring-blue-400"
+                                                    : "hover:bg-blue-50"
+                                                }`}
+                                            onClick={() => handleSelectUser(user._id)}
+                                        >
+                                            <div className="w-10 h-10 rounded-full bg-slate-400 flex items-center justify-center text-white font-bold text-lg">
+                                                {user.email[0].toUpperCase()}
+                                            </div>
+                                            <div className="flex-grow">
+                                                <div className="font-semibold text-gray-800">
+                                                    {user.email}
+                                                </div>
+                                            </div>
+                                            {selectedUserIds.includes(user._id) && (
+                                                <span className="ml-auto text-blue-600 font-bold text-xl">
+                                                    &#10003;
+                                                </span>
+                                            )}
+                                        </li>
+                                    ))
+                                ) : (
+                                    <p className="text-center text-gray-500">
+                                        No users available.
+                                    </p>
+                                )}
                             </ul>
                             <button
-                                className="absolute left-0 bottom-0 w-full bg-blue-600 text-white py-3 rounded-b-xl font-semibold hover:bg-blue-700 transition"
+                                className={`w-full py-3 rounded-lg font-semibold transition-all duration-200 shadow-md
+                                ${selectedUserIds.length === 0
+                                        ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                                        : "bg-blue-600 text-white hover:bg-blue-700"
+                                    }`}
                                 onClick={handleAddCollaborator}
                                 disabled={selectedUserIds.length === 0}
                             >
@@ -406,99 +512,153 @@ export const Project = () => {
                     </div>
                 )}
             </section>
-            <style>
-                {`
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                }
-            `}
-            </style>
 
-            <section className="right bg-slate-50 flex-grow h-full flex">
-                <div className="explorer h-full max-w-64 min-w-52 bg-slate-200">
+            {/* Right Section: File Explorer, Code Editor, and Iframe Preview */}
+            {/* On mobile, this section will stack its children vertically, each taking full screen height when scrolled into view. */}
+            {/* On large screens, it takes the remaining width and full height, maintaining the desktop layout. */}
+            <section className="right bg-slate-50 flex-grow flex flex-col lg:flex-row m-2 lg:m-4 rounded-lg shadow-lg">
+                {/* File Explorer */}
+                {/* On mobile, it takes full width and full screen height. */}
+                {/* On large screens, it takes a fixed max-width and full height. */}
+                <div className="explorer h-[calc(100vh-2rem)] lg:h-full lg:max-w-[250px] w-full bg-slate-200 p-2 border-b lg:border-b-0 lg:border-r border-gray-300 flex-shrink-0 rounded-t-lg lg:rounded-l-lg lg:rounded-tr-none overflow-y-auto">
+                    <h2 className="text-lg font-bold text-gray-800 mb-3 px-2">Files</h2>
                     <div className="fileTree w-full">
-                        {Object.keys(fileTree || {}).map((file, index) => {
-                            return (
-                                <div
-                                    onClick={() => {
-                                        setCurrentFile(file);
-                                        setOpenFiles((prev) =>
-                                            prev.includes(file) ? [...prev] : [...prev, file]
-                                        );
-                                    }}
-                                    key={index}
-                                    className="tree-element cursor-pointer p-2 px-4 flex items-center gap-2 bg-slate-400 w-full border-1"
-                                >
-                                    <p className="font-semibold text-lg">{file}</p>
+                        {Object.keys(fileTree || {}).length > 0 ? (
+                            Object.keys(fileTree).map((file, index) => (
+                                <div key={index} className="flex items-center group">
+                                    <button
+                                        onClick={() => {
+                                            setCurrentFile(file);
+                                            setOpenFiles((prev) =>
+                                                prev.includes(file) ? [...prev] : [...prev, file]
+                                            );
+                                        }}
+                                        className="tree-element cursor-pointer p-2 px-4 flex items-center gap-2 w-full text-left rounded-md hover:bg-blue-200 transition-colors duration-150 mb-1 flex-grow"
+                                    >
+                                        <i className="ri-file-line text-blue-600"></i>
+                                        <p className="font-medium text-gray-800 truncate">{file}</p>
+                                    </button>
+                                    {/* Delete Icon */}
+                                    <button
+                                        className="ml-2 p-1 rounded hover:bg-red-100 text-red-600 transition-colors duration-150"
+                                        title="Delete file"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            // Remove from fileTree
+                                            setFileTree((prev) => {
+                                                const updated = { ...prev };
+                                                delete updated[file];
+                                                saveFileTree(updated);
+                                                // Emit file delete event to other collaborators
+                                                sendMessage("file-delete", {
+                                                    fileName: file,
+                                                    projectId: location.state.project._id,
+                                                    sender: user.email,
+                                                });
+                                                return updated;
+                                            });
+                                            // Remove from openFiles and update currentFile if needed
+                                            setOpenFiles((prev) => {
+                                                const filtered = prev.filter((f) => f !== file);
+                                                if (currentFile === file) {
+                                                    setCurrentFile(filtered[0] || null);
+                                                }
+                                                return filtered;
+                                            });
+                                        }}
+                                    >
+                                        <i className="ri-delete-bin-6-line"></i>
+                                    </button>
                                 </div>
-                            );
-                        })}
+                            ))
+                        ) : (
+                            <p className="text-center text-gray-500 mt-4 text-sm">
+                                No files in project.
+                            </p>
+                        )}
                     </div>
                 </div>
 
-                <div className="code-editor flex flex-col flex-grow h-full">
-                    <div className="top flex justify-between w-full">
-                        <div className="files flex">
+                {/* Code Editor Area */}
+                {/* On mobile, this takes full screen height, stacking below file explorer. */}
+                {/* On large, it takes flex-grow and is next to explorer. */}
+                <div className="code-editor flex flex-col flex-grow h-[calc(100vh-2rem)] lg:h-full bg-white rounded-b-lg lg:rounded-r-lg lg:rounded-bl-none">
+                    {/* File Tabs and Run Button */}
+                    {/* File Tabs and Run Button */}
+                    <div className="top flex justify-between items-center w-full bg-slate-100 border-b border-gray-200 p-2 shadow-sm flex-shrink-0">
+                        <div className="files flex flex-row flex-nowrap overflow-x-auto scrollbar-hide max-w-[70vw] h-10">
                             {openFiles.map((file, index) => (
-                                <button
+                                <div
                                     key={index}
-                                    onClick={() => setCurrentFile(file)}
-                                    className={`open-file cursor-pointer p-2 px-4 flex items-center w-fit gap-2 bg-slate-300 ${currentFile === file ? "bg-slate-400" : ""
-                                        }`}
+                                    className="relative flex items-center group"
+                                    style={{ minWidth: 0 }}
                                 >
-                                    <p className="font-semibold text-lg">{file}</p>
-                                </button>
+                                    <button
+                                        onClick={() => setCurrentFile(file)}
+                                        className={`open-file cursor-pointer p-2 px-4 flex items-center gap-2 w-fit text-sm font-medium rounded-t-md transition-colors duration-150
+                    ${currentFile === file
+                                                ? "bg-blue-500 text-white shadow-inner"
+                                                : "bg-slate-200 text-gray-700 hover:bg-blue-100"
+                                            }`}
+                                        style={{
+                                            maxWidth: 180,
+                                            minWidth: 60,
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                            whiteSpace: "nowrap",
+                                            paddingRight: "28px",
+                                            position: "relative",
+                                        }}
+                                    >
+                                        <p className="truncate">{file}</p>
+                                    </button>
+                                    {/* Close button for each tab */}
+                                    <button
+                                        className="absolute right-1 top-1/2 -translate-y-1/2 bg-white border border-gray-300 rounded-full p-0.5 text-xs text-gray-500 hover:text-red-500 shadow group-hover:visible"
+                                        style={{
+                                            visibility: openFiles.length > 1 ? "visible" : "hidden",
+                                            zIndex: 10,
+                                        }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setOpenFiles((prev) => {
+                                                const filtered = prev.filter((f) => f !== file);
+                                                if (currentFile === file) {
+                                                    const idx = prev.findIndex((f) => f === file);
+                                                    const nextFile =
+                                                        prev[idx - 1] || prev[idx + 1] || null;
+                                                    setCurrentFile(nextFile);
+                                                }
+                                                return filtered;
+                                            });
+                                        }}
+                                        aria-label={`Close ${file}`}
+                                    >
+                                        <i className="ri-close-line"></i>
+                                    </button>
+                                </div>
                             ))}
                         </div>
-
-                        <div className="actions flex gap-2">
+                        <div className="actions flex gap-2 pr-2">
                             <button
-                                onClick={async () => {
-                                    await webContainer.mount(fileTree)
-
-
-                                    const installProcess = await webContainer.spawn("npm", ["install"])
-
-
-
-                                    installProcess.output.pipeTo(new WritableStream({
-                                        write(chunk) {
-                                            console.log(chunk)
-                                        }
-                                    }))
-
-                                    if (runProcess) {
-                                        runProcess.kill()
-                                    }
-
-                                    let tempRunProcess = await webContainer.spawn("npm", ["start"]);
-
-                                    tempRunProcess.output.pipeTo(new WritableStream({
-                                        write(chunk) {
-                                            console.log(chunk)
-                                        }
-                                    }))
-
-                                    setRunProcess(tempRunProcess)
-
-                                    webContainer.on('server-ready', (port, url) => {
-                                        console.log(port, url)
-                                        setIframeUrl(url)
-                                    })
-
-                                }}
-                                className='p-2 px-4 bg-slate-600 text-white'
+                                onClick={handleRunProject}
+                                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200 shadow-md"
+                                aria-label="Run project"
                             >
-                                run
+                                <i className="ri-play-fill mr-1"></i> Run
                             </button>
                         </div>
                     </div>
+
+                    {/* Code Editor Content */}
                     <div className="bottom flex flex-grow h-0">
-                        {currentFile && fileTree[currentFile] && fileTree[currentFile].file && (
-                            <div className="code-editor-area h-full overflow-auto flex-grow bg-slate-50">
-                                <pre className="hljs h-full m-0">
+                        {currentFile &&
+                            fileTree[currentFile] &&
+                            fileTree[currentFile].file ? (
+                            <div className="code-editor-area h-full overflow-auto flex-grow bg-slate-900 text-white rounded-b-lg">
+                                <pre className="hljs h-full m-0 p-4 text-sm leading-relaxed overflow-auto">
                                     <code
-                                        className="hljs h-full outline-none"
+                                        className="hljs h-full outline-none block"
                                         contentEditable
                                         suppressContentEditableWarning
                                         onBlur={(e) => {
@@ -507,12 +667,12 @@ export const Project = () => {
                                                 ...fileTree,
                                                 [currentFile]: {
                                                     file: {
-                                                        contents: updatedContent
-                                                    }
-                                                }
-                                            }
-                                            setFileTree(ft)
-                                            saveFileTree(ft)
+                                                        contents: updatedContent,
+                                                    },
+                                                },
+                                            };
+                                            setFileTree(ft);
+                                            saveFileTree(ft); // Save to backend
 
                                             // Emit file update to other collaborators
                                             sendMessage("file-update", {
@@ -524,33 +684,100 @@ export const Project = () => {
                                         }}
                                         dangerouslySetInnerHTML={{
                                             __html: hljs.highlight(
-                                                fileTree[currentFile]?.file.contents || '',
-                                                { language: 'javascript' }
+                                                fileTree[currentFile]?.file.contents || "",
+                                                { language: "javascript" } // Assuming JS for highlighting, adjust as needed
                                             ).value,
                                         }}
                                         style={{
-                                            whiteSpace: "pre-wrap",
-                                            paddingBottom: "25rem",
-                                            counterSet: "line-numbering",
-                                            minHeight: 0,
+                                            whiteSpace: "pre-wrap", // Preserve whitespace and wrap lines
+                                            minHeight: "100%", // Ensure it takes full height
+                                            counterSet: "line-numbering", // For potential future line numbering
                                         }}
                                     />
                                 </pre>
                             </div>
+                        ) : (
+                            <div className="flex-grow h-full flex items-center justify-center text-gray-500 text-lg bg-gray-100 rounded-b-lg">
+                                Select a file to view its content.
+                            </div>
                         )}
                     </div>
                 </div>
-                {iframeUrl && webContainer &&
-                    (<div className="flex min-w-96 flex-col h-full">
-                        <div className="address-bar">
-                            <input type="text"
+
+                {/* Iframe Preview */}
+                {/* On mobile, this will stack below the code editor and take full screen height. */}
+                {/* On large screens, it will be next to it, maintaining its desktop size. */}
+                {iframeUrl && webContainer && (
+                    <div className="flex flex-col h-[calc(100vh-2rem)] lg:h-full w-full lg:min-w-[400px] lg:max-w-[50%] bg-gray-100 rounded-b-lg lg:rounded-r-lg lg:rounded-bl-none shadow-inner border-t lg:border-t-0 lg:border-l border-gray-300">
+                        {/* Close Button */}
+                        <button
+                            className="absolute top-15 right-3 z-10 bg-white rounded-full p-2 shadow hover:bg-red-100 transition-colors"
+                            onClick={() => setIframeUrl(null)}
+                            aria-label="Close Preview"
+                        >
+                            <i className="ri-close-line text-2xl text-gray-700 hover:text-red-600"></i>
+                        </button>
+                        <div className="address-bar p-2 bg-slate-200 rounded-t-lg lg:rounded-tr-none shadow-sm flex-shrink-0">
+                            <input
+                                type="text"
                                 onChange={(e) => setIframeUrl(e.target.value)}
-                                value={iframeUrl} className="w-full p-2 px-4 bg-slate-200" />
+                                value={iframeUrl}
+                                className="w-full p-2 px-4 bg-white border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+                                aria-label="Iframe URL"
+                            />
                         </div>
-                        <iframe src={iframeUrl} className="w-full h-full"></iframe>
-                    </div>)
-                }
+                        <iframe
+                            src={iframeUrl}
+                            className="w-full h-full border-0 rounded-b-lg"
+                            title="Project Preview"
+                        ></iframe>
+                    </div>
+                )}
             </section>
+
+            {/* Custom CSS for scrollbar-hide */}
+            <style>
+                {`
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+                .scrollbar-hide {
+                    -ms-overflow-style: none;  /* IE and Edge */
+                    scrollbar-width: none;  /* Firefox */
+                }
+                /* Basic markdown styling for AI messages */
+                .markdown-body pre {
+                    background-color: #1a202c !important; /* Dark background for code blocks */
+                    padding: 1rem;
+                    border-radius: 0.5rem;
+                    overflow-x: auto;
+                    white-space: pre-wrap;
+                    word-break: break-all;
+                }
+                .markdown-body code {
+                    font-family: 'Fira Code', 'Cascadia Code', monospace;
+                    font-size: 0.875rem; /* text-sm */
+                    color: #e2e8f0; /* Light gray for code text */
+                }
+                .markdown-body p {
+                    margin-bottom: 0.5rem;
+                }
+                .markdown-body ul, .markdown-body ol {
+                    margin-left: 1.5rem;
+                    margin-bottom: 0.5rem;
+                }
+                .markdown-body li {
+                    margin-bottom: 0.25rem;
+                }
+                .markdown-body strong {
+                    font-weight: 600;
+                }
+                .markdown-body a {
+                    color: #60a5fa; /* blue-400 */
+                    text-decoration: underline;
+                }
+                `}
+            </style>
         </main>
     );
 };

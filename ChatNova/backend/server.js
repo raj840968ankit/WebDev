@@ -85,6 +85,11 @@ io.on('connection', (socket) => {
         socket.broadcast.to(socket.roomId).emit('server-message', { message, sender });  // Broadcast the message to all users in the project room
     });
 
+    // Example with socket.io
+    socket.on('file-delete', ({ fileName, projectId, sender }) => {
+        socket.to(projectId).emit('file-delete', { fileName, sender });
+    });
+
     socket.on('disconnect', () => {
         console.log(`User disconnected : ${socket.id}`);
         socket.leave(socket.roomId)
