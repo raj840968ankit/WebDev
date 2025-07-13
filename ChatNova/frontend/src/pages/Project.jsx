@@ -48,6 +48,7 @@ export const Project = () => {
     const [webContainer, setWebContainer] = useState(null); // WebContainer instance for running the project
     const [iframeUrl, setIframeUrl] = useState(null); // URL for the live preview iframe
     const [runProcess, setRunProcess] = useState(null); // Reference to the running WebContainer process
+    const [runError, setRunError] = useState(""); // Add this state at the top
 
     const location = useLocation(); // Hook to access route state (project ID)
 
@@ -254,10 +255,13 @@ export const Project = () => {
 
     const handleRunProject = async () => {
         if (!webContainer) {
-            console.error("WebContainer not initialized.");
+            const msg = ("WebContainer not initialized.");
+            console.error(msg);
+            setRunError(msg);
             return;
         }
 
+        setRunError("");
         try {
             await webContainer.mount(fileTree);
 
@@ -266,6 +270,9 @@ export const Project = () => {
                 new WritableStream({
                     write(chunk) {
                         console.log(chunk);
+                        if (typeof chunk === "string" && chunk.toLowerCase().includes("error")) {
+                            setRunError(prev => prev + "\n" + chunk);
+                        }
                     },
                 })
             );
@@ -280,6 +287,9 @@ export const Project = () => {
                 new WritableStream({
                     write(chunk) {
                         console.log(chunk);
+                        if (typeof chunk === "string" && chunk.toLowerCase().includes("error")) {
+                            setRunError(prev => prev + "\n" + chunk);
+                        }
                     },
                 })
             );
@@ -291,6 +301,7 @@ export const Project = () => {
             });
         } catch (error) {
             console.error("Error running project:", error);
+            setRunError(error.message || String(error));
         }
     };
 
@@ -707,30 +718,58 @@ export const Project = () => {
                 {/* Iframe Preview */}
                 {/* On mobile, this will stack below the code editor and take full screen height. */}
                 {/* On large screens, it will be next to it, maintaining its desktop size. */}
-                {iframeUrl && webContainer && (
-                    <div className="flex flex-col h-[calc(100vh-2rem)] lg:h-full w-full lg:min-w-[400px] lg:max-w-[50%] bg-gray-100 rounded-b-lg lg:rounded-r-lg lg:rounded-bl-none shadow-inner border-t lg:border-t-0 lg:border-l border-gray-300">
-                        {/* Close Button */}
-                        <button
-                            className="absolute top-15 right-3 z-10 bg-white rounded-full p-2 shadow hover:bg-red-100 transition-colors"
-                            onClick={() => setIframeUrl(null)}
-                            aria-label="Close Preview"
-                        >
-                            <i className="ri-close-line text-2xl text-gray-700 hover:text-red-600"></i>
-                        </button>
-                        <div className="address-bar p-2 bg-slate-200 rounded-t-lg lg:rounded-tr-none shadow-sm flex-shrink-0">
-                            <input
-                                type="text"
-                                onChange={(e) => setIframeUrl(e.target.value)}
-                                value={iframeUrl}
-                                className="w-full p-2 px-4 bg-white border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-400 text-sm"
-                                aria-label="Iframe URL"
-                            />
-                        </div>
-                        <iframe
-                            src={iframeUrl}
-                            className="w-full h-full border-0 rounded-b-lg"
-                            title="Project Preview"
-                        ></iframe>
+                {(runError || (iframeUrl && webContainer)) && (
+                    <div className="flex flex-col h-[calc(100vh-2rem)] lg:h-full w-full lg:min-w-[400px] lg:max-w-[50%] bg-gray-100 rounded-b-lg lg:rounded-r-lg lg:rounded-bl-none shadow-inner border-t lg:border-t-0 lg:border-l border-gray-300 relative">
+                        {/* Error Section - Updated to match iframe styling */}
+                        {runError && (
+                            <div className="flex flex-col h-full w-full">
+                                {/* Header Bar with Close Button */}
+                                <div className="address-bar p-2 bg-slate-200 rounded-t-lg lg:rounded-tr-none shadow-sm flex justify-between items-center">
+                                    <div className="text-gray-700 font-medium ml-2">Error</div>
+                                    <button
+                                        className="bg-white rounded-full p-1 shadow hover:bg-red-100 transition-colors"
+                                        onClick={() => setRunError(null)}
+                                        aria-label="Close Error"
+                                    >
+                                        <i className="ri-close-line text-xl text-gray-700 hover:text-red-600"></i>
+                                    </button>
+                                </div>
+
+                                {/* Error Content */}
+                                <div className="flex-grow bg-red-50 p-4 overflow-auto">
+                                    <pre className="text-red-700 whitespace-pre-wrap text-sm">{runError}</pre>
+                                </div>
+                            </div>
+                        )}
+
+                        {iframeUrl && webContainer && (
+                            <div className="flex flex-col h-full w-full">
+                                {/* Header Bar with URL Input and Close Button */}
+                                <div className="address-bar p-2 bg-slate-200 rounded-t-lg lg:rounded-tr-none shadow-sm flex justify-between items-center">
+                                    <input
+                                        type="text"
+                                        onChange={(e) => setIframeUrl(e.target.value)}
+                                        value={iframeUrl}
+                                        className="w-full p-2 px-4 bg-white border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-400 text-sm mr-2"
+                                        aria-label="Iframe URL"
+                                    />
+                                    <button
+                                        className="bg-white rounded-full p-1 shadow hover:bg-red-100 transition-colors flex-shrink-0"
+                                        onClick={() => setIframeUrl(null)}
+                                        aria-label="Close Preview"
+                                    >
+                                        <i className="ri-close-line text-xl text-gray-700 hover:text-red-600"></i>
+                                    </button>
+                                </div>
+
+                                {/* iFrame Content */}
+                                <iframe
+                                    src={iframeUrl}
+                                    className="w-full h-full border-0 rounded-b-lg flex-grow"
+                                    title="Project Preview"
+                                ></iframe>
+                            </div>
+                        )}
                     </div>
                 )}
             </section>

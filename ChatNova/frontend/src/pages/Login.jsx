@@ -17,7 +17,7 @@ export const Login = () => {
 
             setUser(response.data.user); // Set user in context
 
-            localStorage.setItem("token", response.data.token); // Store token in localStorage
+            //localStorage.setItem("token", response.data.token); // Store token in localStorage
 
             navigate("/"); // Redirect to home page on successful login
         } catch (error) {

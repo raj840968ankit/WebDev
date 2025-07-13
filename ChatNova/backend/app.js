@@ -12,7 +12,10 @@ await connect();
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+  origin: process.env.CLIENT_URL, // or your frontend domain
+  credentials: true, // allow cookies to be sent
+}))
 
 app.use(morgan('dev'))  //!logs every http request
 

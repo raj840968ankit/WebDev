@@ -4,6 +4,9 @@ import redisClient from '../services/redis.service.js';
 
 export const authUser = async (req, res, next) => {
     try {
+        // console.log("🔍 Incoming headers:", req.headers);
+        // console.log("🔍 Cookies parsed:", req.cookies);
+        
         const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
         
         // Check if token is provided in cookies or in the Authorization header
@@ -18,7 +21,11 @@ export const authUser = async (req, res, next) => {
         // If the token is blacklisted, it means the user has logged out
 
         if(isBlackListed === 'logout') {
-            res.clearCookie(token);
+            res.clearCookie('token', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production', // true only on HTTPS
+                sameSite: 'Lax'
+            });
             return res.status(401).send({ error: 'Unauthorized User' });
         }
 

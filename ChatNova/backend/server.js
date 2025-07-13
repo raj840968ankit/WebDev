@@ -6,6 +6,7 @@ import { env } from './config/env.js'
 import mongoose from 'mongoose'
 import projectModel from './models/project.model.js'
 import { generateResult } from './services/gemini.service.js'
+import cookie from 'cookie'
 
 const PORT = process.env.PORT || 3001
 
@@ -23,7 +24,9 @@ const io = new Server(server, {
 //! This middleware checks the token sent in the handshake and verifies it
 io.use(async (socket, next) => {
     try {
-        const token = socket.handshake.auth?.token || socket.handshake.headers.authorization?.split(' ')[1];  // Get the token from the handshake
+        // const token = socket.handshake.auth?.token || socket.handshake.headers.authorization?.split(' ')[1];  // Get the token from the handshake
+
+        const { cookie: rawCookie } = socket.handshake.headers;
 
         const projectId = socket.handshake.query.projectId;  // Get the projectId from the query parameters
 
@@ -33,6 +36,10 @@ io.use(async (socket, next) => {
 
         socket.project = await projectModel.findById(projectId);
 
+        // ✅ Parse cookies and extract token
+        const parsedCookie = cookie.parse(rawCookie || '');
+        const token = parsedCookie.token;
+        
         if (!token) {
             return next(new Error('Authentication error'));
         }

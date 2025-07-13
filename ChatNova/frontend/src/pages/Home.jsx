@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate for naviga
 
 export const Home = () => {
   // eslint-disable-next-line no-unused-vars
-  const { user } = useContext(UserContext); // Access user from context
+  const { user, setUser } = useContext(UserContext); // Access user from context
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [projects, setProjects] = useState([]); // State to hold projects
@@ -37,15 +37,35 @@ export const Home = () => {
       });
       setProjectName("");
       setIsModalOpen(false);
-      
+
       await axios.get("/projects/all").then((res) => setProjects(res.data));
     } catch (error) {
       console.error(error);
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await axios.get("/users/logout");  // your logout endpoint
+      localStorage.removeItem("token");  // optional since you're using cookies now
+      setUser(null);
+      navigate("/login");
+    } catch (error) {
+      console.error("❌ Logout failed:", error);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 font-inter">
+
+      {/* 🔓 Logout button */}
+      <button
+        onClick={handleLogout}
+        className="absolute top-4 right-4 px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow-md"
+      >
+        Logout
+      </button>
+
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-extrabold text-gray-800 mb-8 text-center drop-shadow-sm">
           Your Projects

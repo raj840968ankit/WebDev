@@ -23,10 +23,19 @@ export const createUserController = async (req, res) => {
 
         const token = user.generateJWT()  //generate JWT token for the user
 
+        const isProduction = process.env.NODE_ENV === 'production';
+        // Set token in HttpOnly cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: isProduction, // true only on HTTPS
+            sameSite: isProduction ? 'None' : 'Lax', // Or 'None' if frontend is on different domain and using HTTPS
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        });
+
         delete user._doc.password;  //remove password from user object before sending it to the client
         delete user._doc.__v;  //remove __v field from user object before sending it to the client
         
-        res.status(201).send({user, token})
+        res.status(201).send({user})
 
     } catch (error) {
         console.log('❌ Server Register Error:', error); 
@@ -55,10 +64,19 @@ export const loginUserController = async (req, res) => {
 
         const token = user.generateJWT()  //generate JWT token for the user
 
+        const isProduction = process.env.NODE_ENV === 'production';
+        // Set token in HttpOnly cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: isProduction, // true only on HTTPS
+            sameSite: isProduction ? 'None' : 'Lax', // Or 'None' if frontend is on different domain and using HTTPS
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        });
+
         delete user._doc.password;  //remove password from user object before sending it to the client
         delete user._doc.__v;  //remove __v field from user object before sending it to the client
-
-        res.status(200).json({user, token})
+        
+        res.status(201).json({user})
 
     } catch (error) {
         console.log('❌ Server Login Error:', error); 
@@ -83,6 +101,14 @@ export const logoutUserController = async (req, res) => {
         
         //! we have set token in redis when user log out and will check it in auth middleware for blacklisting
         await redisClient.set(token, 'logout', 'EX', 60 * 60 * 24 * 7);
+
+        const isProduction = process.env.NODE_ENV === 'production';
+        // 🧼 Clear the cookie
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: isProduction ? 'None' : 'Lax', // Or 'None' if frontend is on different domain and using HTTPS
+        });
 
         res.status(200).json({ message: 'User logged out successfully' });
         
